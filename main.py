@@ -5,6 +5,8 @@ import os
 import requests
 driver = webdriver.Chrome(executable_path="chromedriver.exe")
 laufwerkbuchstabe = 'D:'
+username = ''
+password = ''
 
 class Element:
 
@@ -246,7 +248,7 @@ def remove_duplicates_and_clear(raw_list):
     return list(result.values())
 
 
-login("st162876", "76kg@Sommer")
+login(username, password)
 ilias = Folder('Ilias',
                'https://ilias3.uni-stuttgart.de/ilias.php?cmd=show&cmdClass=ildashboardgui&cmdNode=9x&baseClass=ilDashboardGUI',
                None)
