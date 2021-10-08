@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 import pickle
 import os
 import requests
-import time
 
 # Selenium Code:
 PATH = "C:\Program Files (x86)\chromedriver.exe"
