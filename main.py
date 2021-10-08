@@ -3,12 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import pickle
 import os
 import requests
-
-# Selenium Code:
-PATH = "C:\Program Files (x86)\chromedriver.exe"
-driver = webdriver.Chrome(executable_path=PATH)
-
-# Input-Variablen:
+driver = webdriver.Chrome(executable_path="chromedriver.exe")
 laufwerkbuchstabe = 'D:'
 
 class Element:
