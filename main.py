@@ -268,8 +268,8 @@ with requests.session() as s:
     url = 'https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=123&baseClass=ilStartUpGUI&rtoken='
     r = s.post(url,
                data={
-                   'username': 'st162876',
-                   'password': '76kg@Sommer',
+                   'username': username,
+                   'password': password,
                    'cmd[doStandardAuthentication]': 'Anmelden'
                }
                )
