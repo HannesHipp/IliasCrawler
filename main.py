@@ -4,8 +4,6 @@ import pickle
 import os
 import requests
 
-#hallo
-
 # Selenium Code:
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=PATH)
@@ -234,8 +232,8 @@ def crawl(page):
         new_pages[0].parent = page.parent
     if len(new_pages) == 0 and len(files_and_videos) == 1:
         files_and_videos[0].parent = page.parent
-    for newPage in new_pages:
-        files_and_videos += crawl(newPage)
+    for new_page in new_pages:
+        files_and_videos += crawl(new_page)
     return files_and_videos
 
 
