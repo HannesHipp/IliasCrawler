@@ -1,14 +1,15 @@
 import pickle
 import os
-from bs4 import BeautifulSoup
-from Session import Session
-from model.Folder import Folder
+from service.Session import Session
+from model.Folders import Folder as Folder
+
 
 def crawl(page):
-    page.content = Session.get_content()
+    page.content = Session.get_content(page.url)
     files_and_videos = page.get_files_and_videos()
     new_pages = page.get_new_pages()
     if len(new_pages) == 1 and len(files_and_videos) == 0:
+        new_pages[0].name = page.name
         new_pages[0].parent = page.parent
     if len(new_pages) == 0 and len(files_and_videos) == 1:
         files_and_videos[0].parent = page.parent
@@ -16,7 +17,7 @@ def crawl(page):
         files_and_videos += crawl(new_page)
     return files_and_videos
 
-Session()
+
 ilias = Folder('Ilias',
                'https://ilias3.uni-stuttgart.de/ilias.php?cmd=show&cmdClass=ildashboardgui&cmdNode=9x&baseClass=ilDashboardGUI',
                None)

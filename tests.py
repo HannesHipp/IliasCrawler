@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import os
+import re
 
 username = "st162876"
 password = "76kg@Sommer"
@@ -14,10 +16,15 @@ with requests.session() as session:
                    'cmd[doStandardAuthentication]': 'Anmelden'
                }
                )
-    soup = BeautifulSoup(session.get('https://ilias3.uni-stuttgart.de/ilias.php?cmd=show&cmdClass=ildashboardgui&cmdNode=9x&baseClass=ilDashboardGUI').text, 'lxml')
-    article = soup.findAll('a')
-    for ele in article:
-        print(ele.text)
+    soup = session.get('https://ilias3.uni-stuttgart.de/goto_Uni_Stuttgart_file_2135161_download.html')
+    print(soup.text)
+    # content = soup.findAll('video')
+    # for ele in content:
+    #     print(ele.attrs['src'])
 
+#
+# s = 'https://ilias3.uni-stuttgart.de/data/Uni_Stuttgart/mobs/mm_2817249/WS2020_Intro_CRT1_UT.mp4?il_wac_token=08fa859bd4b630902f1d0a5ad898125657f0810b&'
+# pattern = re.compile(r"\.[a-z0-9]{1,4}")
+# seatch = pattern.search(s)
+# print(seatch)
 
-def get

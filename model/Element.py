@@ -1,12 +1,13 @@
 import UserData
+import os
 
 class Element:
 
     def __init__(self, name, url, parent):
         self.name = Element.__clear_name(name)
-        self.url = url
+        self.url = Element.__correct_url(url)
         self.parent = parent
-        print(self.name)
+        print(self.name + ' | ' + self.url)
 
     def get_path(self):
         if self.parent is None:
@@ -28,4 +29,16 @@ class Element:
         if len(name) > 100:
             name = name[:45] + '___' + name[-45:]
         return name
+
+    @staticmethod
+    def __correct_url(url):
+        if 'https://ilias3.uni-stuttgart.de/' not in url:
+            if url[:2] == "./":
+                url = url[2:]
+            url = 'https://ilias3.uni-stuttgart.de/' + url
+        return url
+
+    @staticmethod
+    def extract_from_page(content, parent):
+        raise Exception("Page extraction method not implemented.")
 
