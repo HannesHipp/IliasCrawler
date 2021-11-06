@@ -1,7 +1,4 @@
-import time
-
 from service.EventsManagement import EventListener
-import view.Service as Service
 import sys
 
 
