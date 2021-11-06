@@ -118,7 +118,7 @@ class OPD(Folder):
         #     if len(video_elements) != 0:
         #         found = True
         # for element in video_elements:
-        #     if 'presenter' in element.get_attribute("id"):
+        #     if 'presenter' in element.get_attribute("key"):
         #         pass
         #     else:
         #         result.append(Video(self.name + '.mp4', element.get_attribute('src'), self))

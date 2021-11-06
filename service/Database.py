@@ -10,33 +10,36 @@ class Field:
 
 class Database:
 
-    table_name = " data "
-
-    def __init__(self, id, *additional_fields):
-        self.id = id
+    def __init__(self, name, key, *additional_fields):
+        self.name = name
+        self.key = key
         self.additional_fields = additional_fields
-        fields_to_string = "(" + self.id.name + " " + self.id.type + ","
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+
+        # Create string dynamically depending on number of fields
+        fields_to_string = " (" + self.key.name + " " + self.key.type + ","
         for field in self.additional_fields:
             fields_to_string = fields_to_string + field.name + " " + field.type + ","
         fields_to_string = fields_to_string[:-1] + ")"
-        self.file_name = fields_to_string + ".db"
-        self.connection = sqlite3.connect(self.file_name)
-        self.cursor = self.connection.cursor()
+        print("CREATE TABLE " + self.name + fields_to_string)
+
         try:
             with self.connection:
-                self.cursor.execute("CREATE TABLE" + Database.table_name + fields_to_string)
+                self.cursor.execute("CREATE TABLE " + self.name + fields_to_string)
         except sqlite3.OperationalError:
             pass
 
     def add(self, list):
-        if len(list) == (len(self.additional_fields)+1):
-            if not self.id_exists(list[0]):
-                string = "("
+        if len(list) == (len(self.additional_fields) + 1):
+            if not self.key_exists(list[0]):
+                placeholder = "("
                 for element in list:
-                    string = string + "?, "
-                string = string[:-2] + ")"
+                    placeholder = placeholder + "?, "
+                placeholder = placeholder[:-2] + ")"
+                print("INSERT INTO " + self.name + " VALUES " + placeholder, list)
                 with self.connection:
-                    self.cursor.execute("INSERT INTO" + Database.table_name + "VALUES " + string, list)
+                    self.cursor.execute("INSERT INTO " + self.name + " VALUES " + placeholder, tuple(list))
             else:
                 raise Exception(
                     str(list[0])
@@ -44,16 +47,13 @@ class Database:
                 )
         else:
             raise Exception(
-                "Datenbank hat "
-                + str(len(self.additional_fields)+1)
-                + " Felder, übergebenes Objekt hat "
-                + str(len(list))
-                + " Felder."
+                "Datenbank hat " + str(len(self.additional_fields) + 1) + " Felder, übergebenes Objekt hat "
+                + str(len(list)) + " Felder."
             )
 
-    def id_exists(self, id):
+    def key_exists(self, key):
         with self.connection:
-            self.cursor.execute("SELECT * FROM" + Database.table_name + "WHERE " + self.id.name + "='" + id + "'")
+            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + self.key.name + "='" + key + "'")
             if len(self.cursor.fetchall()) == 0:
                 return False
             else:
@@ -61,5 +61,8 @@ class Database:
 
     def find(self, field, text):
         with self.connection:
-            self.cursor.execute("SELECT * FROM" + Database.table_name + "WHERE " + field.name + "='" + text + "'")
+            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + field.name + "='" + text + "'")
             return self.cursor.fetchall()
+
+
+
