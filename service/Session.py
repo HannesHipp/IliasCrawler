@@ -29,3 +29,7 @@ class Session:
     @staticmethod
     def get_content(url):
         return BeautifulSoup(Session.getSession().get(url).text, 'lxml')
+
+    @staticmethod
+    def get_file_content(url):
+        return Session.getSession().get(url)

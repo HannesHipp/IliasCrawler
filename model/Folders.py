@@ -1,6 +1,6 @@
 from model.Files import File as File
 from model.Files import Video as Video
-import service.Service as Service
+import model.Service as Service
 from model.Element import Element as Element
 
 
@@ -70,6 +70,7 @@ class Lm(Folder):
 
     @staticmethod
     def create(element, parent, number):
+        # print(element.attrs['href'])
         if number == 0:
             # Calculate first lm page to crawl
             url = "https://ilias3.uni-stuttgart.de/" \

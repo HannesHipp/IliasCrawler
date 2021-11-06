@@ -7,7 +7,7 @@ class Element:
         self.name = Element.__clear_name(name)
         self.url = Element.__correct_url(url)
         self.parent = parent
-        print(self.name + ' | ' + self.url)
+        # print(self.name + ' | ' + self.url)
 
     def get_path(self):
         if self.parent is None:
@@ -18,7 +18,7 @@ class Element:
             while pointer.parent is not None:
                 pointer = pointer.parent
                 result = pointer.name + "\\" + result
-            result = UserData.getLaufwerksbuchstabe() + ":\\" + result
+            result = UserData.getSpeicherpfad() + "\\" + result
         return result
 
     @staticmethod
