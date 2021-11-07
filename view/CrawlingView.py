@@ -8,7 +8,18 @@ class CrawlingView(EventListener):
     __number_of_crawled_folders = 0
 
     @staticmethod
-    def show():
+    def ask_for_crawl():
+        while True:
+            result = input("Möchtest du damit beginnen Ilias nach neuen Dateien zu durchsuchen? Gib 'j' für Ja und 'n' für Nein ein.")
+            if result == "j":
+                return True
+            elif result == "n":
+                return False
+            else:
+                print("Falsche Antwort. Probieren wir es noch einmal...")
+
+    @staticmethod
+    def crawling_starts_promt():
         print("Ilias wird durchsucht. Dies kann je nach Anzahl deiner Kurse ein bisschen dauern...")
 
     @staticmethod

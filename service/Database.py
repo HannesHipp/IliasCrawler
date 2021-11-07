@@ -10,7 +10,18 @@ class Field:
 
 class Database:
 
+    __instances = []
+
+    @staticmethod
+    def get_instance(name):
+        for instance in Database.__instances:
+            if name == instance.name:
+                return instance
+
     def __init__(self, name, key, *additional_fields):
+        for instance in Database.__instances:
+            if name == instance.name:
+                raise Exception("Eine Datenbank mit diesem Namen steht bereits über get_instance zur Verfügung.")
         self.name = name
         self.key = key
         self.additional_fields = additional_fields
@@ -22,13 +33,15 @@ class Database:
         for field in self.additional_fields:
             fields_to_string = fields_to_string + field.name + " " + field.type + ","
         fields_to_string = fields_to_string[:-1] + ")"
-        print("CREATE TABLE " + self.name + fields_to_string)
 
         try:
             with self.connection:
                 self.cursor.execute("CREATE TABLE " + self.name + fields_to_string)
         except sqlite3.OperationalError:
             pass
+
+        Database.__instances.append(self)
+
 
     def add(self, list):
         if len(list) == (len(self.additional_fields) + 1):
@@ -37,7 +50,6 @@ class Database:
                 for element in list:
                     placeholder = placeholder + "?, "
                 placeholder = placeholder[:-2] + ")"
-                print("INSERT INTO " + self.name + " VALUES " + placeholder, list)
                 with self.connection:
                     self.cursor.execute("INSERT INTO " + self.name + " VALUES " + placeholder, tuple(list))
             else:
@@ -63,6 +75,3 @@ class Database:
         with self.connection:
             self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + field.name + "='" + text + "'")
             return self.cursor.fetchall()
-
-
-

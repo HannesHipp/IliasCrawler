@@ -1,5 +1,6 @@
 import UserData
-import os
+import hashlib
+
 
 class Element:
 
@@ -41,4 +42,10 @@ class Element:
     @staticmethod
     def extract_from_page(content, parent):
         raise Exception("Page extraction method not implemented.")
+
+    def element_hash(self):
+        result = int(hashlib.sha1(self.name.encode("utf-8")).hexdigest(), 16) % (10 ** 4)
+        if self.parent is not None:
+            result = result * self.parent.element_hash()
+        return result
 

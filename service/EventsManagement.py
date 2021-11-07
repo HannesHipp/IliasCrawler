@@ -1,5 +1,13 @@
 class EventsManager:
 
+    __instance = None
+
+    @staticmethod
+    def get_instance():
+        if EventsManager.__instance is None:
+            EventsManager.__instance = EventsManager()
+        return EventsManager.__instance
+
     __listeners = {}
 
     def attach_listener(self, event_type, listener):

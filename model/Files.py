@@ -3,6 +3,8 @@ import os
 import pickle
 import model.Service as Service
 import re
+
+from service.Database import Database
 from service.Session import Session
 
 pattern = re.compile(r"\.[a-z0-9]{1,4}")
@@ -14,11 +16,7 @@ class Downloadable(Element):
         if not os.path.isdir(path):
             os.makedirs(path)
         open(path + "\\" + self.name, 'wb').write(Session.get_file_content(self.url).content)
-        with open('logdatei.txt', 'rb') as logdatei:
-            downloaded = pickle.load(logdatei)
-            downloaded.append(self.get_path())
-            with open('logdatei.txt', 'wb') as logdatei:
-                pickle.dump(downloaded, logdatei)
+        Database.get_instance("files").add([str(self.element_hash())])
 
 
 class File(Downloadable):

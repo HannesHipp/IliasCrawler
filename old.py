@@ -12,7 +12,7 @@ def crawl(page):
     page.content = Session.get_content(page.url)
     files_and_videos = page.get_files_and_videos()
     new_pages = page.get_new_pages()
-    events_manager.notify_listeners("crawl", (len(files_and_videos), len(new_pages)))
+    EventsManager.get_instance().notify_listeners("crawl", (len(files_and_videos), len(new_pages)))
     if len(new_pages) == 1 and len(files_and_videos) == 0:
         new_pages[0].name = page.name
         new_pages[0].parent = page.parent
@@ -24,15 +24,14 @@ def crawl(page):
 
 
 # Setting up Event Management
-events_manager = EventsManager()
-events_manager.attach_listener("download", DownloadView())
-events_manager.attach_listener("crawl", CrawlingView())
+EventsManager.get_instance().attach_listener("download", DownloadView())
+EventsManager.get_instance().attach_listener("crawl", CrawlingView())
 
 # Starting folder of the crawling process
-CrawlingView.show()
+CrawlingView.crawling_starts_promt()
 
 ilias = Folder('Ilias',
-               'https://ilias3.uni-stuttgart.de/goto_Uni_Stuttgart_crs_2096342.html',
+               'https://ilias3.uni-stuttgart.de/ilias.php?cmd=show&cmdClass=ildashboardgui&cmdNode=9x&baseClass=ilDashboardGUI',
                None)
 
 # All found files and videos are saved in list-object 'data'
@@ -61,7 +60,7 @@ for item in newitems:
     try:
         item.download()
         downloaded_already += 1
-        events_manager.notify_listeners("download", downloaded_already)
+        EventsManager.get_instance().notify_listeners("download", downloaded_already)
     except Exception as e:
         errors.append(item.get_path() + "\\" + item.name + " " + e)
 if len(errors) != 0:

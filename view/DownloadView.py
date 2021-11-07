@@ -10,9 +10,9 @@ class DownloadView(EventListener):
     def show(number_of_new_files):
         DownloadView.__number_of_new_files = number_of_new_files
         if number_of_new_files == 0:
-            print("Deine Dateien sind up-to-date.")
+            print("\nDeine Dateien sind bereits up-to-date.")
         else:
-            print("Es wurden " + str(DownloadView.__number_of_new_files) + " neue Dateien gefunden. Diese werden jetzt "
+            print("\nEs wurden " + str(DownloadView.__number_of_new_files) + " neue Dateien gefunden. Diese werden jetzt "
                                                                            "herruntergeladen.")
 
     @staticmethod
