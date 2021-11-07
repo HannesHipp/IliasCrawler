@@ -7,6 +7,7 @@ class DownloadController:
 
     @staticmethod
     def run(data):
+        print("")
         # Comparison between paths in logdatei and data. New items are added to list 'newitems'
         newitems = []
         for item in data:

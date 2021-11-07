@@ -1,5 +1,5 @@
-import UserData
 import hashlib
+from service.Database import Database, Field
 
 
 class Element:
@@ -19,7 +19,8 @@ class Element:
             while pointer.parent is not None:
                 pointer = pointer.parent
                 result = pointer.name + "\\" + result
-            result = UserData.getSpeicherpfad() + "\\" + result
+            storage_path = Database.get_instance("userdata").find(Field("containsdata", "text"), "true")[0][3]
+            result = storage_path + "\\" + result
         return result
 
     @staticmethod
