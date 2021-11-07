@@ -23,16 +23,15 @@ class File(Downloadable):
 
     @staticmethod
     def create(element, parent):
-        # print(element)
         name = str(element.text)
-        # if '.mp4' in name:
-        #     name = name.split('.mp4')[0] + '.mp4'
-        # else:
-        #     name = name + '.pdf'
-        try:
-            name = pattern.split(name)[0] + pattern.search(name)[0]
-        except:
-            pass
+        if '.mp4' in name:
+            name = name.split('.mp4')[0] + '.mp4'
+        else:
+            name = name + '.pdf'
+        # try:
+        #     name = pattern.split(name)[0] + pattern.search(name)[0]
+        # except:
+        #     pass
         return File(name,
                     element['href'],
                     parent)
