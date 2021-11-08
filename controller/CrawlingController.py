@@ -25,8 +25,8 @@ class CrawlingController:
     def run():
         if CrawlingView.ask_for_crawl():
             ilias = Folder('Ilias',
-                           'https://ilias3.uni-stuttgart.de/goto_Uni_Stuttgart_fold_2173034.html',
-                           # 'https://ilias3.uni-stuttgart.de/ilias.php?cmdClass=ilmembershipoverviewgui&cmdNode=k2&baseClass=ilmembershipoverviewgui',
+                           # 'https://ilias3.uni-stuttgart.de/goto_Uni_Stuttgart_fold_2173034.html',
+                           'https://ilias3.uni-stuttgart.de/ilias.php?cmdClass=ilmembershipoverviewgui&cmdNode=k2&baseClass=ilmembershipoverviewgui',
                            None)
             CrawlingView.crawling_starts_promt()
             return crawl(ilias)
