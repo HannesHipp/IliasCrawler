@@ -1,13 +1,6 @@
 import sqlite3
 
 
-class Field:
-
-    def __init__(self, name, type):
-        self.name = name
-        self.type = type
-
-
 class Database:
 
     __instances = []
@@ -29,9 +22,9 @@ class Database:
         self.cursor = self.connection.cursor()
 
         # Create string dynamically depending on number of fields
-        fields_to_string = " (" + self.key.name + " " + self.key.type + ","
+        fields_to_string = " (" + self.key + " text,"
         for field in self.additional_fields:
-            fields_to_string = fields_to_string + field.name + " " + field.type + ","
+            fields_to_string = fields_to_string + field + " text,"
         fields_to_string = fields_to_string[:-1] + ")"
 
         try:
@@ -43,7 +36,10 @@ class Database:
         Database.__instances.append(self)
 
 
-    def add(self, list):
+    def add(self, *data):
+        list = []
+        for item in data:
+            list.append(item)
         if len(list) == (len(self.additional_fields) + 1):
             if not self.key_exists(list[0]):
                 placeholder = "("
@@ -60,12 +56,12 @@ class Database:
         else:
             raise Exception(
                 "Datenbank hat " + str(len(self.additional_fields) + 1) + " Felder, übergebenes Objekt hat "
-                + str(len(list)) + " Felder."
+                + str(len(data)) + " Felder."
             )
 
-    def key_exists(self, key):
+    def key_exists(self, key_text):
         with self.connection:
-            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + self.key.name + "='" + key + "'")
+            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + self.key + "='" + key_text + "'")
             if len(self.cursor.fetchall()) == 0:
                 return False
             else:
@@ -73,5 +69,28 @@ class Database:
 
     def find(self, field, text):
         with self.connection:
-            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + field.name + "='" + text + "'")
+            self.cursor.execute("SELECT * FROM " + self.name + " WHERE " + field + "='" + text + "'")
+            result = self.cursor.fetchall()
+            if len(result) == 1:
+                result = result[0]
+            return result
+
+    def update(self, key, key_text, field, field_text):
+        with self.connection:
+            self.cursor.execute("UPDATE " + self.name + " SET " + field + "='" + field_text + "' WHERE " + key + "='" + key_text + "'")
             return self.cursor.fetchall()
+
+    def get_all(self):
+        with self.connection:
+            self.cursor.execute("SELECT * FROM " + self.name)
+            result = self.cursor.fetchall()
+            if len(self.additional_fields) == 0:
+                new_result = []
+                for element in result:
+                    new_result.append(element[0])
+                result = new_result
+            return result
+
+    def delete_key(self, key_text):
+        with self.connection:
+            self.cursor.execute("DELETE FROM " + self.name + " WHERE " + self.key + "='" + key_text + "'")

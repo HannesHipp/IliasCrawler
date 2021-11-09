@@ -1,5 +1,5 @@
 import hashlib
-from service.Database import Database, Field
+from service.Database import Database
 
 
 class Element:
@@ -19,7 +19,7 @@ class Element:
             while pointer.parent is not None:
                 pointer = pointer.parent
                 result = pointer.name + "\\" + result
-            storage_path = Database.get_instance("userdata").find(Field("containsdata", "text"), "true")[0][3]
+            storage_path = Database.get_instance("userdata").get_all()[0][2]
             result = storage_path + "\\" + result
         return result
 
@@ -27,7 +27,7 @@ class Element:
     def __clear_name(name):
         for char in [' ', '/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
             name = "".join(name.split(char))
-        name = "".join(name.split())
+        name = " ".join(name.split())
         if len(name) > 100:
             name = name[:45] + '___' + name[-45:]
         return name
@@ -44,9 +44,9 @@ class Element:
     def extract_from_page(content, parent):
         raise Exception("Page extraction method not implemented.")
 
-    def element_hash(self):
+    def get_hash(self):
         result = int(hashlib.sha1(self.name.encode("utf-8")).hexdigest(), 16) % (10 ** 4)
         if self.parent is not None:
-            result = result * self.parent.element_hash()
-        return result
+            result = result * self.parent.get_hash()
+        return str(result)
 

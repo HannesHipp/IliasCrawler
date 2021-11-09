@@ -14,7 +14,6 @@ class SetupView():
         print("Gib nun bitte den Speicherpfad ein, an dem deine Ilias-Dateien gespeichert werden sollen. \n"
               "Bsp.: C:\\Users\\hanne\\PycharmProjects\\IliasCrawler")
         pfad = input("Speicherpfad: ")
-        print("")
         return pfad
 
 

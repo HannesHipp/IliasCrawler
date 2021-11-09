@@ -1,3 +1,4 @@
+from Session import Session
 from model.Files import File as File
 from model.Files import Video as Video
 import model.Service as Service
@@ -38,6 +39,33 @@ class Folder(Element):
     @staticmethod
     def create(element, parent):
         return Folder(str(element.text),
+                      element.attrs['href'],
+                      parent)
+
+
+class Root(Folder):
+
+    def get_new_pages(self):
+        result = Course.extract_from_page(self.content, self)
+        return result
+
+
+class Course(Folder):
+
+    @staticmethod
+    def extract_from_page(content, parent):
+        result = []
+        raw_items = Service.get_items_where_href_contains_markers(content, '_crs_')
+        for element in Service.remove_duplicates_and_clear(raw_items):
+            result.append(Course.create(element, parent))
+        return result
+
+    def get_course_number(self):
+        return self.url.split("crs_")[1].split(".html")[0]
+
+    @staticmethod
+    def create(element, parent):
+        return Course(str(element.text),
                       element.attrs['href'],
                       parent)
 

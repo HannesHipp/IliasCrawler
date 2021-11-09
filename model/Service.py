@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 def get_items_where_href_contains_markers(page_content, *markers):
     result = []
     all_a_elements = page_content.findAll('a')

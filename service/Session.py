@@ -1,7 +1,7 @@
-import requests
 from bs4 import BeautifulSoup
-import UserData
-from service.Database import Database, Field
+import requests
+
+from service.Database import Database
 
 
 class Session:
@@ -12,12 +12,12 @@ class Session:
         if Session.__instance is None:
             Session.__instance = Session()
             Session.__instance.session = requests.session()
-            userdata = Database.get_instance("userdata").find(Field("containsdata", "text"), "true")[0]
+            userdata = Database.get_instance("userdata").get_all()[0]
             Session.__instance.session.post('https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart'
                                             '&cmd=post&cmdClass=ilstartupgui&cmdNode=123&baseClass=ilStartUpGUI&rtoken=',
                                             data={
-                                                  'username': userdata[1],
-                                                  'password': userdata[2],
+                                                  'username': userdata[0],
+                                                  'password': userdata[1],
                                                   'cmd[doStandardAuthentication]': 'Anmelden'
                                             }
                                             )
@@ -34,4 +34,4 @@ class Session:
 
     @staticmethod
     def get_file_content(url):
-        return Session.getSession().get(url)
+        return Session.getSession().get(url).content

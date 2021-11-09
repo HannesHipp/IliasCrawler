@@ -16,6 +16,8 @@ class DownloadView(EventListener):
                                                                            "herruntergeladen.")
 
     @staticmethod
-    def update(downloaded_already):
+    def update(data):
+        downloaded_already = data[0]
+        file_name = data[1]
         percentage = downloaded_already / DownloadView.__number_of_new_files * 100
-        Service.drawProgressBar(percentage)
+        Service.drawProgressBar(percentage, file_name)

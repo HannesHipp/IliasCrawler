@@ -15,8 +15,7 @@ class Downloadable(Element):
         path = self.get_path()
         if not os.path.isdir(path):
             os.makedirs(path)
-        open(path + "\\" + self.name, 'wb').write(Session.get_file_content(self.url).content)
-        Database.get_instance("files").add([str(self.element_hash())])
+        open(path + "\\" + self.name, 'wb').write(Session.get_file_content(self.url))
 
 
 class File(Downloadable):

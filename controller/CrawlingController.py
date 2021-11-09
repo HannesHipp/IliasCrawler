@@ -1,3 +1,4 @@
+from service.Database import Database
 from controller import Service
 from model.Folders import Folder
 from service.EventsManagement import EventsManager
@@ -22,13 +23,10 @@ def crawl(page):
 class CrawlingController:
 
     @staticmethod
-    def run():
-        if CrawlingView.ask_for_crawl():
-            ilias = Folder('Ilias',
-                           # 'https://ilias3.uni-stuttgart.de/goto_Uni_Stuttgart_fold_2173034.html',
-                           'https://ilias3.uni-stuttgart.de/ilias.php?cmdClass=ilmembershipoverviewgui&cmdNode=k2&baseClass=ilmembershipoverviewgui',
-                           None)
-            CrawlingView.crawling_starts_promt()
-            return crawl(ilias)
-        else:
-            Service.quit_program()
+    def run(courses):
+        CrawlingView.crawling_starts_promt()
+        result = []
+        for course in courses:
+            if not Database.get_instance("course_exceptions").key_exists(course.get_course_number()):
+                result += crawl(course)
+        return result
