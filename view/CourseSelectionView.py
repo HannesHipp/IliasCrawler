@@ -16,8 +16,8 @@ class CourseSelectionView:
 
     @staticmethod
     def first_time_only_promt():
-        print("\nIn Zukunft wirst du benachrichtigt wenn ein neuer Kurs gefunden wurde. Du wirst außerdem jedes mal \n"
-              "beim Ausführen des Programms gefragt, ob du deine Auswahl der Kurse anpassen möchtest.")
+        print("\nIn Zukunft wirst du benachrichtigt wenn ein neuer Kurs gefunden wurde.")
+        #Du wirst außerdem jedes mal beim Ausführen des Programms gefragt, ob du deine Auswahl der Kurse anpassen möchtest.
 
     @staticmethod
     def show_no_new_courses_promt():

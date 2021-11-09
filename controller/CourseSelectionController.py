@@ -1,5 +1,4 @@
-from Session import Session
-from controller.CrawlingController import crawl
+from service.Session import Session
 from model.Folders import Root
 from service.Database import Database
 from view import Service

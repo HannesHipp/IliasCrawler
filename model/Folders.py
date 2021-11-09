@@ -1,4 +1,4 @@
-from Session import Session
+from service.Session import Session
 from model.Files import File as File
 from model.Files import Video as Video
 import model.Service as Service

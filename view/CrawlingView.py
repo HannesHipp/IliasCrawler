@@ -9,7 +9,7 @@ class CrawlingView(EventListener):
 
     @staticmethod
     def crawling_starts_promt():
-        print("Ilias wird durchsucht. Dies kann je nach Anzahl deiner Kurse ein bisschen dauern...")
+        print("\nIlias wird durchsucht. Dies kann je nach Anzahl deiner Kurse ein bisschen dauern...")
 
     @staticmethod
     def update(number_of_files_and_folders):
