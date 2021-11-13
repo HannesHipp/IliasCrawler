@@ -1,6 +1,5 @@
 from model.Element import Element as Element
 import os
-import pickle
 import model.Service as Service
 import re
 
@@ -9,13 +8,15 @@ from service.Session import Session
 
 pattern = re.compile(r"\.[a-z0-9]{1,4}")
 
+
 class Downloadable(Element):
 
     def download(self):
         path = self.get_path()
         if not os.path.isdir(path):
             os.makedirs(path)
-        open(path + "\\" + self.name, 'wb').write(Session.get_file_content(self.url))
+        with open(path + "\\" + self.name, 'wb') as file:
+            file.write(Session.get_file_content(self.url))
 
 
 class File(Downloadable):
@@ -23,14 +24,14 @@ class File(Downloadable):
     @staticmethod
     def create(element, parent):
         name = str(element.text)
-        if '.mp4' in name:
-            name = name.split('.mp4')[0] + '.mp4'
-        else:
+        # if '.mp4' in name:
+        #     name = name.split('.mp4')[0] + '.mp4'
+        # else:
+        #     name = name + '.pdf'
+        try:
+            name = pattern.split(name)[0] + pattern.search(name)[0]
+        except:
             name = name + '.pdf'
-        # try:
-        #     name = pattern.split(name)[0] + pattern.search(name)[0]
-        # except:
-        #     pass
         return File(name,
                     element['href'],
                     parent)
@@ -42,6 +43,10 @@ class File(Downloadable):
         for element in Service.remove_duplicates_and_clear(raw_items):
             result.append(File.create(element, parent))
         return result
+
+    def get_hash(self):
+        return self.url.split("_file_")[1][:7]
+
 
 
 class Video(Downloadable):
@@ -60,3 +65,6 @@ class Video(Downloadable):
         for element in Service.remove_duplicates_and_clear(raw_items):
             result.append(Video.create(element, parent))
         return result
+
+    def get_hash(self):
+        return self.url.split("/")[6]

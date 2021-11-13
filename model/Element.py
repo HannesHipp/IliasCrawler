@@ -12,21 +12,15 @@ class Element:
 
     def get_path(self):
         if self.parent is None:
-            return ""
+            return Database.get_instance("userdata").get_all()[0][2]
         else:
-            result = self.parent.name
-            pointer = self.parent
-            while pointer.parent is not None:
-                pointer = pointer.parent
-                result = pointer.name + "\\" + result
-            storage_path = Database.get_instance("userdata").get_all()[0][2]
-            result = storage_path + "\\" + result
-        return result
+            parentpath = self.parent.get_path()
+            return parentpath + "\\" + self.parent.name
 
     @staticmethod
     def __clear_name(name):
-        for char in [' ', '/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
-            name = "".join(name.split(char))
+        for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
+            name = " ".join(name.split(char))
         name = " ".join(name.split())
         if len(name) > 100:
             name = name[:45] + '___' + name[-45:]
@@ -45,8 +39,9 @@ class Element:
         raise Exception("Page extraction method not implemented.")
 
     def get_hash(self):
-        result = int(hashlib.sha1(self.name.encode("utf-8")).hexdigest(), 16) % (10 ** 4)
-        if self.parent is not None:
-            result = result * self.parent.get_hash()
+        # result = int(hashlib.sha1(self.name.encode("utf-8")).hexdigest(), 16) % (10 ** 4)
+        # if self.parent is not None:
+        #     result = result * self.parent.get_hash()
+        result = self.name + self.parent.name + self.parent.parent.name
         return str(result)
 

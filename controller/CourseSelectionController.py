@@ -36,13 +36,22 @@ class CourseSelectionController:
                 if course.get_course_number() == new_course_number:
                     new_courses.append(course)
                     Database.get_instance("all_courses").add(new_course_number, course.name)
-        CourseSelectionView.number_of_new_courses_promt(len(new_courses))
+
+        # user chooses to select course exceptions for all or only new courses
+        courses_to_choose_from = new_courses
+        CourseSelectionView.would_you_like_to_change_course_exceptions()
+        if Service.user_chooses_yes(""):
+            courses_to_choose_from = current_courses
+        else:
+            CourseSelectionView.number_of_new_courses_promt(len(new_courses))
 
         # Select course exceptions and save to database
-        course_exception_numbers = CourseSelectionController.select_course_exceptions(new_courses)
+        course_exception_numbers = CourseSelectionController.select_course_exceptions(courses_to_choose_from)
         for course_exception_number in course_exception_numbers:
-            Database.get_instance("course_exceptions").add(course_exception_number)
-
+            try:
+                Database.get_instance("course_exceptions").add(course_exception_number)
+            except:
+                pass
         if len(new_courses) != 0:
             CourseSelectionView.thank_you_promt()
         if len(old_courses) == 0:
