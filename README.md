@@ -10,12 +10,12 @@ The User now has text feedback about what the program is currently doing.
 In order to get started with this code you need to:
 
 - Install Python
-- Press Windows + R and type in 'cmd' (without '')
-- type in 'py -m ensurepip --upgrade' (without '')
-- type in py -m pip install bs4
-- type in py -m pip install requests
-- type in py -m pip install lxml
+- Press Windows + R and type in 'cmd' 
+- type in 'py -m ensurepip --upgrade' 
+- type in 'py -m pip install bs4' 
+- type in 'py -m pip install requests'
+- type in 'py -m pip install lxml'
 
 # Troubleshooting
 
-Try Deleting database.db in controller folder
+Try deleting database.db in controller folder
