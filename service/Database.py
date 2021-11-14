@@ -1,6 +1,14 @@
 import sqlite3
 
 
+class ItemAlreadyExists(Exception):
+    pass
+
+
+class WrongFieldLength(Exception):
+    pass
+
+
 class Database:
 
     __instances = []
@@ -49,12 +57,9 @@ class Database:
                 with self.connection:
                     self.cursor.execute("INSERT INTO " + self.name + " VALUES " + placeholder, tuple(list))
             else:
-                raise Exception(
-                    str(list[0])
-                    + " ist bereits in der Datenbank!"
-                )
+                raise ItemAlreadyExists
         else:
-            raise Exception(
+            raise WrongFieldLength(
                 "Datenbank hat " + str(len(self.additional_fields) + 1) + " Felder, übergebenes Objekt hat "
                 + str(len(data)) + " Felder."
             )

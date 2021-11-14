@@ -1,4 +1,4 @@
-from service.Database import Database
+from service.Database import Database, ItemAlreadyExists
 from service.EventsManagement import EventsManager
 from view.DownloadView import DownloadView
 
@@ -21,13 +21,14 @@ class DownloadController:
         downloaded_already = 0
         errors = []
         for item in newitems:
-            # try:
-            item.download()
-            Database.get_instance("files").add(item.get_hash())
-            downloaded_already += 1
-            EventsManager.get_instance().notify_listeners("download", (downloaded_already, item.name))
-            # except Exception as e:
-            #     errors.append(item.get_path() + "\\" + item.name + ", Grund: " + str(e))
+            try:
+                item.download()
+                Database.get_instance("files").add(item.get_hash())
+                downloaded_already += 1
+                EventsManager.get_instance().notify_listeners("download", (downloaded_already, item.name))
+            except Exception as e:
+                if not Exception is ItemAlreadyExists:
+                    errors.append(item.get_path() + "\\" + item.name + ", Grund: " + str(e))
         if len(errors) != 0:
             print("\nFolgende Dateien konnten nicht herruntergeladen werden:")
             for error in errors:

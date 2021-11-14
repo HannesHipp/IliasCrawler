@@ -24,6 +24,7 @@ class Session:
                          )
             test_content = BeautifulSoup(session.get("https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboard"
                                                 "GUI&cmd=jumpToSelectedItems").text, "lxml")
+            # If "Anmelden" button is present, then we are not already logged in
             if test_content.find(attrs={"aria-label": "Anmelden"}) is not None:
                 raise ConnectionError
             Session.__instance = session
