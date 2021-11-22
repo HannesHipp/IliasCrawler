@@ -20,10 +20,7 @@ class Element:
     def __clear_name(name):
         for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
             name = " ".join(name.split(char))
-        name = " ".join(name.split())
-        if len(name) > 100:
-            name = name[:45] + '___' + name[-45:]
-        return name
+        return " ".join(name.split())
 
     @staticmethod
     def __correct_url(url):

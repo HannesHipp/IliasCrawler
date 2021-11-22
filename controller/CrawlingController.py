@@ -2,6 +2,7 @@ from service.Database import Database
 from service.EventsManagement import EventsManager
 from service.Session import Session
 from view.CrawlingView import CrawlingView
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 def crawl(page):
@@ -58,9 +59,9 @@ class CrawlingController:
     @staticmethod
     def run(courses):
         CrawlingView.crawling_starts_promt()
+        courses_to_crawl = [course for course in courses if Database.get_instance("courses_to_download").key_exists(course.get_course_number())]
         result = []
-        for course in courses:
-            if not Database.get_instance("course_exceptions").key_exists(course.get_course_number()):
-                result += crawl(course)
+        for item in ThreadPool(8).map(crawl, courses_to_crawl):
+            result += item
         result = detect_items_with_long_path(result)
         return result

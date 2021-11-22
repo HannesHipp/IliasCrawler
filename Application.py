@@ -13,8 +13,8 @@ def initialize():
     # setting up databases
     Database("userdata", "username", "password", "downloadpath")
     Database("files", "hash")
-    Database("course_exceptions", "course_number")
-    Database("all_courses", "course_number", "name")
+    Database("courses_to_download", "course_number")
+    Database("all_courses", "course_number")
 
     # Setting up Event Management
     EventsManager.get_instance().attach_listener("download", DownloadView())
@@ -28,4 +28,3 @@ courses = CourseSelectionController.run()
 data = CrawlingController.run(courses)
 DownloadController.run(data)
 Service.quit_program()
-

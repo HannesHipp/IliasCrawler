@@ -24,14 +24,15 @@ class File(Downloadable):
     @staticmethod
     def create(element, parent):
         name = str(element.text)
-        # if '.mp4' in name:
-        #     name = name.split('.mp4')[0] + '.mp4'
-        # else:
-        #     name = name + '.pdf'
         try:
             name = pattern.split(name)[0] + pattern.search(name)[0]
         except:
-            name = name + '.pdf'
+            try:
+                extension = element.parent.parent.parent.find(class_="il_ItemProperty").text.replace(
+                    "\n", "").replace("\t", "").replace("\xa0", "")
+                name = f"{name}.{extension}"
+            except:
+                pass
         return File(name,
                     element['href'],
                     parent)
@@ -39,14 +40,14 @@ class File(Downloadable):
     @staticmethod
     def extract_from_page(content, parent):
         result = []
-        raw_items = Service.get_items_where_href_contains_markers(content, '_file_')
+        raw_items = Service.get_items_where_href_contains_markers(
+            content, '_file_')
         for element in Service.remove_duplicates_and_clear(raw_items):
             result.append(File.create(element, parent))
         return result
 
     def get_hash(self):
         return self.url.split("_file_")[1][:7]
-
 
 
 class Video(Downloadable):
@@ -61,7 +62,8 @@ class Video(Downloadable):
     @staticmethod
     def extract_from_page(content, parent):
         result = []
-        raw_items = Service.get_items_where_src_contains_markers(content, '.mp4', 'webm')
+        raw_items = Service.get_items_where_src_contains_markers(
+            content, '.mp4', 'webm')
         for element in Service.remove_duplicates_and_clear(raw_items):
             result.append(Video.create(element, parent))
         return result

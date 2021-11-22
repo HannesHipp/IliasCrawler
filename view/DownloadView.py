@@ -13,7 +13,7 @@ class DownloadView(EventListener):
             print("\nDeine Dateien sind bereits up-to-date.")
         else:
             print("\nDavon sind " + str(DownloadView.__number_of_new_files) + " Dateien noch nicht in deinem lokalen "
-                  "Speicher. Diese Dateien werden jetztherruntergeladen:")
+                  "Speicher. Diese Dateien werden jetzt herruntergeladen:")
         for file in new_files:
             print(file.name)
 

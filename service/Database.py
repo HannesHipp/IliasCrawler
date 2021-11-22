@@ -99,3 +99,9 @@ class Database:
     def delete_key(self, key_text):
         with self.connection:
             self.cursor.execute("DELETE FROM " + self.name + " WHERE " + self.key + "='" + key_text + "'")
+    
+    def overwrite(self, data):
+        with self.connection:
+            self.cursor.execute("DELETE FROM " + self.name)
+        for item in data:
+            self.add(item)
