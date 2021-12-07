@@ -1,14 +1,20 @@
 from service.Session import Session
-from model.Files import File as File
-from model.Files import Video as Video
+from model.File import File as File
+from model.Video import Video as Video
 import model.Service as Service
 from model.Element import Element as Element
+from json import loads
 
 
 class Folder(Element):
 
     def __init__(self, name, url, parent):
         super().__init__(name, url, parent)
+        if 'https://ilias3.uni-stuttgart.de/' not in url:
+            if url[:2] == "./":
+                url = url[2:]
+            url = 'https://ilias3.uni-stuttgart.de/' + url
+        self.url = url
         self.content = None
 
     #get_files_and_videos and get_new_pages are polymophically overwritten in subclasses of Folder
@@ -38,12 +44,14 @@ class Folder(Element):
 
     @staticmethod
     def create(element, parent):
+        url = element.attrs['href']
+        url = Element.correct_url(url)
         return Folder(str(element.text),
-                      element.attrs['href'],
+                      url,
                       parent)
 
 
-class Root(Folder):
+class Ilias(Folder):
 
     def get_new_pages(self):
         result = Course.extract_from_page(self.content, self)
@@ -139,18 +147,16 @@ class MCH(Folder):
 class OPD(Folder):
 
     def get_files_and_videos(self):
-        result = []
-        # found = False
-        # while not found:
-        #     video_elements = remove_duplicates_and_clear(self.get_items_where_src_contains_markers('.mp4'))
-        #     if len(video_elements) != 0:
-        #         found = True
-        # for element in video_elements:
-        #     if 'presenter' in element.get_attribute("key"):
-        #         pass
-        #     else:
-        #         result.append(Video(self.name + '.mp4', element.get_attribute('src'), self))
-        return result
+        id = self.url.split("&id=")[1].split("&cmd")[0]
+        id1 = id.split("/")[0]
+        id2 = id.split("/")[1]
+        json_url = f'https://ilias3.uni-stuttgart.de/Customizing/global/plugins/Services/Repository/RepositoryObject/Opencast/api.php/episode.json?id={id1}%2F{id2}'
+        json = Session.get_file_content(json_url)
+        url = loads(json)["search-results"]["result"]["mediapackage"]["media"]["track"][0]["url"]
+        return [Video(f"{self.name}.mp4", url, self)]
+    
+    def get_new_pages(self):
+        return []
 
     @staticmethod
     def extract_from_page(content, parent):
@@ -162,7 +168,9 @@ class OPD(Folder):
 
     @staticmethod
     def create(element, parent):
+        url = element.attrs['href']
+        url = Element.correct_url(url)
         return OPD(str(element.text),
-                   element.attrs['href'],
+                   url,
                    parent)
 

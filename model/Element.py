@@ -5,7 +5,7 @@ class Element:
 
     def __init__(self, name, url, parent):
         self.name = Element.__clear_name(name)
-        self.url = Element.__correct_url(url)
+        self.url = url
         self.parent = parent
         # print(self.name + ' | ' + self.url)
 
@@ -23,7 +23,7 @@ class Element:
         return " ".join(name.split())
 
     @staticmethod
-    def __correct_url(url):
+    def correct_url(url):
         if 'https://ilias3.uni-stuttgart.de/' not in url:
             if url[:2] == "./":
                 url = url[2:]
@@ -37,4 +37,6 @@ class Element:
     def get_hash(self):
         result = self.name + self.parent.name + self.parent.parent.name
         return str(result)
+
+        g
 
