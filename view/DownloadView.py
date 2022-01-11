@@ -14,8 +14,6 @@ class DownloadView(EventListener):
         else:
             print("\nDavon sind " + str(DownloadView.__number_of_new_files) + " Dateien noch nicht in deinem lokalen "
                   "Speicher. Diese Dateien werden jetzt herruntergeladen:")
-        for file in new_files:
-            print(file.name)
 
     @staticmethod
     def update(data):

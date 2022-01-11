@@ -1,7 +1,5 @@
-from service.Session import Session
-from model.Folders import Ilias
+from model.Ilias import Ilias
 from service.Database import Database
-from view import Service
 from view.CourseSelectionView import CourseSelectionView
 
 
@@ -45,9 +43,5 @@ class CourseSelectionController:
 
     @staticmethod
     def crawl_for_courses():
-        root = Ilias('Ilias',
-                    'https://ilias3.uni-stuttgart.de/ilias.php?cmdClass=ilmembershipoverviewgui&cmdNode=k2&baseClass=ilmembershipoverviewgui',
-                    None)
-        root.content = Session.get_content(root.url)
-        return root.get_new_pages()
-
+        return Ilias.create().get_new_pages()
+    

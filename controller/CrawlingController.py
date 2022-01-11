@@ -6,7 +6,6 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 
 def crawl(page):
-    page.content = Session.get_content(page.url)
     files_and_videos = page.get_files_and_videos()
     new_pages = page.get_new_pages()
     page.content = None
@@ -59,7 +58,7 @@ class CrawlingController:
     @staticmethod
     def run(courses):
         CrawlingView.crawling_starts_promt()
-        courses_to_crawl = [course for course in courses if Database.get_instance("courses_to_download").key_exists(course.get_course_number())]
+        courses_to_crawl = [course.convert_to_folder() for course in courses if Database.get_instance("courses_to_download").key_exists(course.get_course_number())]
         result = []
         for item in ThreadPool(6).map(crawl, courses_to_crawl):
             result += item

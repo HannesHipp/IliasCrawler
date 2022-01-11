@@ -1,13 +1,36 @@
 from service.Database import Database
+from service.Exceptions import NoNameException, NoUrlException
 
 
 class Element:
 
+    url_prefixes = {'ilias.php?': 'https://ilias3.uni-stuttgart.de/',
+                    'Uni_Stuttgart/mobs/': 'https://ilias3.uni-stuttgart.de/'}
+
     def __init__(self, name, url, parent):
-        self.name = Element.__clear_name(name)
-        self.url = url
+        self.__set_name(name)
+        self.__set_url(url)
         self.parent = parent
-        # print(self.name + ' | ' + self.url)
+
+    def __set_name(self, name):
+        for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
+            name = " ".join(name.split(char))
+        self.name = " ".join(name.split())
+
+    def __set_url(self, url):
+        if 'http' not in url:
+            url_needs_correction = True
+            for key in type(self).url_prefixes.keys():
+                if url_needs_correction:
+                    if key in url:
+                        if url[:2] == "./":
+                            url = url[2:]
+                        url = type(self).url_prefixes[key] + url
+                        url_needs_correction = False
+            if url_needs_correction:
+                raise Exception(
+                    f"Url does not match prefixes. type = {str(type(self))} url = {url}")
+        self.url = url
 
     def get_path(self):
         if self.parent is None:
@@ -17,26 +40,24 @@ class Element:
             return parentpath + "\\" + self.parent.name
 
     @staticmethod
-    def __clear_name(name):
-        for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
-            name = " ".join(name.split(char))
-        return " ".join(name.split())
+    def get_name(bs4_element):
+        try:
+            name = bs4_element.text
+            if name.strip():
+                return name
+            else:
+                raise NoNameException
+        except (KeyError, AttributeError):
+            raise NoNameException
 
     @staticmethod
-    def correct_url(url):
-        if 'https://ilias3.uni-stuttgart.de/' not in url:
-            if url[:2] == "./":
-                url = url[2:]
-            url = 'https://ilias3.uni-stuttgart.de/' + url
-        return url
+    def get_url(bs4_element):
+        try:
+            return bs4_element.attrs['href']
+        except (KeyError, AttributeError):
+            raise NoUrlException
 
     @staticmethod
-    def extract_from_page(content, parent):
-        raise Exception("Page extraction method not implemented.")
-
-    def get_hash(self):
-        result = self.name + self.parent.name + self.parent.parent.name
-        return str(result)
-
-        g
+    def get_raw_elements(page):
+        return page.content.findAll('a')
 
