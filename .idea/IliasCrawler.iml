@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/venv/Lib/site-packages/bs4" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/venv/Lib/site-packages/requests" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/view" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/new" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (IliasCrawler)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
