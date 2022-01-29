@@ -1,44 +1,40 @@
-import os
-from controller.CourseLoadingController import CourseLoadingController
-from controller.CourseSelectionController import CourseSelectionController
-from controller.LoginController import LoginController
-from controller.PathSelectionController import PathSelectionController
-from controller.Window import Window
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import Qt
-import sys
-from service.Database import Database
-from service.EventsManagement import EventsManager
+from PyQt5.QtCore import QObject, pyqtSignal, QThread
+from src.python.business.BusinessModel import BusinessModel
+from src.python.ui.UI import UI
+from src.python.process.Crawler import Crawler
+from src.python.process.Downloader import Downloader
 
 
-def initialize(window):
-    # setting up databases
-    Database("login_data", "username", "password")
-    Database("storage_path", "storage_path")
-    Database("files", "hash")
-    Database("all_courses", "course_number", "should_be_downloaded")
+class Application(QObject):
 
-    # Setting up Event Management
-    # EventsManager.get_instance().attach_listener("download", DownloadView())
-    # EventsManager.get_instance().attach_listener("crawl", CrawlingView())
+    request_crawling = pyqtSignal(list)
+    request_login_data = pyqtSignal()
+    request_login_data_validation = pyqtSignal(str, str)
 
-    # Setting up all Controllers
-    LoginController(window)
-    PathSelectionController(window)
-    CourseLoadingController(window)
-    CourseSelectionController(window)
+    def __init__(self) -> None:
+        super().__init__()
+        
+        self.crawler = Crawler()
+        self.downloader = Downloader()
+        self.business_model = BusinessModel()
 
-os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-app = QApplication(sys.argv)
-app.setAttribute(Qt.AA_EnableHighDpiScaling)
-window = Window()
-initialize(window)
-window.show()
-if len(Database.get_instance("login_data").get_all()) == 0 or len(Database.get_instance("storage_path").get_all()) == 0:
-    Database.get_instance("login_data").clear_table()
-    Database.get_instance("storage_path").clear_table()
-    LoginController.instance.show()
-else:   
-    CourseSelectionController.instance.first_time_execution = False
-    CourseLoadingController.instance.show()
-sys.exit(app.exec_())
+        # setup threading
+        self.worker_thread = QThread()
+        self.crawler.moveToThread(self.worker_thread)
+        self.downloader.moveToThread(self.worker_thread)
+        self.worker_thread.start()  
+
+        # setup connections
+        self.request_crawling.connect(self.crawler.crawl)
+        self.crawler.send_crawling_results.connect(self.business_model.setCourses)
+        self.request_login_data_validation.connect(self.business_model.setSession)
+
+    def run(self):
+        if self.business_model.is_valid:
+            self.request_crawling.emit()
+        else:
+            self.request_login_data.emit()
+
+    def validateLoginData(self, username, password):
+        self.request_login_data_validation.emit(username, password)
+    

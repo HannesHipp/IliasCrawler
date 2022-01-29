@@ -93,9 +93,10 @@ class Page(Container):
         return result
 
     def construct_parent_structure(self, bs4_element):
-        on_page_container_types = type(self).on_page_container_types
-        parent
-        while parent
+        # on_page_container_types = type(self).on_page_container_types
+        # parent
+        # while parent
+        pass
 
 class OnPageContainer(Container):
     pass
@@ -144,4 +145,3 @@ def crawl(page):
     for new_page in new_pages:
         files_and_videos += crawl(new_page)
     return files_and_videos
-
