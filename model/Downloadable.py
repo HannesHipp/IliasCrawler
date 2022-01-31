@@ -1,5 +1,6 @@
 from model.Element import Element
 import os
+from service.BusinessModel import BusinessModel
 from service.Session import Session
 
 
@@ -10,4 +11,4 @@ class Downloadable(Element):
         if not os.path.isdir(path):
             os.makedirs(path)
         with open(path + "\\" + self.name, 'wb') as file:
-            file.write(Session.get_file_content(self.url))
+            file.write(BusinessModel.instance.session.get_file_content(self.url))

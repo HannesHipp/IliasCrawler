@@ -1,4 +1,5 @@
 from model.Element import Element as Element
+from service.BusinessModel import BusinessModel
 from service.Exceptions import NoNameException, NoUrlException
 from service.Session import Session
 
@@ -31,4 +32,4 @@ class Page(Element):
         return result
 
     def get_content(self):
-        return Session.get_content(self.url)
+        return BusinessModel.instance.session.get_content(self.url)

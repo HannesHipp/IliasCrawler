@@ -18,12 +18,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>800</width>
      <height>500</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/test/pictures/IMG_4740.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/test/pictures/CourseLoadingPicture.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QWidget" name="widget" native="true">
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="label_description">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>180</y>
+     <x>245</x>
+     <y>260</y>
      <width>311</width>
      <height>16</height>
     </rect>
@@ -71,10 +71,10 @@ font: 10pt &quot;Segoe UI&quot;;</string>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>138</y>
-     <width>311</width>
-     <height>41</height>
+     <x>245</x>
+     <y>220</y>
+     <width>310</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="font">
@@ -95,7 +95,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
   <zorder>label</zorder>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

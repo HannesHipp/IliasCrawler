@@ -26,29 +26,31 @@ class Database():
         return self.login_data_table.get_all()[0][0]
 
     def get_password(self):
-        return self.login_data_table.get_all()[0][1]
+            return self.login_data_table.get_all()[0][1]
 
-    def set_login_data(self, username, password):
+    def save_login_data(self, username, password):
         self.login_data_table.clear_table()
         self.login_data_table.add(username, password)
+    
+    def get_storage_path(self):
+        return self.storage_path_table.get_all()[0][0]
 
-    def set_storage_path(self, storage_path):
+    def save_storage_path(self, storage_path):
         self.storage_path_table.clear_table()
         self.storage_path_table.add(storage_path)
 
-    def course_in_database(self, course):
-        self.courses_table.key_exists(course.get_hash())
+    def get_saved_course_dict(self):
+        result = {}
+        list_of_course_tuples = self.courses_table.get_all()
+        for course_tuple in list_of_course_tuples:
+            if course_tuple[1] == "True":
+                result[course_tuple[0]] = True
+            else:
+                result[course_tuple[0]] = False
+        return result
 
-    def course_should_be_downloaded(self, course):
-        should_be_downloaded = self.courses_table.find("hash", course.get_hash())[0][1]
-        if should_be_downloaded == "False":
-            return False
-        else:
-            return True
-
-    def clear_course_table(self):
+    def save_fresh_courses(self, fresh_courses):
         self.courses_table.clear_table()
-
-    def add_course(self, course):
-        self.courses_table.add(course.get_hash(), str(course.should_be_downloaded))
-        
+        for course in fresh_courses:
+            self.courses_table.add(course.get_hash(), str(course.should_be_downloaded))
+            

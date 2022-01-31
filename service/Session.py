@@ -5,8 +5,6 @@ from service.Database import Database
 
 class Session:
 
-    __instance = None
-
     def __init__(self, username, password):
         self.session = requests.session()
         self.session.post('https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart'
@@ -17,21 +15,14 @@ class Session:
                               'cmd[doStandardAuthentication]': 'Anmelden'
                           }
                           )
-        if self.__is_valid():
-            self.is_valid = True
-            Session.__instance = self.session
-        else: 
-            self.is_valid = False
 
-    @staticmethod
-    def get_content(url):
-        return BeautifulSoup(Session.__instance.get(url).text, 'lxml')
+    def get_content(self, url):
+        return BeautifulSoup(self.session.get(url).text, 'lxml')
 
-    @staticmethod
-    def get_file_content(url):
-        return Session.__instance.get(url).content
+    def get_file_content(self, url):
+        return self.session.get(url).content
 
-    def __is_valid(self):
+    def is_valid(self):
         test_content = BeautifulSoup(self.session.get("https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboard"
                                                       "GUI&cmd=jumpToSelectedItems").text, "lxml")
 

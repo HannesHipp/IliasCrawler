@@ -2,6 +2,7 @@ from controller.CourseLoadingController import CourseLoadingController
 from controller.Frame import Frame
 from controller.Window import Window
 from easygui import diropenbox
+from service.BusinessModel import BusinessModel
 from service.Database import Database
 
 
@@ -20,5 +21,5 @@ class PathSelectionController(Frame):
     def button_select_path_on_action(self):
         path = diropenbox()
         if path is not None:
-            Database.instance.set_storage_path(path)
+            BusinessModel.instance.set_storage_path(path)
             CourseLoadingController.instance.show()

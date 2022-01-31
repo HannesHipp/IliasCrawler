@@ -1,8 +1,10 @@
 import time
+from controller.AutoStartController import AutoStartController
 from controller.Frame import Frame
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox
+from service.BusinessModel import BusinessModel
 
 from service.Database import Database
 
@@ -19,25 +21,46 @@ class CourseSelectionController(Frame):
         super().__init__(container)
         self.button_select_choice.clicked.connect(
             self.button_select_choice_on_action)
-        self.model = None
-        self.courses = None
-        self.first_time_execution = None
+        AutoStartController.instance.button_start.clicked.connect(
+            self.start_autostart_on_action
+        )
+        AutoStartController.instance.button_cancel.clicked.connect(
+            self.cancel_autostart_on_action
+        )
+        self.canceled = False
+
+    def button_select_choice_on_action(self):
+        BusinessModel.instance.update_fresh_courses(self.get_updated_course_list())
+        print("Done")
 
     def show(self):
         super().show()
+        fresh_courses = BusinessModel.instance.fresh_courses
+        saved_course_dict = BusinessModel.instance.safed_courses_dict
+        self.model = self.construct_item_model(fresh_courses, saved_course_dict)
         self.listView.setModel(self.model)
-        # if not self.first_time_execution:
-        #     # CourseSelectionController.show_intervention_dialog()
-        #     a = 2
+        if not BusinessModel.instance.first_time_execution:
+            self.show_autostart_dialog()
 
-            
-    def button_select_choice_on_action(self):
-        self.save_selection_to_database()
-        print(self.get_selection())
+    def construct_item_model(self, fresh_courses, safed_courses_dict):
+        result = QStandardItemModel()
+        for course in fresh_courses:
+            item = QStandardItem(course.name)
+            item.setCheckable(True)
+            item.setData(course)
+            item.setCheckState(Qt.Unchecked)
+            if not course.get_hash() in safed_courses_dict:
+                item.setCheckState(Qt.Checked)
+                item.setBackground(QBrush(QColor(113,217,140)))
+                result.insertRow(0, item)
+            else:
+                if safed_courses_dict[course.get_hash()]:
+                    item.setCheckState(Qt.Checked)
+                result.appendRow(item)
+        return result   
 
-    def save_selection_to_database(self):
-        database = Database.instance
-        database.clear_course_table()
+    def get_updated_course_list(self):
+        result = []
         for i in range(self.model.rowCount()):
             item = self.model.item(i)
             course = item.data()
@@ -45,20 +68,30 @@ class CourseSelectionController(Frame):
                 course.should_be_downloaded = True
             else: 
                 course.should_be_downloaded = False
-            database.add_course(course)
+            result.append(course)
+        return result
 
-    @staticmethod
-    def show_intervention_dialog():
-        dialog = QMessageBox()
-        dialog.setWindowTitle("AutoStart")
-        dialog.exec_()
-        sec = 10
+    def show_autostart_dialog(self):
+        autostart = AutoStartController.instance
+        autostart.show()
+        sec = 20
         while sec >= 0:
-            dialog.setText(
-                f"IliasCrawler wird in {sec} Sekunden beginnen, in den zuvor ausgewählten Kursen nach neuen Dateien zu suchen. Wenn du deine Kurse anpassen möchtest, dann wähle bitte \"Abbrechen\".")
+            autostart.description.setText(
+                f"Das Programm wird in {sec}s deine bereits auswählten Kurse durchsuchen und neue Dateien automatisch herunterladen. Wenn du deine Kurse ändern möchtest, klicke einfach auf 'Abbrechen'.")
+            autostart.button_start.setText(f"Starten ({sec})")
             time.sleep(1)
             sec -= 1
+            autostart.app.processEvents()
+            if self.canceled:
+                break
+        if not self.canceled:
+            AutoStartController.instance.button_start.clicked.emit()
 
-    def get_selection(self):
-        return [self.model.item(i).text() for i in range(
-            self.model.rowCount()) if self.model.item(i).checkState() == Qt.Checked]
+    def start_autostart_on_action(self):
+        AutoStartController.instance.close()
+        self.button_select_choice.clicked.emit()
+
+
+    def cancel_autostart_on_action(self):
+        self.canceled = True
+        AutoStartController.instance.close()
