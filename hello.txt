@@ -1,0 +1,108 @@
+<ul>
+    <li data-jstree='{ "disabled" : true , "opened" : true }' id="exp_node_lm_exp_1" rel="disabled">
+        <a href="ilias.php?ref_id=2145231&amp;obj_id=1&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+             <img src="./templates/default/images/icon_lm.svg"/>
+             <span class="loader">
+             </span>
+             <span class="ilExp2NodeContent">
+              Vorlesungen zur Chemischen Reaktionstechnik 1
+             </span>
+        </a>
+        <ul>
+            <li data-jstree='{ "disabled" : true , "opened" : true }' id="exp_node_lm_exp_458298" rel="disabled">
+                <a href="ilias.php?ref_id=2145231&amp;obj_id=458298&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                    <img src="./templates/default/images/icon_st.svg"/>
+                    <span class="loader">
+                    </span>
+                    <span class="ilExp2NodeContent">
+                        Vorlesung 01, Sprechstunde am 3.11.2020, 14:00 in WebEx
+                    </span>
+                </a>
+                <ul>
+                    <li data-jstree='{ "disabled" : true , "opened" : true }' id="exp_node_lm_exp_453685" rel="disabled">
+                        <a href="ilias.php?ref_id=2145231&amp;obj_id=453685&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                            <img src="./templates/default/images/icon_st.svg"/>
+                            <span class="loader">
+                            </span>
+                            <span class="ilExp2NodeContent">
+                                Einf�hrung
+                            </span>
+                        </a>
+                        <ul>
+                            <li data-jstree='{ "disabled" : true , "opened" : true }' id="exp_node_lm_exp_453686" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=453686&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent ilHighlighted">
+                                        Einf�hrung
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_453695" rel="disabled">
+                        <a href="ilias.php?ref_id=2145231&amp;obj_id=453695&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                            <img src="./templates/default/images/icon_st.svg"/>
+                            <span class="loader">
+                            </span>
+                            <span class="ilExp2NodeContent">
+                                St�chiometrie und Stoffbilanzierung
+                            </span>
+                        </a>
+                        <ul>
+                            <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_458059" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=458059&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent">
+                                        St�chiometrische Gleichungen
+                                    </span>
+                                </a>
+                            </li>
+                            <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_458058" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=458058&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent">
+                                        Ums�tze und Schl�sselkomponenten
+                                    </span>
+                                </a>
+                            </li>
+                            <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_458057" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=458057&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent">
+                                        Schl�sselkomponenten und Nichtschl�sselkomponenten
+                                    </span>
+                                </a>
+                            </li>
+                            <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_458056" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=458056&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent">
+                                        Relativer Umsatz, Selektivit�t und Ausbeute
+                                    </span>
+                                </a>
+                            </li>
+                            <li data-jstree='{ "disabled" : true  }' id="exp_node_lm_exp_458055" rel="disabled">
+                                <a href="ilias.php?ref_id=2145231&amp;obj_id=458055&amp;cmd=layout&amp;cmdClass=illmpresentationgui&amp;cmdNode=gw&amp;baseClass=ilLMPresentationGUI">
+                                    <img src="./templates/default/images/icon_pg.svg"/>
+                                    <span class="loader">
+                                    </span>
+                                    <span class="ilExp2NodeContent">
+                                        Rechenbeispiel
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+ 

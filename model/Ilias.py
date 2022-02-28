@@ -1,19 +1,14 @@
-from model.Page import Page
 from model.Course import Course
-from service.Session import Session
+from model.IlItemGroup import IlItemGroup
+from model.Page import Page
 
 
 class Ilias(Page):
 
+    on_page_container_types = [IlItemGroup]
     downloadable_types = []
+    tree_importance = 0
 
     @staticmethod
-    def get_sub_page_types():
+    def sub_page_types():
         return [Course]
-
-    @staticmethod
-    def create():
-        url = 'https://ilias3.uni-stuttgart.de/ilias.php?cmdClass=ilmembershipoverviewgui&cmdNode=k2&baseClass=ilmembershipoverviewgui'
-        return Ilias('Ilias',
-                     url,
-                     None)

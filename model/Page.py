@@ -1,35 +1,51 @@
-from model.Element import Element as Element
+from model.Container import Container
 from service.BusinessModel import BusinessModel
-from service.Exceptions import NoNameException, NoUrlException
-from service.Session import Session
+from service.Exceptions import DoesNotContainNecessaryAttributesException
 
 
-class Page(Element):
+class Page(Container):
 
-    def __init__(self, name, url, parent):
-        super().__init__(name, url, parent)
-        self.content = self.get_content()
-
+    def crawl(self):
+        self.set_content()
+        files_and_videos = self.get_files_and_videos()
+        new_pages = self.get_new_pages()
+        self.content = None
+        for new_page in new_pages:
+            files_and_videos += new_page.crawl()
+        return files_and_videos
+    
     def get_files_and_videos(self):
-        return self.extract_elements(type(self).downloadable_types)
+        return self.extract_types(type(self).downloadable_types)
 
     def get_new_pages(self):
-        return self.extract_elements(type(self).get_sub_page_types())
+        return self.extract_types(type(self).sub_page_types())
 
-    def extract_elements(self, types):
+    def extract_types(self, types):
         result = []
-        for _type in types:
-            raw_elements = _type.get_raw_elements(self)
-            for raw_element in raw_elements:
+        for type_ in types:
+            for bs4_element in type_.extractor.extract_from_page(self.content):
                 try:
-                    if _type.is_valid(raw_element):
-                        url = _type.get_url(raw_element)
-                        name = _type.get_name(raw_element)
-                        if url not in [element.url for element in result]:
-                            result.append(_type.create(name, url, self))
-                except (NoNameException, NoUrlException):
-                    pass       
+                    parent = self.construct_parents(bs4_element)
+                    result.append(type_(bs4_element=bs4_element, parent=parent))
+                except DoesNotContainNecessaryAttributesException:
+                    pass
         return result
 
-    def get_content(self):
-        return BusinessModel.instance.session.get_content(self.url)
+    def construct_parents(self, bs4_element):
+        current = bs4_element
+        parent_found = False
+        while not parent_found:
+            if current.parent is None:
+                return self
+            else:
+                current = current.parent
+                for on_page_container_type in type(self).on_page_container_types:
+                    parent_found = on_page_container_type.extractor.extract_from_page_matches(current) 
+        for child in self.children:
+            if hasattr(child, 'id'):
+                if id(current) == child.id:
+                    return child
+        return on_page_container_type(current, self.construct_parents(current))
+
+    def set_content(self):
+        self.content = BusinessModel.instance.session.get_content(self.url)

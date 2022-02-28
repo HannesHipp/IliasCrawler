@@ -1,12 +1,11 @@
 import time
 from controller.AutoStartController import AutoStartController
+from controller.CrawlingController import CrawlingController
 from controller.Frame import Frame
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMessageBox
 from service.BusinessModel import BusinessModel
 
-from service.Database import Database
 
 
 class CourseSelectionController(Frame):
@@ -30,8 +29,8 @@ class CourseSelectionController(Frame):
         self.canceled = False
 
     def button_select_choice_on_action(self):
-        BusinessModel.instance.update_fresh_courses(self.get_updated_course_list())
-        print("Done")
+        BusinessModel.instance.set_fresh_courses(self.get_updated_course_list())
+        CrawlingController.instance.show()
 
     def show(self):
         super().show()

@@ -1,11 +1,6 @@
-import time
 from controller.Frame import Frame
 from controller.CourseSelectionController import CourseSelectionController
 from model.Ilias import Ilias
-from model.Course import Course
-from controller.Window import Window
-from PyQt5.QtCore import pyqtSignal, QObject, QThread, Qt
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from service.BusinessModel import BusinessModel
 
 from service.Database import Database
@@ -26,9 +21,11 @@ class CourseLoadingController(Frame):
     def show(self):
         super().show()
         BusinessModel.instance.initialize()
-        BusinessModel.instance.set_fresh_courses(self.crawl())
+        BusinessModel.instance.set_fresh_courses(self.crawl_courses())
         CourseSelectionController.instance.show()  
 
-    def crawl(self):
-        return Ilias.create().get_new_pages()
+    def crawl_courses(self):
+        ilias = Ilias(name='Ilias', url='https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems', parent=None)
+        ilias.set_content()
+        return ilias.get_new_pages()
 

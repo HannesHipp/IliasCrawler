@@ -15,5 +15,4 @@ class Frame(QWidget):
         if self.index is None:
             self.container.add_frame(self)
         self.container.stackedWidget.setCurrentIndex(self.index)
-        self.container.app.processEvents()
 

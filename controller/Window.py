@@ -3,14 +3,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
 
 class Window(QWidget):
     
-    def __new__(cls, app):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(Window, cls).__new__(cls)
-        return cls.instance
-    
-    def __init__(self, app):
+    def __init__(self):
         super().__init__()
-        self.app = app
         self.stackedWidget = QStackedWidget()
         mainLayout = QVBoxLayout()    
         mainLayout.setSpacing(0)

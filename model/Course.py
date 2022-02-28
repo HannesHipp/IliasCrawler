@@ -1,34 +1,31 @@
-from tkinter import E
-from model.Element import Element
+from model.File import File
 from model.Folder import Folder
-from service.Database import Database
-from service.EventsManagement import EventsManager
+from model.HTML_Extractor import HTML_Extractor
+from model.IlContainerBlock import IlContainerBlock
+from model.Lm import Lm
+from model.Page import Page
+from model.Video import Video
 
 
-class Course(Element):
+class Course(Page):
+    
+    extractor = HTML_Extractor(
+        {'href' : {'contains' : '_crs_'}},
+        'text',
+        'href'
+    )
+    on_page_container_types = [IlContainerBlock]
+    downloadable_types = [File, Video]
+    tree_importance = 0
 
-    url_markers = ['_crs_']
+    @staticmethod
+    def sub_page_types():
+        return [Lm, Folder]
 
-    def __init__(self, name, url, parent):
-        super().__init__(name, url, parent)
+    def __init__(self, **parameters):
+        super().__init__(**parameters)
         self.is_new = None
         self.should_be_downloaded = None
 
     def get_hash(self):
         return self.url.split("crs_")[1].split(".html")[0]
-    
-    def convert_to_folder(self):
-        EventsManager.get_instance().notify_listeners("crawl", (0, 1))
-        return Folder(self.name, self.url, self.parent)
-
-    @staticmethod
-    def create(name, url, parent):
-        return Course(name,
-                      url,
-                      parent)
-
-    @staticmethod
-    def is_valid(bs4_element):
-        if any(x in Course.get_url(bs4_element) for x in Course.url_markers):
-            return True
-        return False

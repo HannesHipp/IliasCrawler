@@ -21,6 +21,7 @@ class BusinessModel(QObject):
         self.password = None
         self.storage_path = None
         self.fresh_courses = None
+        self.downloadable_data = None
         if not self.first_time_execution:
             self.username = self.database.get_username()
             self.password = self.database.get_password()
@@ -48,7 +49,7 @@ class BusinessModel(QObject):
     def set_fresh_courses(self, courses):
         self.fresh_courses = courses
 
-    def update_fresh_courses(self, courses):
+    def set_fresh_courses(self, courses):
         self.fresh_courses = courses
         self.business_model_changed.emit()
 

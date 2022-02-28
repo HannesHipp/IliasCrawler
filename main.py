@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 from controller.AutoStartController import AutoStartController
+from controller.CrawlingController import CrawlingController
 
 from controller.Window import Window
 from controller.LoginController import LoginController
@@ -22,6 +23,7 @@ def initializeUI(app):
     PathSelectionController(window)
     CourseLoadingController(window)
     CourseSelectionController(window)
+    CrawlingController(window)
 
 
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"

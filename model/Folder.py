@@ -1,30 +1,22 @@
-from model.Page import Page
 from model.File import File
-from model.Video import Video
+from model.HTML_Extractor import HTML_Extractor
+from model.IlContainerBlock import IlContainerBlock
 from model.Lm import Lm
-from model.OPD import OPD
-from model.MCH import MCH
-from service.Exceptions import NoUrlException
+from model.Page import Page
+from model.Video import Video
 
 
 class Folder(Page):
-
-    url_markers = ['_fold_', 'Cmd=showSeries']
+    
+    extractor = HTML_Extractor(
+        {'href' : {'contains' : '_fold_'}},
+        'text',
+        'href'
+    )
+    on_page_container_types = [IlContainerBlock]
     downloadable_types = [File, Video]
+    tree_importance = 1
 
     @staticmethod
-    def get_sub_page_types():
-        return [Folder, Lm, OPD, MCH]
-
-    @staticmethod
-    def create(name, url,  parent):
-        return Folder(name,
-                      url,
-                      parent)
-
-    @staticmethod
-    def is_valid(bs4_element):
-        if any(x in Folder.get_url(bs4_element) for x in Folder.url_markers):
-            return True
-        return False
-        
+    def sub_page_types():
+        return [Lm]
