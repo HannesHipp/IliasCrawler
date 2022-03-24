@@ -54,19 +54,25 @@ class SQLTable:
             return True
 
     def find(self, field, text):
-        return self.execute(f"SELECT * FROM {self.name} WHERE {field}='{text}'")
+        result = self.execute(f"SELECT * FROM {self.name} WHERE {field}='{text}'")
+        if len(result) == 0:
+            result = None
+        return result
 
     def update_item(self, key_text, field, field_text):
         self.execute("UPDATE " + self.name + " SET " + field + "='" + field_text + "' WHERE " + self.key + "='" + key_text + "'")
 
     def get_all(self):
-        return self.execute("SELECT * FROM " + self.name)
+        result = self.execute("SELECT * FROM " + self.name)
+        if len(result) == 0:
+            result = None           
+        return result
 
     def delete_key(self, key_text):
         self.execute("DELETE FROM " + self.name + " WHERE " + self.key + "='" + key_text + "'")
     
     def update_table(self, data):
-        self.execute("DELETE FROM " + self.name)
+        self.clear_table()
         for item in data:
             self.add(item)
 

@@ -4,15 +4,6 @@ from service.Exceptions import DoesNotContainNecessaryAttributesException
 
 
 class Page(Container):
-
-    def crawl(self):
-        self.set_content()
-        files_and_videos = self.get_files_and_videos()
-        new_pages = self.get_new_pages()
-        self.content = None
-        for new_page in new_pages:
-            files_and_videos += new_page.crawl()
-        return files_and_videos
     
     def get_files_and_videos(self):
         return self.extract_types(type(self).downloadable_types)

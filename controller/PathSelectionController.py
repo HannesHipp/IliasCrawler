@@ -1,25 +1,19 @@
-from controller.CourseLoadingController import CourseLoadingController
 from controller.Frame import Frame
-from controller.Window import Window
+from PyQt5.QtCore import pyqtSignal
 from easygui import diropenbox
-from service.BusinessModel import BusinessModel
-from service.Database import Database
 
 
 class PathSelectionController(Frame):
+
+    signal_send_storage_path = pyqtSignal(str)
     
-    def __new__(cls, container):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(PathSelectionController, cls).__new__(cls)
-        return cls.instance
-    
-    def __init__(self, container):   
+    def __init__(self):   
         self.ui_file_location = 'C:\\Users\\Hannes\\Code Projekte\\IliasCrawler\\IliasCrawler\\resources\\PathSelectionView.ui'
-        super().__init__(container)
+        super().__init__()
         self.button_select_path.clicked.connect(self.button_select_path_on_action)
 
     def button_select_path_on_action(self):
         path = diropenbox()
         if path is not None:
-            BusinessModel.instance.set_storage_path(path)
-            CourseLoadingController.instance.show()
+            self.signal_send_storage_path.emit(path)
+

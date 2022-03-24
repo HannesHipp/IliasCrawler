@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
 
 class Window(QWidget):
     
-    def __init__(self):
+    def __init__(self, q_app):
         super().__init__()
+        self.q_app = q_app
         self.stackedWidget = QStackedWidget()
         mainLayout = QVBoxLayout()    
         mainLayout.setSpacing(0)
@@ -18,3 +19,9 @@ class Window(QWidget):
         index = self.stackedWidget.count()
         frame.index = index
         self.stackedWidget.addWidget(frame)
+
+    def select_frame(self, frame):
+        if frame.index is None:
+            self.add_frame(frame)
+        self.stackedWidget.setCurrentIndex(frame.index)
+        self.q_app.processEvents()
