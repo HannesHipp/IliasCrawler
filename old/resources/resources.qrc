@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="test">
+    <file>pictures/CourseLoadingPicture.jpg</file>
+    <file>pictures/LoginValidationPicture.jpg</file>
+    <file>pictures/IMG_4740.jpg</file>
+    <file>pictures/Login.JPG</file>
+  </qresource>
+</RCC>

@@ -1,42 +1,74 @@
-import os
-import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
-from controller.AutoStartController import AutoStartController
-from controller.CrawlingController import CrawlingController
+from Framework.App import App
+from Framework.Frame import Frame
 
-from controller.Window import Window
-from controller.LoginController import LoginController
-from controller.LoginValidationController import LoginValidationController
-from controller.PathSelectionController import PathSelectionController
-from controller.CourseLoadingController import CourseLoadingController
-from controller.CourseSelectionController import CourseSelectionController
-from service.BusinessModel import BusinessModel
-from service.Database import Database
-from service.Session import Session
+from IliasCrawler.Datapoints.Username import Username
+from IliasCrawler.Datapoints.Password import Password
+from IliasCrawler.Datapoints.Courses import Courses
+from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos
+from IliasCrawler.Datapoints.Path import Path
 
-def initializeUI(app):
-    window = Window(app)
-    AutoStartController(app)
-    LoginController(window)
-    LoginValidationController(window)
-    PathSelectionController(window)
-    CourseLoadingController(window)
-    CourseSelectionController(window)
-    CrawlingController(window)
+from IliasCrawler.Functions.GetCourses import GetCourses
+from IliasCrawler.Functions.Crawl import Crawl
+from IliasCrawler.Functions.Download import Download
+
+from IliasCrawler.Validators.ValidateLogin import ValidateLogin
 
 
-os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-q_app = QApplication(sys.argv)
-# q_app.setAttribute(Qt.AA_EnableHighDpiScaling)
-initializeUI(q_app)
-BusinessModel()
-if BusinessModel.instance.first_time_execution:
-    LoginController.instance.show()
-else:
-    CourseLoadingController.instance.show()  
-sys.exit(q_app.exec_())
+app = App()
 
+loginFrame = Frame(
+    framePath = "IliasCrawler\\resources\\LoginView.ui",
+    triggerButtonName = "button_login"
+)
+username = Username(
+    frame = loginFrame
+)
+password = Password(
+    frame = loginFrame
+)
+courses = Courses(
+    frame = Frame(
+        framePath = "IliasCrawler\\resources\\CourseSelectionView.ui",
+        triggerButtonName = "button_select_choice"
+    )
+)
+path = Path(
+    frame = Frame(
+        framePath = "IliasCrawler\\resources\\PathSelectionView.ui",
+        triggerButtonName = "button_select_path"
+    )
+)
+filesAndVideos = FilesAndVideos()
 
+app.addFunction(
+    ValidateLogin(
+        username = username,
+        password = password,
+        frame = Frame(framePath = "IliasCrawler\\resources\\LoginValidationView.ui")
+    )
+)
+app.addFunction(
+    GetCourses(
+        username = username, 
+        password = password, 
+        result = courses,
+        frame = Frame(framePath = "IliasCrawler\\resources\\CourseLoadingView.ui")
+    )
+)
 
+app.addFunction(
+    Crawl(
+        courses = courses,
+        result = filesAndVideos,
+        frame = Frame(framePath = "IliasCrawler\\resources\\CrawlingView.ui")
+    )
+)
+app.addFunction(
+    Download(
+        filesAndVideos = filesAndVideos,
+        path = path,
+        frame = Frame(framePath = "IliasCrawler\\resources\\DownloadingView.ui")
+    )
+)
 
+app.start()
