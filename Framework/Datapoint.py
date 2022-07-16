@@ -14,22 +14,21 @@ class Datapoint(QObject):
         super().__init__()
         self.value = None
         self.savedValue = None
-        self.calculatedValue = None
         self.valueToBeValidated = None
-       
+
         self.database = Database(
             self.__class__.__name__,
             kwargs['databaseStructure']
         )
+
         frame = kwargs.pop('frame', None)
         if frame:
             self.frame = frame
             frame.datapoints.append(self)
             self.dataElement = getattr(frame, kwargs['dataElementName'])
-        self.request.connect(self.getValue)
-
-    def canBeRequested(self):
-        return self.value is None and self.valueToBeValidated is None
+            self.request.connect(self.frame.getValues)
+        else:
+            self.request.connect(self.getValue)
 
     def getValue(self):
         self.savedValue = self.getSavedValue()
@@ -45,9 +44,8 @@ class Datapoint(QObject):
             if valid:
                 self.setValue(data)
             else:
-                self.showError(error)
-            self.done.emit()
-        except:
+                self.sendError.emit(error)
+        except AttributeError:
             self.valueToBeValidated = data        
 
     def setValue(self, value):

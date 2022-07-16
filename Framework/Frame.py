@@ -16,5 +16,13 @@ class Frame(QWidget):
 
     def toDoAfterTrigger(self):
         for datapoint in self.datapoints:
-            datapoint.toDoAfterTrigger()  
+            datapoint.toDoAfterTrigger()
         self.datapoints[0].done.emit()
+
+    def getValues(self):
+        allHaveValue = True
+        for datapoint in self.datapoints:
+            datapoint.getValue()
+            allHaveValue = allHaveValue and datapoint.value
+        if allHaveValue:
+            self.datapoints[0].done.emit()

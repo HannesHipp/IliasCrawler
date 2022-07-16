@@ -1,9 +1,9 @@
 from Framework.Database import Database
-from Framework.Datapoint import Datapoint
+from Framework.InputDatapoint import InputDatapoint
 from easygui import diropenbox
 
 
-class Path(Datapoint):
+class Path(InputDatapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(

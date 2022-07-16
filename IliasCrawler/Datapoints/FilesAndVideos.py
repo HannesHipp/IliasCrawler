@@ -1,9 +1,7 @@
-from Framework.Database import Database
-from Framework.Datapoint import Datapoint
+from Framework.OutputDatapoint import OutputDatapoint
 
 
-
-class FilesAndVideos(Datapoint):
+class FilesAndVideos(OutputDatapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(
@@ -16,15 +14,16 @@ class FilesAndVideos(Datapoint):
         allFiles = self.calculatedValue
         result = []
         for file in allFiles:
-            if file.getHash() not in filesOnDisk:
+            if file.get_hash() not in filesOnDisk:
                 result.append(file)
         self.setValue(result)
 
     def getSavedValue(self):
         tupleList = self.database.getTupleList()
         result = []
-        for tuple in tupleList:
-            result.append(tuple[0])
+        if tupleList is not None:
+            for tuple in tupleList:
+                result.append(tuple[0])
         return result
 
     def saveValue(self):

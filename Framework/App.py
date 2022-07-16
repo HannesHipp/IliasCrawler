@@ -2,9 +2,11 @@ import os
 import sys
 from PyQt5.QtCore import QObject, pyqtSignal, QThreadPool
 from PyQt5.QtWidgets import QApplication
+from Framework.InputDatapoint import InputDatapoint
 
 from Framework.Window import Window
-from Framework.Function import Function
+from Framework.Validator import Validator
+
 
 
 class App(QObject):
@@ -22,17 +24,15 @@ class App(QObject):
 
     def addFunction(self, function):
         function.threadpool = self.threadpool
-        if isinstance(function, Function):
-            self.functions.append(function)
-        else:
+        if isinstance(function, Validator):
             self.validators.append(function)
+        else:
+            self.functions.append(function)
         self.makeConnections(function)
-        if (function.outputDatapoint is not None 
-                and function.outputDatapoint not in self.outputDatapoints):
+        if function.outputDatapoint:
             self.addOutputDatapoint(function.outputDatapoint)
         for datapoint in function.inputDatapoints:
-            if (datapoint not in self.outputDatapoints 
-                    and datapoint not in self.inputDatapoints):
+            if isinstance(datapoint, InputDatapoint) and datapoint not in self.inputDatapoints:
                 self.addInputDatapoint(datapoint)
 
     def addOutputDatapoint(self, datapoint):
@@ -54,7 +54,7 @@ class App(QObject):
 
     def decideWhatToDo(self):
         result = None
-        for option in [self.validators, self.inputDatapoints, self.functions]:
+        for option in [self.validators, self.inputDatapoints, self.functions, self.outputDatapoints]:
             if result is not None:
                 break
             else:

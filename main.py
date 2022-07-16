@@ -55,10 +55,10 @@ app.addFunction(
         frame = Frame(framePath = "IliasCrawler\\resources\\CourseLoadingView.ui")
     )
 )
-
 app.addFunction(
     Crawl(
         courses = courses,
+        path = path,
         result = filesAndVideos,
         frame = Frame(framePath = "IliasCrawler\\resources\\CrawlingView.ui")
     )

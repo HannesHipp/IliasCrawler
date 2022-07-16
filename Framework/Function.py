@@ -1,4 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSignal
+from Framework.Datapoint import Datapoint
+from Framework.OutputDatapoint import OutputDatapoint
 
 from Framework.Worker import Worker
 
@@ -12,9 +14,17 @@ class Function(QObject):
 
     def __init__(self, **kwargs) -> None:
         super().__init__()
-        self.outputDatapoint = kwargs.pop('result', None)
+        outputDatapoint = kwargs.pop('result', None)
+        if outputDatapoint:
+            if not isinstance(outputDatapoint, OutputDatapoint):
+                raise Exception(f"Output datapoint of {self.__class__.__name__} function is not of type OutputDatapoint")
+        self.outputDatapoint = outputDatapoint
         self.frame = kwargs.pop('frame')
-        self.inputDatapoints = [kwargs[arg] for arg in kwargs]
+        inputDatapoints = [kwargs[arg] for arg in kwargs]
+        for datapoint in inputDatapoints:
+            if type(datapoint) is Datapoint:
+                raise Exception(f"Input datapoint of {self.__class__.__name__} function must be either of type InputDatapoint or OutputDatapoint")
+        self.inputDatapoints = inputDatapoints
         self.threadpool = None
         self.request.connect(self.startThread)
 
@@ -22,6 +32,8 @@ class Function(QObject):
         result = True
         for datapoint in self.inputDatapoints:
             result = result and datapoint.value is not None
+        if self.outputDatapoint:
+            result = result and self.outputDatapoint.calculatedValue is None
         return result
 
     def startThread(self):
@@ -33,6 +45,7 @@ class Function(QObject):
 
     def saveResult(self, result):
         self.outputDatapoint.calculatedValue = result
+        self.outputDatapoint.request.emit()
 
     def displayFrame(self):
         self.display.emit(self.frame)

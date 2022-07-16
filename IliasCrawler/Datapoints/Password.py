@@ -1,8 +1,7 @@
-from Framework.Database import Database
-from Framework.Datapoint import Datapoint
+from Framework.InputDatapoint import InputDatapoint
 
 
-class Password(Datapoint):
+class Password(InputDatapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(

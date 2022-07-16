@@ -1,11 +1,10 @@
-from model.Element import Element
-from model.File import File
-from model.Folder import Folder
-from model.Lm import Lm
-from model.MCH import MCH
-from model.OPD import OPD
-from model.Video import Video
-from service.EventsManagement import EventsManager
+from IliasCrawler.model.Element import Element
+from IliasCrawler.model.File import File
+from IliasCrawler.model.Folder import Folder
+from IliasCrawler.model.Lm import Lm
+from IliasCrawler.model.MCH import MCH
+from IliasCrawler.model.OPD import OPD
+from IliasCrawler.model.Video import Video
 
 
 class Course(Element):

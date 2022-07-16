@@ -21,7 +21,8 @@ class Validator(Function):
         (valid, error) = result
         if valid:
             for datapoint in self.inputDatapoints:
-                datapoint.setValue(datapoint.valueToBeValidated)   
+                datapoint.setValue(datapoint.valueToBeValidated)  
+                datapoint.valueToBeValidated = None 
         else:
             for datapoint in self.inputDatapoints:
                 datapoint.valueToBeValidated = None

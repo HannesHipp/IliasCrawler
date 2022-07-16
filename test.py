@@ -145,31 +145,15 @@ class MainWindow(QMainWindow):
 # window = MainWindow()
 # app.exec_()
 
-from bs4 import BeautifulSoup
-import requests
+class C:
+
+    def __init__(self) -> None:
+        pass
 
 
-class Session:
 
-    @staticmethod
-    def get_session(username, password):
-        session = requests.session()
-        session.post('https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id='
-                     'Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&base'
-                     'Class=ilStartUpGUI&rtoken=',
-                        data={
-                            'username': username,
-                            'password': password,
-                            'cmd[doStandardAuthentication]': 'Anmelden'
-                        }
-                        )
-        test_content = BeautifulSoup(session.get("https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboard"
-                                            "GUI&cmd=jumpToSelectedItems").text, "lxml")
-        # If "Anmelden" button is present, then we are not already logged in
-        if test_content.find(attrs={"aria-label": "Anmelden"}) is not None:
-            print("anmelden button gefunden")
-        return session
+C().f()
 
-Session.get_session("st162876", "90.0kg@Sommer")
+
 
 

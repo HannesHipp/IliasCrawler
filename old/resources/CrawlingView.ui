@@ -112,7 +112,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     </rect>
    </property>
    <property name="value">
-    <number>24</number>
+    <number>0</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -147,7 +147,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
 font: 10pt &quot;Segoe UI&quot;;</string>
    </property>
    <property name="text">
-    <string>0 Ordner und 0 Dateien gefunden...</string>
+    <string>Noch keine Kurse wurden durchsucht</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

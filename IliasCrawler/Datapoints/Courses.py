@@ -1,10 +1,9 @@
-from Framework.Database import Database
-from Framework.Datapoint import Datapoint
+from Framework.OutputDatapoint import OutputDatapoint
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PyQt5.QtCore import Qt
 from distutils.util import strtobool
 
-class Courses(Datapoint):
+class Courses(OutputDatapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(
@@ -49,15 +48,13 @@ class Courses(Datapoint):
     def validate(self, value):
         for course in value:
             if course.shouldBeDownloaded:
-                return True
+                return True, ""
         return False, "Es muss mindestens ein Kurs ausgewählt werden."
 
     def getSavedValue(self):
         result = {}
         tupleList = self.database.getTupleList()
-        if tupleList is None:
-            return None
-        else:
+        if tupleList is not None:
             for tuple in tupleList:
                 result[tuple[0]] = strtobool(tuple[1])
         return result
