@@ -1,5 +1,8 @@
 from Framework.App import App
 from Framework.Frame import Frame
+from Framework.InputFrame import InputFrame
+from Framework.NoUiFrame import NoUiFrame
+from Framework.OutputFrame import OutputFrame
 
 from IliasCrawler.Datapoints.Username import Username
 from IliasCrawler.Datapoints.Password import Password
@@ -16,59 +19,44 @@ from IliasCrawler.Validators.ValidateLogin import ValidateLogin
 
 app = App()
 
-loginFrame = Frame(
-    framePath = "IliasCrawler\\resources\\LoginView.ui",
-    triggerButtonName = "button_login"
-)
-username = Username(
-    frame = loginFrame
-)
-password = Password(
-    frame = loginFrame
-)
-courses = Courses(
-    frame = Frame(
-        framePath = "IliasCrawler\\resources\\CourseSelectionView.ui",
-        triggerButtonName = "button_select_choice"
-    )
-)
-path = Path(
-    frame = Frame(
-        framePath = "IliasCrawler\\resources\\PathSelectionView.ui",
-        triggerButtonName = "button_select_path"
-    )
-)
-filesAndVideos = FilesAndVideos()
 
-app.addFunction(
-    ValidateLogin(
-        username = username,
-        password = password,
-        frame = Frame(framePath = "IliasCrawler\\resources\\LoginValidationView.ui")
-    )
+loginFrame = InputFrame("IliasCrawler\\resources\\LoginView.ui",
+                        textfield_username = Username(), 
+                        textfield_password = Password(),
+                    	validationFrame = OutputFrame("IliasCrawler\\resources\LoginValidationView.ui",
+                                                      ValidateLogin())
 )
-app.addFunction(
-    GetCourses(
-        username = username, 
-        password = password, 
-        result = courses,
-        frame = Frame(framePath = "IliasCrawler\\resources\\CourseLoadingView.ui")
-    )
+pathFrame = InputFrame("IliasCrawler\\resources\\PathSelectionView.ui",
+                       button_select_path = Path()
 )
-app.addFunction(
-    Crawl(
-        courses = courses,
-        path = path,
-        result = filesAndVideos,
-        frame = Frame(framePath = "IliasCrawler\\resources\\CrawlingView.ui")
-    )
+getCoursesFrame = OutputFrame("IliasCrawler\\resources\\CourseLoadingView.ui",
+                              GetCourses()
 )
-app.addFunction(
-    Download(
-        filesAndVideos = filesAndVideos,
-        path = path,
-        frame = Frame(framePath = "IliasCrawler\\resources\\DownloadingView.ui")
-    )
+coursesFrame = InputFrame("IliasCrawler\\resources\\CourseSelectionView.ui",
+                          listView = Courses()
+)
+crawlingFrame = OutputFrame("IliasCrawler\\resources\\CrawlingView.ui",
+                            Crawl()
+)
+filesAndVideosFrame = NoUiFrame(FilesAndVideos()
+)
+downloadingFrame = OutputFrame("IliasCrawler\\resources\\DownloadingView.ui",
+                               Download()
 )
 
-app.start()
+loginFrame.connect(pathFrame, 'button_login')
+pathFrame.connect(getCoursesFrame, 'button_select_path')
+getCoursesFrame.connect(coursesFrame)
+coursesFrame.connect(crawlingFrame, 'button_select_choice')
+crawlingFrame.connect(filesAndVideosFrame)
+filesAndVideosFrame.connect(downloadingFrame)
+
+app.addFrame(loginFrame)
+app.addFrame(pathFrame)
+app.addFrame(getCoursesFrame)
+app.addFrame(coursesFrame)
+app.addFrame(crawlingFrame)
+app.addFrame(filesAndVideosFrame)
+app.addFrame(downloadingFrame)
+
+app.startWith(loginFrame)
