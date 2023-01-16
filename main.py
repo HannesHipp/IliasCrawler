@@ -19,29 +19,41 @@ from IliasCrawler.Validators.ValidateLogin import ValidateLogin
 
 app = App()
 
+username = Username()
+password = Password()
+path = Path()
+courses = Courses()
+filesAndVideos = FilesAndVideos()
 
-loginFrame = InputFrame("IliasCrawler\\resources\\LoginView.ui",
-                        textfield_username = Username(), 
-                        textfield_password = Password(),
-                    	validationFrame = OutputFrame("IliasCrawler\\resources\LoginValidationView.ui",
-                                                      ValidateLogin())
+
+loginFrame = Frame(
+    path = "IliasCrawler\\resources\\LoginView.ui",
+    textfield_username = username, 
+    textfield_password = password,
+    validators = [ValidateLogin(username, password)]
 )
-pathFrame = InputFrame("IliasCrawler\\resources\\PathSelectionView.ui",
-                       button_select_path = Path()
+pathFrame = Frame(
+    path = "IliasCrawler\\resources\\PathSelectionView.ui",
+    button_select_path = path
 )
-getCoursesFrame = OutputFrame("IliasCrawler\\resources\\CourseLoadingView.ui",
-                              GetCourses()
+getCoursesFrame = Frame(
+    path = "IliasCrawler\\resources\\CourseLoadingView.ui",
+    function = GetCourses(username, password)
 )
-coursesFrame = InputFrame("IliasCrawler\\resources\\CourseSelectionView.ui",
-                          listView = Courses()
+coursesFrame = Frame(
+    path = "IliasCrawler\\resources\\CourseSelectionView.ui",
+    listView = courses
 )
-crawlingFrame = OutputFrame("IliasCrawler\\resources\\CrawlingView.ui",
-                            Crawl()
+crawlingFrame = Frame(
+    path = "IliasCrawler\\resources\\CrawlingView.ui",
+    function = Crawl(username, courses, password)
 )
-filesAndVideosFrame = NoUiFrame(FilesAndVideos()
+filesAndVideosFrame = Frame(
+    filesAndVideos
 )
-downloadingFrame = OutputFrame("IliasCrawler\\resources\\DownloadingView.ui",
-                               Download()
+downloadingFrame = Frame(
+    path = "IliasCrawler\\resources\\DownloadingView.ui",
+    function = Download(username, password, path, filesAndVideos)
 )
 
 loginFrame.connect(pathFrame, 'button_login')

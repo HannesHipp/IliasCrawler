@@ -1,5 +1,7 @@
 from Framework.App import App
 from Framework.Frame import Frame
+from Framework.DataElements.TextField import TextField
+from Framework.DataElements.LoadingAnimation import LoadingAnimation
 
 from IliasCrawler.Datapoints.Username import Username
 from IliasCrawler.Datapoints.Password import Password
@@ -24,48 +26,51 @@ filesAndVideos = FilesAndVideos()
 
 
 loginFrame = Frame(
-    path = "IliasCrawler\\resources\\LoginView.ui",
-    textfield_username = username, 
-    textfield_password = password,
-    validators = [ValidateLogin(username, password)]
+    "IliasCrawler\\resources\\LoginView.ui",
+    TextField(username, "textfield_username"),
+    TextField(password, "textfield_password"),
+    validatorFrame = Frame(
+        "IliasCrawler\\resources\\LoginValidationView.ui",
+        LoadingAnimation(ValidateLogin(username, password), "loading_animation")
+    )
 )
-pathFrame = Frame(
-    path = "IliasCrawler\\resources\\PathSelectionView.ui",
-    button_select_path = path
-)
-getCoursesFrame = Frame(
-    path = "IliasCrawler\\resources\\CourseLoadingView.ui",
-    function = GetCourses(username, password)
-)
-coursesFrame = Frame(
-    path = "IliasCrawler\\resources\\CourseSelectionView.ui",
-    listView = courses
-)
-crawlingFrame = Frame(
-    path = "IliasCrawler\\resources\\CrawlingView.ui",
-    function = Crawl(username, courses, password)
-)
-filesAndVideosFrame = Frame(
-    filesAndVideos
-)
-downloadingFrame = Frame(
-    path = "IliasCrawler\\resources\\DownloadingView.ui",
-    function = Download(username, password, path, filesAndVideos)
-)
+# pathFrame = Frame(
+#     "IliasCrawler\\resources\\PathSelectionView.ui",
+#     PathSelector(path, "select_path")
+# )
+# getCoursesFrame = Frame(
+#     "IliasCrawler\\resources\\CourseLoadingView.ui",
+#     ProgressBarWithText(GetCourses(username, password), "progress_bar", "progress_bar_text_label")
+# )
+# coursesFrame = Frame(
+#     "IliasCrawler\\resources\\CourseSelectionView.ui",
+#     ListCheckable(courses, "listView")
+# )
+# crawlingFrame = Frame(
+#     "IliasCrawler\\resources\\CrawlingView.ui",
+#     ProgressBarWithText(Crawl(username, password, courses), "progress_bar", "progress_bar_text_label")
+# )
+# filesAndVideosFrame = Frame(
+#     filesAndVideos
+# )
+# downloadingFrame = Frame(
+#     "IliasCrawler\\resources\\DownloadingView.ui",
+#     ProgressBarWithText(Download(username, password, path, filesAndVideos), "progress_bar", "progress_bar_text_label")
+# )
 
-loginFrame.connect(pathFrame, 'button_login')
-pathFrame.connect(getCoursesFrame, 'button_select_path')
-getCoursesFrame.connect(coursesFrame)
-coursesFrame.connect(crawlingFrame, 'button_select_choice')
-crawlingFrame.connect(filesAndVideosFrame)
-filesAndVideosFrame.connect(downloadingFrame)
+# loginFrame.connect(pathFrame, 'button_login')
+# pathFrame.connect(getCoursesFrame, 'button_select_path')
+# getCoursesFrame.connect(coursesFrame)
+# coursesFrame.connect(crawlingFrame, 'button_select_choice')
+# crawlingFrame.connect(filesAndVideosFrame)
+# filesAndVideosFrame.connect(downloadingFrame)
 
 app.addFrame(loginFrame)
-app.addFrame(pathFrame)
-app.addFrame(getCoursesFrame)
-app.addFrame(coursesFrame)
-app.addFrame(crawlingFrame)
-app.addFrame(filesAndVideosFrame)
-app.addFrame(downloadingFrame)
+# app.addFrame(pathFrame)
+# app.addFrame(getCoursesFrame)
+# app.addFrame(coursesFrame)
+# app.addFrame(crawlingFrame)
+# app.addFrame(filesAndVideosFrame)
+# app.addFrame(downloadingFrame)
 
 app.startWith(loginFrame)

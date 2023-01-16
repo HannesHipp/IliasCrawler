@@ -54,9 +54,7 @@ class SQLTable:
             return True
 
     def getAll(self):
-        result = self.execute("SELECT * FROM " + self.name)
-        if len(result) == 0:
-            result = None           
+        result = self.execute("SELECT * FROM " + self.name)          
         return result
 
     def updateTable(self, tupleList):

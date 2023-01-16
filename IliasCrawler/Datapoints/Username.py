@@ -1,31 +1,34 @@
 from Framework.Database import Database
-from Framework.InputDatapoint import InputDatapoint
+from Framework.Datapoint import Datapoint
 
-
-class Username(InputDatapoint):
+class Username(Datapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(
-            databaseStructure = ('username',),
-            dataElementName = "textfield_username",
-            **kwargs
-            )
+            **kwargs,
+            numberOfDatabaseFields = 1
+        )
 
-    def howToGetValue(self):
-        if self.savedValue is None:
-            self.displayFrame()
+    def getValue(self, savedValue, calculatedValue):
+        if savedValue is None:
+            return None, True
         else:
-            self.setValue(self.savedValue)
+            return savedValue, False
     
-    def extractFromDataElement(self):
-        return self.dataElement.text()
+    def readFrom(self, dataElement):
+        return dataElement.text()
 
-    def getSavedValue(self):
-        tupleList = self.database.getTupleList()
-        if tupleList is None:
-            return None
+    def writeTo(self, dataElement, data):
+        dataElement.setText(data)
+
+    def valueFromDatabaseFormat(self, tupleList):
+        return tupleList[0][0]
+
+    def valueToDatabaseFormat(self, data):
+        return [(data,)]
+
+    def validate(self, data):
+        if data is None:
+            return False, "Es muss ein Nutzername eingegeben werden."
         else:
-            return tupleList[0][0]
-
-    def saveValue(self):
-        self.database.saveTupleList([(self.value,)])
+            return True, ""

@@ -1,38 +1,36 @@
 from Framework.Database import Database
-from Framework.InputDatapoint import InputDatapoint
+from Framework.Datapoint import Datapoint
 from easygui import diropenbox
 
 
-class Path(InputDatapoint):
+class Path(Datapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(
-            databaseStructure = ('path',),
-            dataElementName = "button_select_path",
-            **kwargs
+            **kwargs,
+            numberOfDatabaseFields = 1
         )
 
-    def howToGetValue(self):
-        if self.savedValue is None:
-            self.displayFrame()
+    def getValue(self, savedValue, calculatedValue):
+        if savedValue is None:
+            return None, True
         else:
-            self.setValue(self.savedValue)
+            return savedValue, False
     
-    def extractFromDataElement(self):
+    def readFrom(self, dataElement):
         return diropenbox()
+
+    def writeTo(self, dataElement, data):
+        pass
+
+    def valueFromDatabaseFormat(self, tupleList):
+        return tupleList[0][0]
+
+    def valueToDatabaseFormat(self, data):
+        return [(data,)]
 
     def validate(self, data):
         if data is not None:
             return True, ""
         else:
             return False, "Es muss ein Pfad ausgewählt werden."
-
-    def getSavedValue(self):
-        tupleList = self.database.getTupleList()
-        if tupleList is None:
-            return None
-        else:
-            return tupleList[0][0]
-
-    def saveValue(self):
-        self.database.saveTupleList([(self.value,)])

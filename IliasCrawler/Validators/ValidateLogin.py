@@ -6,13 +6,12 @@ class ValidateLogin(Validator):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.username = kwargs['username']
-        self.password = kwargs['password']
 
-    def validate(self):
-        session = Session(self.username.valueToBeValidated, self.password.valueToBeValidated)
-        if session.is_valid():
-            return True, ''
-        else:
-            return False, 'Der Benutzername oder das Passwort war falsch.'
+    def validate(self, **datapoints):
+        return True, ''
+        # session = Session('', '')
+        # if session.is_valid():
+        #     return True, ''
+        # else:
+        #     return False, 'Der Benutzername oder das Passwort war falsch.'
     

@@ -9,8 +9,6 @@ class GetCourses(Function):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.username = kwargs['username']
-        self.password = kwargs['password']
 
     def execute(self, progress_signal):
         Session.setGlobalSession(Session(self.username.value, self.password.value))

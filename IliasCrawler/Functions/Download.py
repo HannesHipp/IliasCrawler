@@ -5,8 +5,6 @@ class Download(Function):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.path = kwargs['path']
-        self.filesAndVideos = kwargs['filesAndVideos']
 
     def execute(self, progress_signal):
         downloaded_already = 0

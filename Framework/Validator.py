@@ -4,27 +4,16 @@ from Framework.Function import Function
 
 class Validator(Function):
 
+    done = pyqtSignal(tuple)
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
-    def canBeRequested(self):
-        result = True
-        for datapoint in self.inputDatapoints:
-            result = result and datapoint.valueToBeValidated is not None
-        return result
-
     def execute(self, progress_signal):
-        valid, error = self.validate()
+        valid, error = self.validate(*self.valuesToValidate)
         return (valid, error)
         
-    def saveResult(self, result):
+    def finishedThread(self, result):
         (valid, error) = result
-        if valid:
-            for datapoint in self.inputDatapoints:
-                datapoint.setValue(datapoint.valueToBeValidated)  
-                datapoint.valueToBeValidated = None 
-        else:
-            for datapoint in self.inputDatapoints:
-                datapoint.valueToBeValidated = None
-            self.sendError.emit(error)
+        for 
         self.done.emit()

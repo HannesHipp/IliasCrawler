@@ -5,63 +5,41 @@ from Framework.Database import Database
 
 class Datapoint(QObject):
 
-    request = pyqtSignal()
-    done = pyqtSignal()
-    display = pyqtSignal(object)
-    sendError = pyqtSignal(str)
-
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.value = None
-        self.savedValue = None
-        self.valueToBeValidated = None
+        self.valid = False
+        self.name = self.__class__.__name__.lower()
+        self.database = Database(self.name, kwargs['numberOfDatabaseFields'])
 
-        self.database = Database(
-            self.__class__.__name__,
-            kwargs['databaseStructure']
-        )
-
-        frame = kwargs.pop('frame', None)
-        if frame:
-            self.frame = frame
-            frame.datapoints.append(self)
-            self.dataElement = getattr(frame, kwargs['dataElementName'])
-            self.request.connect(self.frame.getValues)
+    def handleRequest(self):
+        savedValue = self.valueFromDatabaseFormat_(self.database.getTupleList())
+        calculatedValue = self.value
+        value, displayRequested = self.getValue(savedValue, calculatedValue)
+        if value and not displayRequested:
+            self.setValue(value)
         else:
-            self.request.connect(self.getValue)
+            self.value = value
+        return displayRequested
 
-    def getValue(self):
-        self.savedValue = self.getSavedValue()
-        self.howToGetValue()
+    def setValueWithDataFrom(self, dataElement):
+        self.value = self.readFrom(dataElement)
 
-    def displayFrame(self):
-        self.display.emit(self.frame)
+    def valueFromDatabaseFormat_(self, tupleList):
+        if len(tupleList) == 0:
+            return None
+        else:
+            return self.valueFromDatabaseFormat(tupleList)
 
-    def toDoAfterTrigger(self):
-        data = self.extractFromDataElement()
-        try:
-            valid, error = self.validate(data)
-            if valid:
-                self.setValue(data)
-            else:
-                self.sendError.emit(error)
-        except AttributeError:
-            self.valueToBeValidated = data        
-
-    def setValue(self, value):
-        self.value = value
-        self.saveValue()
-
-    def getSavedValue(self):
-        raise Exception(f"getSavedValue method not implemented for {self.__class__.__name__}")
+    def finalize(self):
+        self.valid = True
+        self.database.saveTupleList(self.valueToDatabaseFormat(self.value))
 
     def howToGetValue(self):
         raise Exception(f"howToGetValue method not implemented for {self.__class__.__name__}")
 
-    def saveValue(self, value):
-        raise Exception(f"saveValue method not implemented for {self.__class__.__name__}")
+    def valueFromDatabaseFormat(self, tupleList):
+        raise Exception(f"valueFromDatabaseFormat method not implemented for {self.__class__.__name__}")
 
-    def extractFromDataElement(self):
-        raise Exception(f"extractFromDataElement method not implemented for {self.__class__.__name__}")
-
-
+    def valueToDatabaseFormat(self, data):
+        raise Exception(f"valueToDatabaseFormat method not implemented for {self.__class__.__name__}")

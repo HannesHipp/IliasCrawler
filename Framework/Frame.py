@@ -1,28 +1,37 @@
-from PyQt5.QtWidgets import QWidget, QWidget
-from PyQt5.uic import loadUi
+from functools import partial
+
 import IliasCrawler.resources.resources
+
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget
+from PyQt5.uic import loadUi
 
 
 class Frame(QWidget):
 
-    def __init__(self, **kwargs):
+    request = pyqtSignal()
+    display = pyqtSignal(object)
+
+    def __init__(self, path, *args, **kwargs):
         super().__init__()
         self.index = None
-        loadUi(kwargs['framePath'], self)
-        if 'triggerButtonName' in kwargs:
-            triggerButton = getattr(self, kwargs['triggerButtonName'])
-            triggerButton.clicked.connect(self.toDoAfterTrigger)
-        self.datapoints = []
+        loadUi(path)
+        self.validationFrame = kwargs.pop('validatorFrame', None)
+        if self.validationFrame:
+            pass
+            # set next frames
+        self.uiElements = []
+        for uiElement in args:
+            self.uiElements.append(uiElement)
+            uiElement.setQtElements(self)
+        self.nextFrames = {}
+        self.request.connect(self.handleRequest)
 
-    def toDoAfterTrigger(self):
-        for datapoint in self.datapoints:
-            datapoint.toDoAfterTrigger()
-        self.datapoints[0].done.emit()
+    def handleRequest(self):
+        pass
 
-    def getValues(self):
-        allHaveValue = True
-        for datapoint in self.datapoints:
-            datapoint.getValue()
-            allHaveValue = allHaveValue and datapoint.value
-        if allHaveValue:
-            self.datapoints[0].done.emit()
+    def show(self):
+        self.display.emit(self)            
+
+    def showNextFrame(self):
+        self.nextFrame.request.emit()     

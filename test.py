@@ -145,14 +145,18 @@ class MainWindow(QMainWindow):
 # window = MainWindow()
 # app.exec_()
 
-class C:
 
-    def __init__(self) -> None:
-        pass
+class A:
 
+    def f(self, progress_bar, progress_bar_label):
+        print(progress_bar)
+        print(progress_bar_label)
 
+    def test(self):
+        kwargs = {'progress_bar':'pb', 'progress_bar_label':'pbl', 'pppp':'sadfs'}
+        self.f(**kwargs)
 
-C().f()
+A().test()
 
 
 

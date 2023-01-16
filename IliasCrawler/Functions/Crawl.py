@@ -8,8 +8,6 @@ class Crawl(Function):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.courses = kwargs['courses']
-        self.path = kwargs['path']
 
     def execute(self, progress_signal):
         result = []

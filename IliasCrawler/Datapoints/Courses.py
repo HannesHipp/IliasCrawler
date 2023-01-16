@@ -1,39 +1,33 @@
-from Framework.OutputDatapoint import OutputDatapoint
+from Framework.Datapoint import Datapoint
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PyQt5.QtCore import Qt
 from distutils.util import strtobool
 
-class Courses(OutputDatapoint):
+class Courses(Datapoint):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(
-            databaseStructure = ('hash', 'shouldBeDownlaoded'),
-            dataElementName = "listView",
-            **kwargs
-            )
+            **kwargs,
+            numberOfDatabaseFields = 2
+        )
 
-    def howToGetValue(self):
-        hashToDownloadIs = self.savedValue
-        allCourses = self.calculatedValue
-        model = QStandardItemModel()
+    def getValue(self, savedValue, calculatedValue):
+        hashToDownloadIs = savedValue
+        allCourses = calculatedValue
         for course in allCourses:
-            item = QStandardItem(course.name)
-            item.setData(course)
-            item.setCheckable(True)
-            item.setCheckState(Qt.Unchecked)
+            shouldBeDownloaded = False
             hash = course.getHash()
             if hash in hashToDownloadIs:
+                course.isNew = False
                 if hashToDownloadIs[hash]:
-                    item.setCheckState(Qt.Checked)
-                model.appendRow(item)
+                    shouldBeDownloaded = True
             else:
-                item.setBackground(QBrush(QColor(113,217,140)))
-                model.insertRow(0, item)
-        self.dataElement.setModel(model)
-        self.display.emit(self.frame)
-
-    def extractFromDataElement(self):
-        model = self.dataElement.model()
+                course.isNew = True
+            course.shouldBeDownloaded = shouldBeDownloaded
+        return allCourses, True
+        
+    def readFrom(self, dataElement):
+        model = dataElement.model()
         result = []
         for i in range(model.rowCount()):
             item = model.item(i)
@@ -44,23 +38,37 @@ class Courses(OutputDatapoint):
                 course.shouldBeDownloaded = False
             result.append(course)
         return result
+    
+    def writeTo(self, dataElement, courses):
+        model = QStandardItemModel()
+        for course in courses:
+            item = QStandardItem(course.name)
+            item.setData(course)
+            item.setCheckable(True)
+            item.setCheckState(Qt.Unchecked)
+            if course.shouldBeDownloaded:
+                item.setCheckState(Qt.Checked)
+            if course.isNew:
+                item.setBackground(QBrush(QColor(113,217,140)))
+                model.insertRow(0, item)
+            else:
+                model.appendRow(item)
+        dataElement.setModel(model)
 
+    def valueFromDatabaseFormat(self, tupleList):
+        result = {}
+        for tuple in tupleList:
+            result[tuple[0]] = strtobool(tuple[1])
+        return result
+
+    def valueToDatabaseFormat(self, courses):
+        result = []
+        for course in courses:
+            result.append((str(course.getHash()), str(course.shouldBeDownloaded)))
+        return result
+    
     def validate(self, value):
         for course in value:
             if course.shouldBeDownloaded:
                 return True, ""
         return False, "Es muss mindestens ein Kurs ausgewählt werden."
-
-    def getSavedValue(self):
-        result = {}
-        tupleList = self.database.getTupleList()
-        if tupleList is not None:
-            for tuple in tupleList:
-                result[tuple[0]] = strtobool(tuple[1])
-        return result
-
-    def saveValue(self):
-        result = []
-        for course in self.value:
-            result.append((str(course.getHash()), str(course.shouldBeDownloaded)))
-        self.database.saveTupleList(result)
