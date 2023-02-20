@@ -28,4 +28,3 @@ courses = CourseSelectionController.run()
 data = CrawlingController.run(courses)
 DownloadController.run(data)
 Service.quit_program()
-

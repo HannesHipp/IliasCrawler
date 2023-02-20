@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 from service.Database import Database
 
+LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&baseClass=ilStartUpGUI&rtoken="
+COURSESURL = "https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems"
+
 
 class Session:
     __instance = None
@@ -13,17 +16,14 @@ class Session:
                 userdata = Database.get_instance("userdata").get_all()[0]
             else:
                 userdata = [username, password]
+            data = {
+                'username': userdata[0],
+                'password': userdata[1],
+                'cmd[doStandardAuthentication]': 'Anmelden'
+            }
             session = requests.session()
-            session.post('https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart'
-                         '&cmd=post&cmdClass=ilstartupgui&cmdNode=123&baseClass=ilStartUpGUI&rtoken=',
-                         data={
-                             'username': userdata[0],
-                             'password': userdata[1],
-                             'cmd[doStandardAuthentication]': 'Anmelden'
-                         }
-                         )
-            test_content = BeautifulSoup(session.get("https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboard"
-                                                "GUI&cmd=jumpToSelectedItems").text, "lxml")
+            session.post(LOGINURL, data=data)
+            test_content = BeautifulSoup(session.get(COURSESURL).text, "lxml")
             # If "Anmelden" button is present, then we are not already logged in
             if test_content.find(attrs={"aria-label": "Anmelden"}) is not None:
                 raise ConnectionError
