@@ -27,11 +27,12 @@ filesAndVideos = FilesAndVideos()
 
 loginFrame = Frame(
     "IliasCrawler\\resources\\LoginView.ui",
-    TextField(username, "textfield_username"),
-    TextField(password, "textfield_password"),
-    validatorFrame = Frame(
+    TextField(username, name="textfield_username"),
+    TextField(password, name="textfield_password"),
+    validationFrame=Frame(
         "IliasCrawler\\resources\\LoginValidationView.ui",
-        LoadingAnimation(ValidateLogin(username, password), "loading_animation")
+        LoadingAnimation(username, name="loading_animation"),
+        function=ValidateLogin(username, password)
     )
 )
 # pathFrame = Frame(
@@ -40,7 +41,8 @@ loginFrame = Frame(
 # )
 # getCoursesFrame = Frame(
 #     "IliasCrawler\\resources\\CourseLoadingView.ui",
-#     ProgressBarWithText(GetCourses(username, password), "progress_bar", "progress_bar_text_label")
+#     LoadingAnimation(courses, bar="progress_bar", label="progress_bar_text_label"),
+#     function = GetCourses(username, password, courses)
 # )
 # coursesFrame = Frame(
 #     "IliasCrawler\\resources\\CourseSelectionView.ui",

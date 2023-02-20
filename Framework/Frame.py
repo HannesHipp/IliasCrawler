@@ -9,29 +9,40 @@ from PyQt5.uic import loadUi
 
 class Frame(QWidget):
 
-    request = pyqtSignal()
     display = pyqtSignal(object)
 
     def __init__(self, path, *args, **kwargs):
         super().__init__()
-        self.index = None
         loadUi(path)
-        self.validationFrame = kwargs.pop('validatorFrame', None)
-        if self.validationFrame:
-            pass
-            # set next frames
+        self.index = None
+        self.nextFrame = None
         self.uiElements = []
         for uiElement in args:
             self.uiElements.append(uiElement)
             uiElement.setQtElements(self)
-        self.nextFrames = {}
-        self.request.connect(self.handleRequest)
 
-    def handleRequest(self):
-        pass
+        self.validationFrame = kwargs.pop('validatorFrame', None)
+        self.function = kwargs.pop('validatorFrame', None)
+        if self.function:
+            self.function.done.connect(self.showNextFrame)
+            self.function.error
 
     def show(self):
-        self.display.emit(self)            
+        self.display.emit(self)
+        if self.function:
+            self.function.run.emit()
 
     def showNextFrame(self):
-        self.nextFrame.request.emit()     
+        self.nextFrame.show()
+
+    def showErrorMessage(self):
+        print
+
+    def connect(self, frame, button_name=None):
+        if button_name:
+            getattr(self, button_name).clicked.connect(frame.show)
+        else:
+            if not self.nextFrame:
+                self.nextFrame = frame
+            else:
+                raise Exception("A default next frame has already been set.")

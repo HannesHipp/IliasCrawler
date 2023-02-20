@@ -20,9 +20,6 @@ class App(QObject):
     def startWith(self, frame):
         frame.request.emit()
         sys.exit(self.qApp.exec_())
-
-    def showPopup(self, path):
-        pass
     
     def cock(self):
         print("""p n the v wird freigesetzt

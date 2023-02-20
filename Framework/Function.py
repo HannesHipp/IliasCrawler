@@ -6,24 +6,27 @@ from Framework.Worker import Worker
 
 class Function(QObject):
 
+    run = pyqtSignal()
+    error = pyqtSignal(str)
     done = pyqtSignal()
 
-    def __init__(self, *args) -> None:
+    def __init__(self, *datapoints) -> None:
         super().__init__()
-        self.args = args
+        self.datapoints = datapoints
+        self.run.connect(self.runFunction)
 
-    def handleRequest(self):
+    def runFunction(self):
+        worker = Worker(self.execute, self.datapoints)
+        worker.signals.done.connect(self.finishedThread)
         threadpool = QThreadPool.globalInstance()
-        worker = Worker(self.execute)
-        worker.signals.result.connect(self.finishedThread)
-        worker.signals.progress.connect(self.updateFrame)
         threadpool.start(worker)
 
     def finishedThread(self):
         self.done.emit()
-    
-    def updateFrame(self, tuple):
-        pass
+
+    def errorOccured(self, message):
+        self.error.emit(message)
 
     def execute(self):
-        raise Exception(f"execute-method not implemented for function {self.__class__.__name__}")
+        raise Exception(
+            f"execute-method not implemented for function {self.__class__.__name__}")

@@ -1,19 +1,21 @@
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
 
+
 class WorkerSignals(QObject):
 
-    result = pyqtSignal(object)
-    progress = pyqtSignal(tuple)
+    error = pyqtSignal(str)
+    done = pyqtSignal(object)
 
 
 class Worker(QRunnable):
 
-    def __init__(self, fn, *args, **kwargs):
+    def __init__(self, function, datapoints):
         super(Worker, self).__init__()
-        self.fn = fn
+        self.fn = function
+        self.datapoints = datapoints
         self.signals = WorkerSignals()
 
     @pyqtSlot()
     def run(self):
-        result = self.fn(progress_signal=self.signals.progress)
-        self.signals.result.emit(result)
+        self.fn(*self.datapoints)
+        self.signals.done.emit()
