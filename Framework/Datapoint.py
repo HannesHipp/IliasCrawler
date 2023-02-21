@@ -7,14 +7,15 @@ class Datapoint(QObject):
 
     valueChanged = pyqtSignal()
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        name = self.__class__.__name__.lower()
-        self.database = Database(name, kwargs['numberOfDatabaseFields'])
-        self.value = self.databaseTupleToValue(self.database.getTupleList())
-        self.valid = False
-        if self.value:
+        self.database = Database(self.__class__.__name__.lower())
+        if savedTuplelist := self.database.getTuplelist():
+            self.value = self.databaseTuplelistToValue(savedTuplelist)
             self.valid = True
+        else:
+            self.value = None
+            self.valid = False
 
     def setValue(self, value):
         self.value = value
@@ -22,12 +23,14 @@ class Datapoint(QObject):
 
     def isValid(self):
         self.valid = True
-        self.database.saveTupleList(self.databaseValueToTuple(self.value))
+        self.database.saveTuplelist(self.databaseValueToTuplelist(self.value))
 
-    def databaseTupleToValue(self, tupleList):
+    def databaseTuplelistToValue(self, tupleList):
         raise Exception(
-            f"valueFromDatabaseFormat method not implemented for {self.__class__.__name__}")
+            f"valueFromDatabaseFormat method not implemented for {self.__class__.__name__}"
+        )
 
-    def databaseValueToTuple(self, data):
+    def databaseValueToTuplelist(self, data):
         raise Exception(
-            f"valueToDatabaseFormat method not implemented for {self.__class__.__name__}")
+            f"valueToDatabaseFormat method not implemented for {self.__class__.__name__}"
+        )

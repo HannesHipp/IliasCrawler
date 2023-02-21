@@ -3,11 +3,8 @@ from Framework.Datapoint import Datapoint
 
 class FilesAndVideos(Datapoint):
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(
-            **kwargs,
-            numberOfDatabaseFields = 1
-        )
+    def __init__(self) -> None:
+        super().__init__()
 
     def getValue(self, savedValue, calculatedValue):
         filesOnDisk = savedValue
@@ -15,7 +12,7 @@ class FilesAndVideos(Datapoint):
         for file in allFiles:
             if file.get_hash() not in filesOnDisk:
                 file.shouldBeDownloaded = True
-            else: 
+            else:
                 file.shouldBeDownloaded = False
         return allFiles, False
 

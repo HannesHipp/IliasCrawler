@@ -13,24 +13,25 @@ class Frame(QWidget):
 
     def __init__(self, path, *args, **kwargs):
         super().__init__()
-        loadUi(path)
+        loadUi(path, self)
         self.index = None
         self.nextFrame = None
+        self.prevFrame = None
         self.uiElements = []
         for uiElement in args:
             self.uiElements.append(uiElement)
             uiElement.setQtElements(self)
 
-        self.validationFrame = kwargs.pop('validatorFrame', None)
-        self.function = kwargs.pop('validatorFrame', None)
+        self.validationFrame = kwargs.pop('validationFrame', None)
+        self.function = kwargs.pop('function', None)
         if self.function:
             self.function.done.connect(self.showNextFrame)
-            self.function.error
+            # self.function.error
 
     def show(self):
         self.display.emit(self)
         if self.function:
-            self.function.run.emit()
+            self.function.start.emit()
 
     def showNextFrame(self):
         self.nextFrame.show()
@@ -39,10 +40,13 @@ class Frame(QWidget):
         print
 
     def connect(self, frame, button_name=None):
+        if self.validationFrame:
+            self.validationFrame.nextFrame = frame
+            self.validationFrame.prevFrame = self
+            frame = self.validationFrame
         if button_name:
             getattr(self, button_name).clicked.connect(frame.show)
         else:
-            if not self.nextFrame:
-                self.nextFrame = frame
-            else:
+            if self.nextFrame:
                 raise Exception("A default next frame has already been set.")
+            self.nextFrame = frame

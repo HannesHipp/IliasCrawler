@@ -1,19 +1,28 @@
 from PyQt5.QtCore import pyqtSignal
+from Framework.Datapoint import Datapoint
 
 from Framework.Function import Function
+
+
+class ValidationError(Exception):
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
 
 class Validator(Function):
 
     done = pyqtSignal(tuple)
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
+    def __init__(self, *datapoints) -> None:
+        super().__init__(*datapoints)
 
-    def execute(self, progress_signal):
-        valid, error = self.validate(*self.valuesToValidate)
-        return (valid, error)
-        
-    def finishedThread(self, result):
-        (valid, error) = result
-        for 
-        self.done.emit()
+    @staticmethod
+    def execute(*datapoints: Datapoint):
+        pass
+        # valid, error = self.validate(*datapoints)
+        # if valid:
+        #     for datapoint in datapoints:
+        #         datapoint.isValid()
+        # else:
+        #     raise Exception()

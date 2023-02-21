@@ -31,14 +31,14 @@ loginFrame = Frame(
     TextField(password, name="textfield_password"),
     validationFrame=Frame(
         "IliasCrawler\\resources\\LoginValidationView.ui",
-        LoadingAnimation(username, name="loading_animation"),
+        # LoadingAnimation(username, name="loading_animation"),
         function=ValidateLogin(username, password)
     )
 )
-# pathFrame = Frame(
-#     "IliasCrawler\\resources\\PathSelectionView.ui",
-#     PathSelector(path, "select_path")
-# )
+pathFrame = Frame(
+    "IliasCrawler\\resources\\PathSelectionView.ui",
+    # PathSelector(path, "select_path")
+)
 # getCoursesFrame = Frame(
 #     "IliasCrawler\\resources\\CourseLoadingView.ui",
 #     LoadingAnimation(courses, bar="progress_bar", label="progress_bar_text_label"),
@@ -60,7 +60,7 @@ loginFrame = Frame(
 #     ProgressBarWithText(Download(username, password, path, filesAndVideos), "progress_bar", "progress_bar_text_label")
 # )
 
-# loginFrame.connect(pathFrame, 'button_login')
+loginFrame.connect(pathFrame, 'button_login')
 # pathFrame.connect(getCoursesFrame, 'button_select_path')
 # getCoursesFrame.connect(coursesFrame)
 # coursesFrame.connect(crawlingFrame, 'button_select_choice')

@@ -18,9 +18,9 @@ class App(QObject):
         frame.display.connect(self.window.selectFrame)
 
     def startWith(self, frame):
-        frame.request.emit()
+        frame.show()
         sys.exit(self.qApp.exec_())
-    
+
     def cock(self):
         print("""p n the v wird freigesetzt
         #doityourself
@@ -28,5 +28,3 @@ class App(QObject):
         #ANDFUCKINGFREEBOOOOOOOOBS
         SHOW BOOBS PICS AND print
         .vars""")
-
-

@@ -4,14 +4,12 @@ from IliasCrawler.Session import Session
 
 class ValidateLogin(Validator):
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
+    def __init__(self, *datapoints) -> None:
+        super().__init__(*datapoints)
 
-    def validate(self, **datapoints):
-        return True, ''
-        # session = Session('', '')
-        # if session.is_valid():
-        #     return True, ''
-        # else:
-        #     return False, 'Der Benutzername oder das Passwort war falsch.'
-    
+    def validate(self, username, password):
+        session = Session(username.value, password.value)
+        if session.is_valid():
+            return True, ''
+        else:
+            return False, 'Der Benutzername oder das Passwort ist falsch.'

@@ -3,18 +3,15 @@ from Framework.Datapoint import Datapoint
 
 class Password(Datapoint):
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(
-            **kwargs,
-            numberOfDatabaseFields = 1
-        )
+    def __init__(self) -> None:
+        super().__init__()
 
     def getValue(self, savedValue, calculatedValue):
         if savedValue is None:
             return None, True
         else:
             return savedValue, False
-    
+
     def readFrom(self, dataElement):
         return dataElement.text()
 

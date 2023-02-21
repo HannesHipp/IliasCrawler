@@ -3,13 +3,11 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PyQt5.QtCore import Qt
 from distutils.util import strtobool
 
+
 class Courses(Datapoint):
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(
-            **kwargs,
-            numberOfDatabaseFields = 2
-        )
+    def __init__(self) -> None:
+        super().__init__()
 
     def getValue(self, savedValue, calculatedValue):
         hashToDownloadIs = savedValue
@@ -25,7 +23,7 @@ class Courses(Datapoint):
                 course.isNew = True
             course.shouldBeDownloaded = shouldBeDownloaded
         return allCourses, True
-        
+
     def readFrom(self, dataElement):
         model = dataElement.model()
         result = []
@@ -34,11 +32,11 @@ class Courses(Datapoint):
             course = item.data()
             if item.checkState() == Qt.Checked:
                 course.shouldBeDownloaded = True
-            else: 
+            else:
                 course.shouldBeDownloaded = False
             result.append(course)
         return result
-    
+
     def writeTo(self, dataElement, courses):
         model = QStandardItemModel()
         for course in courses:
@@ -49,7 +47,7 @@ class Courses(Datapoint):
             if course.shouldBeDownloaded:
                 item.setCheckState(Qt.Checked)
             if course.isNew:
-                item.setBackground(QBrush(QColor(113,217,140)))
+                item.setBackground(QBrush(QColor(113, 217, 140)))
                 model.insertRow(0, item)
             else:
                 model.appendRow(item)
@@ -64,9 +62,10 @@ class Courses(Datapoint):
     def valueToDatabaseFormat(self, courses):
         result = []
         for course in courses:
-            result.append((str(course.getHash()), str(course.shouldBeDownloaded)))
+            result.append(
+                (str(course.getHash()), str(course.shouldBeDownloaded)))
         return result
-    
+
     def validate(self, value):
         for course in value:
             if course.shouldBeDownloaded:

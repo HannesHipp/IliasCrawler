@@ -6,20 +6,18 @@ from Framework.Worker import Worker
 
 class Function(QObject):
 
-    run = pyqtSignal()
+    start = pyqtSignal()
     error = pyqtSignal(str)
     done = pyqtSignal()
 
     def __init__(self, *datapoints) -> None:
         super().__init__()
-        self.datapoints = datapoints
-        self.run.connect(self.runFunction)
+        self.worker = Worker(self.execute, *datapoints)
+        self.worker.signals.done.connect(self.finishedThread)
+        self.start.connect(self.run)
 
-    def runFunction(self):
-        worker = Worker(self.execute, self.datapoints)
-        worker.signals.done.connect(self.finishedThread)
-        threadpool = QThreadPool.globalInstance()
-        threadpool.start(worker)
+    def run(self):
+        QThreadPool.globalInstance().start(self.worker)
 
     def finishedThread(self):
         self.done.emit()
