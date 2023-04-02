@@ -11,8 +11,9 @@ class SQLTable:
         self.connection = sqlite3.connect(SQLTable.FILENAME)
         self.cursor = self.connection.cursor()
         self.fieldLength = numOfFields
+        letters = [chr(i) for i in range(97, 97 + numOfFields)]
         fieldsStr = SQLTable.createTupleStr(
-            [f"{field} text" for field in range(numOfFields)])
+            [f"{letter} text" for letter in letters])
         try:
             self.execute(f"CREATE TABLE {self.name} {fieldsStr}")
         except sqlite3.OperationalError:
@@ -48,8 +49,9 @@ class SQLTable:
         self.execute(f"INSERT INTO {self.name} VALUES {placeholder}", tuple)
 
     def keyExists(self, key_text):
+        # a=keyName
         result = self.execute(
-            f"SELECT * FROM {self.name} WHERE 0='{key_text}'")
+            f"SELECT * FROM {self.name} WHERE a=?", (key_text,))
         if len(result) == 0:
             return False
         else:

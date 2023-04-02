@@ -6,26 +6,14 @@ class Password(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def getValue(self, savedValue, calculatedValue):
-        if savedValue is None:
-            return None, True
+    def isValid(self, value):
+        if value:
+            return True
         else:
-            return savedValue, False
+            return "Das Passwort ist nicht korrekt."
 
-    def readFrom(self, dataElement):
-        return dataElement.text()
-
-    def writeTo(self, dataElement, data):
-        dataElement.setText(data)
-
-    def valueFromDatabaseFormat(self, tupleList):
+    def databaseTuplelistToValue(self, tupleList):
         return tupleList[0][0]
 
-    def valueToDatabaseFormat(self, data):
-        return [(data,)]
-
-    def validate(self, data):
-        if data is None:
-            return False, "Es muss ein Nutzername eingegeben werden."
-        else:
-            return True, ""
+    def databaseValueToTuplelist(self, password):
+        return [(password,)]

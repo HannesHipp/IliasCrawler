@@ -1,29 +1,30 @@
-from PyQt5.QtCore import QObject, pyqtSignal, QThreadPool
+import sys
+import traceback
+from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
 
 
-from Framework.Worker import Worker
+class FunctionSignals(QObject):
 
-
-class Function(QObject):
-
-    start = pyqtSignal()
     error = pyqtSignal(str)
     done = pyqtSignal()
 
-    def __init__(self, *datapoints) -> None:
+
+class Function(QRunnable):
+
+    def __init__(self) -> None:
         super().__init__()
-        self.worker = Worker(self.execute, *datapoints)
-        self.worker.signals.done.connect(self.finishedThread)
-        self.start.connect(self.run)
+        self.signals = FunctionSignals()
 
+    @pyqtSlot()
     def run(self):
-        QThreadPool.globalInstance().start(self.worker)
-
-    def finishedThread(self):
-        self.done.emit()
-
-    def errorOccured(self, message):
-        self.error.emit(message)
+        try:
+            self.execute()
+            self.signals.done.emit()
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit(
+                str(exctype, value, traceback.format_exc()))
 
     def execute(self):
         raise Exception(

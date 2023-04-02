@@ -1,5 +1,4 @@
 from PyQt5.QtCore import QObject, pyqtSignal
-from Framework.Frame import Frame
 from Framework.Database import Database
 
 
@@ -17,13 +16,18 @@ class Datapoint(QObject):
             self.value = None
             self.valid = False
 
-    def setValue(self, value):
-        self.value = value
-        self.valueChanged.emit()
+    def validate(self):
+        valid = self.isValid(self.value)
+        if valid == True:
+            self.valid = True
+            self.database.saveTuplelist(
+                self.databaseValueToTuplelist(self.value))
+        return valid
 
-    def isValid(self):
-        self.valid = True
-        self.database.saveTuplelist(self.databaseValueToTuplelist(self.value))
+    def updateValue(self, value):
+        if self.isValid(value) == True:
+            self.value = value
+            self.valueChanged.emit()
 
     def databaseTuplelistToValue(self, tupleList):
         raise Exception(

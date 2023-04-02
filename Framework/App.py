@@ -14,9 +14,6 @@ class App(QObject):
         self.qApp = QApplication(sys.argv)
         self.window = Window()
 
-    def addFrame(self, frame):
-        frame.display.connect(self.window.selectFrame)
-
     def startWith(self, frame):
         frame.show()
         sys.exit(self.qApp.exec_())

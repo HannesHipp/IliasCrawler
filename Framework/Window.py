@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QWidget, QStackedWidget
 
 class Window(QWidget):
 
+    instance = None
+
     def __init__(self):
         super().__init__()
         self.stackedWidget = QStackedWidget()
@@ -12,6 +14,7 @@ class Window(QWidget):
         mainLayout.addWidget(self.stackedWidget)
         self.setFixedSize(800, 500)
         self.setLayout(mainLayout)
+        Window.instance = self
         self.show()
 
     def addFrame(self, frame):

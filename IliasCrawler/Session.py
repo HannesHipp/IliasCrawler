@@ -5,22 +5,22 @@ import requests
 class Session:
 
     __instance = None
+    LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&baseClass=ilStartUpGUI&rtoken="
+    COURSESURL = "https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems"
 
     def __init__(self, username, password):
         session = requests.session()
-        session.post('https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id='
-                     'Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&base'
-                     'Class=ilStartUpGUI&rtoken=',
-                        data={
-                            'username': username,
-                            'password': password,
-                            'cmd[doStandardAuthentication]': 'Anmelden'
-                        }
-                        )
+        data = {
+            'username': username,
+            'password': password,
+            'cmd[doStandardAuthentication]': 'Anmelden'
+        }
+        session.post(Session.LOGINURL, data=data)
         self.session = session
 
     def is_valid(self):
-        test_content = BeautifulSoup(self.session.get("https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems").text, "lxml")
+        test_content = BeautifulSoup(
+            self.session.get(Session.COURSESURL).text, "lxml")
         # If "Anmelden" button is present, then we are not already logged in
         if test_content.find(attrs={"aria-label": "Anmelden"}) is not None:
             return False
@@ -42,6 +42,3 @@ class Session:
         if Session.__instance is None:
             raise Exception("No global session is set")
         return Session.__instance.get(url).content
-
-    
-

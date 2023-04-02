@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>500</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,6 +38,96 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255)</string>
    </property>
+   <widget class="QLabel" name="label2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>260</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Pfad:</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_select_path">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>290</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 101, 255);
+color: rgb(255, 255, 255);
+border-radius: 20p;</string>
+    </property>
+    <property name="text">
+     <string>Ordner wählen</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_continue">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>440</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 101, 255);
+color: rgb(255, 255, 255);
+border-radius: 20p;</string>
+    </property>
+    <property name="text">
+     <string>Weiter</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineedit_path">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>260</y>
+      <width>261</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label_description">
    <property name="geometry">
@@ -68,30 +158,6 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="button_select_path">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>250</y>
-     <width>91</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(0, 101, 255);
-color: rgb(255, 255, 255);
-border-radius: 20p;</string>
-   </property>
-   <property name="text">
-    <string>Ordner wählen</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -116,11 +182,10 @@ border-radius: 20p;</string>
   <zorder>widget</zorder>
   <zorder>picture</zorder>
   <zorder>label_description</zorder>
-  <zorder>button_select_path</zorder>
   <zorder>label</zorder>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>
