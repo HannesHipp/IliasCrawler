@@ -8,26 +8,14 @@ class Path(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def getValue(self, savedValue, calculatedValue):
-        if savedValue is None:
-            return None, True
+    def isValid(self, value):
+        if value:
+            return True
         else:
-            return savedValue, False
+            return "Es muss ein Pfad ausgewählt werden."
 
-    def readFrom(self, dataElement):
-        return diropenbox()
-
-    def writeTo(self, dataElement, data):
-        pass
-
-    def valueFromDatabaseFormat(self, tupleList):
+    def databaseTuplelistToValue(self, tupleList):
         return tupleList[0][0]
 
-    def valueToDatabaseFormat(self, data):
-        return [(data,)]
-
-    def validate(self, data):
-        if data is not None:
-            return True, ""
-        else:
-            return False, "Es muss ein Pfad ausgewählt werden."
+    def databaseValueToTuplelist(self, path):
+        return [(path,)]
