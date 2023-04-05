@@ -19,8 +19,8 @@ class Course(Element):
 
     def __init__(self, name, url, parent):
         super().__init__(name, url, parent)
-        self.is_new = None
-        self.should_be_downloaded = None
+        self.isNew = None
+        self.shouldBeDownloaded = None
 
     def getHash(self):
         return self.url.split("crs_")[1].split(".html")[0]

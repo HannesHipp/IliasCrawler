@@ -3,3 +3,4 @@
 old
 .gitignore
 *.vscode
+**/__pycache__/

@@ -1,6 +1,4 @@
-from Framework.Database import Database
 from Framework.Datapoint import Datapoint
-from easygui import diropenbox
 
 
 class Path(Datapoint):

@@ -68,20 +68,5 @@ class SQLTable:
     def clearTable(self):
         self.execute(f"DELETE FROM {self.name}")
 
-    # def find(self, field, text):
-    #     result = self.execute(f"SELECT * FROM {self.name} WHERE {field}='{text}'")
-    #     if len(result) == 0:
-    #         result = None
-    #     return result
-
-    # def updateItem(self, key_text, field, field_text):
-    #     self.execute("UPDATE " + self.name + " SET " + field + "='" + field_text + "' WHERE " + self.key + "='" + key_text + "'")
-
-    # def deleteKey(self, key_text):
-    #     self.execute("DELETE FROM " + self.name + " WHERE " + self.key + "='" + key_text + "'")
-
-    # def tableIsEmpty(self):
-    #     if len(self.getAll()) == 0:
-    #         return True
-    #     else:
-    #         False
+    def deleteTable(self):
+        self.execute(f"DROP TABLE {self.name}")

@@ -6,28 +6,30 @@ class Datapoint(QObject):
 
     valueChanged = pyqtSignal()
 
-    def __init__(self) -> None:
+    def __init__(self, save=True) -> None:
         super().__init__()
-        self.database = Database(self.__class__.__name__.lower())
-        if savedTuplelist := self.database.getTuplelist():
-            self.value = self.databaseTuplelistToValue(savedTuplelist)
-            self.valid = True
-        else:
-            self.value = None
-            self.valid = False
+        value = None
+        if save:
+            self.database = Database(self.__class__.__name__.lower())
+            if savedTuplelist := self.database.getTuplelist():
+                value = self.databaseTuplelistToValue(savedTuplelist)
+        self.value = value
 
     def validate(self):
         valid = self.isValid(self.value)
         if valid == True:
-            self.valid = True
             self.database.saveTuplelist(
                 self.databaseValueToTuplelist(self.value))
         return valid
 
     def updateValue(self, value):
+        self.value = value
         if self.isValid(value) == True:
-            self.value = value
             self.valueChanged.emit()
+
+    # overwritten by subclasses
+    def isValid(self, value):
+        return True
 
     def databaseTuplelistToValue(self, tupleList):
         raise Exception(

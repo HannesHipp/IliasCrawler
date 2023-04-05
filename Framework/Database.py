@@ -21,3 +21,7 @@ class Database():
         if not self.table:
             self.initializeTable(tuplelist)
         self.table.updateTable(tuplelist)
+
+    def delete(self):
+        self.table.deleteTable()
+        self.table = None
