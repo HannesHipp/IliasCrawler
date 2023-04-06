@@ -1,8 +1,9 @@
+from Framework.Function import Function
 from Framework.GuiModuls.GuiModul import GuiModul
 import IliasCrawler.resources.resources
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QApplication
 from PyQt5.uic import loadUi
 
 from Framework.Window import Window
@@ -12,7 +13,7 @@ class InputFrame(QWidget):
 
     display = pyqtSignal(object)
 
-    def __init__(self, path: str, buttonNames: list[str]):
+    def __init__(self, path: str, buttonNames: list[str], verificationFunction=None):
         super().__init__()
         loadUi(path, self)
         self.index = None
@@ -21,9 +22,7 @@ class InputFrame(QWidget):
         self.guiModuls = None
         self.display.connect(Window.instance.selectFrame)
         self.prevFrame = None
-
-    def setGuiModuls(self, *guiModuls):
-        self.guiModuls = guiModuls
+        self.verificationFunction = verificationFunction
 
     def getButtons(self, buttonNames: list[str]) -> list[QPushButton]:
         result = []
@@ -37,9 +36,8 @@ class InputFrame(QWidget):
             button.setCheckable(True)
             button.pressed.connect(self.finalize)
 
-    def resetButtons(self):
-        for button in self.buttons:
-            button.setChecked(False)
+    def setGuiModuls(self, *guiModuls):
+        self.guiModuls = guiModuls
 
     def show(self):
         for guiModul in self.guiModuls:
@@ -56,14 +54,22 @@ class InputFrame(QWidget):
         else:
             self.showErrorMessage(errors)
 
+    def resetButtons(self):
+        for button in self.buttons:
+            button.setChecked(False)
+
     def validateFrame(self):
         errors = []
-        for guiModul in self.guiModuls:
-            for datapoint in guiModul.datapoints:
-                validationResult = datapoint.validate()
-                if validationResult != True:
-                    errors.append(validationResult)
+        for datapoint in self.getAllDatapoints():
+            validationResult = datapoint.validate()
+            if validationResult != True:
+                errors.append(validationResult)
         return errors
+
+    def getAllDatapoints(self):
+        rawlist = [
+            datapoint for guimodul in self.guiModuls for datapoint in guimodul.datapoints]
+        return list(set(rawlist))
 
     def showErrorMessage(self, errorMessages):
         print(errorMessages)
