@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from service.Database import Database
 
-LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&baseClass=ilStartUpGUI&rtoken="
+LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12f&baseClass=ilStartUpGUI&rtoken="
 COURSESURL = "https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems"
 
 
