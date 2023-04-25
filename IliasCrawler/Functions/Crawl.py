@@ -1,32 +1,29 @@
 import time
+from Framework.Datapoint import Datapoint
 from Framework.Function import Function
+from IliasCrawler.Datapoints.Courses import Courses
+from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos
 from IliasCrawler.Session import Session
 from IliasCrawler.model.File import File
 
 
 class Crawl(Function):
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
+    def __init__(self, courses: Courses, filesAndVideos: FilesAndVideos, currentCourseName: Datapoint) -> None:
+        super().__init__()
+        self.courses = courses
+        self.filesAndVideos = filesAndVideos
+        self.currentCoursesName = currentCourseName
 
-    def execute(self, progress_signal):
+    def execute(self):
         result = []
-        coursesCrawled = 0
         for course in self.courses.value:
+            self.currentCoursesName.updateValue(course.name)
             if course.shouldBeDownloaded:
-                progress_signal.emit((coursesCrawled, course.name))
                 result += self.crawl(course)
-                coursesCrawled += 1
+                course.hasBeenCrawled = True
         result = self.detect_items_with_long_path(result)
         return result
-
-    def updateFrame(self, tuple):
-        coursesCrawled = tuple[0]
-        currentCourseName = tuple[1]
-        percentage_of_courses_crawled = int((coursesCrawled/len(self.courses.value))*100)
-        self.frame.progress_bar.setValue(percentage_of_courses_crawled)
-        self.frame.progress_bar_label.setText(f"{currentCourseName} wird gerade durchsucht...")
-
 
     def crawl(self, page):
         page.content = Session.get_content(page.url)

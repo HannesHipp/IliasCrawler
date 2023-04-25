@@ -17,17 +17,8 @@ class CourseSelectionFrame(InputFrame):
                                 'name', "shouldBeDownloaded", "isNew")
         )
 
-    def addNextFrames(self, courseSelectionFrame, autostartFrame):
-        self.courseSelectionFrame = courseSelectionFrame
-        self.autostartFrame = autostartFrame
+    def addNextFrames(self, crawlingFrame):
+        self.crawlingFrame = crawlingFrame
 
-    def decideNextFrame(self):
-        hasNewCourses = False
-        for course in self.courses.value:
-            if course.isNew:
-                hasNewCourses = True
-                break
-        if not hasNewCourses and self.autostart.value:
-            return self.autostartFrame
-        else:
-            return self.courseSelectionFrame
+    def decideNextFrame(self, pressedButton):
+        return self.crawlingFrame

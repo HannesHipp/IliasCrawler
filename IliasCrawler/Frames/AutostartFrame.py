@@ -13,10 +13,11 @@ class AutostartCountdown(Function):
 
     def execute(self):
         time = 10
-        while time != 0:
+        while time != 0 and not self.cancel:
+            print(time)
+            self.timer.updateValue(time)
             sleep(1.0)
             time = time - 1
-            self.timer.updateValue(time)
 
 
 class AutostartFrame(OutputFrame):
@@ -29,13 +30,14 @@ class AutostartFrame(OutputFrame):
             buttonNames=['button_cancel', 'button_start']
         )
         self.setGuiModuls(
-            TextLabel(autostartTimer,  self.label_timer, lambda x: x))
+            TextLabel(autostartTimer,  self.label_timer, lambda x: x)
+        )
 
     def addNextFrames(self, courseSelectionFrame, crawlingFrame):
         self.courseSelectionFrame = courseSelectionFrame
         self.crawlingFrame = crawlingFrame
 
-    def decideNextFrame(self):
-        if self.button_cancel.checked:
+    def decideNextFrame(self, pressedButton):
+        if pressedButton == self.button_cancel:
             return self.courseSelectionFrame
         return self.crawlingFrame

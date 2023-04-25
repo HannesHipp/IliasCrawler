@@ -7,6 +7,7 @@ from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos
 from IliasCrawler.Datapoints.Path import Path
 from IliasCrawler.Datapoints.Autostart import Autostart
 
+from IliasCrawler.Frames.CrawlingFrame import CrawlingFrame
 from IliasCrawler.Frames.LoginFrame import LoginFrame
 from IliasCrawler.Frames.LoginValidationFrame import LoginValidationFrame
 from IliasCrawler.Frames.PathFrame import PathFrame
@@ -21,8 +22,8 @@ password = Password()
 path = Path()
 courses = Courses()
 autostart = Autostart()
-autostart.updateValue(True)
-# filesAndVideos = FilesAndVideos()
+autostart.updateValue(False)
+filesAndVideos = FilesAndVideos()
 
 
 loginFrame = LoginFrame(username, password)
@@ -31,13 +32,17 @@ pathFrame = PathFrame(path)
 getCoursesFrame = GetCoursesFrame(username, password, courses, autostart)
 courseSelectionFrame = CourseSelectionFrame(courses)
 autostartFrame = AutostartFrame()
+crawlingFrame = CrawlingFrame(courses, filesAndVideos)
 
 
 loginFrame.addNextFrames(loginValidationFrame)
-loginValidationFrame.addNextFrames(pathFrame)
+loginValidationFrame.addNextFrames(loginFrame, pathFrame)
 pathFrame.addNextFrames(getCoursesFrame)
 getCoursesFrame.addNextFrames(courseSelectionFrame, autostartFrame)
-courseSelectionFrame.addNextFrames(autostartFrame, autostartFrame)
-autostartFrame.addNextFrames(courseSelectionFrame, courseSelectionFrame)
+courseSelectionFrame.addNextFrames(crawlingFrame)
+autostartFrame.addNextFrames(courseSelectionFrame, crawlingFrame)
 
-app.startWith(autostartFrame)
+if username.value and password.value and path.value:
+    app.startWith(getCoursesFrame)
+else:
+    app.startWith(loginFrame)

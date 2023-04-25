@@ -107,7 +107,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     <rect>
      <x>430</x>
      <y>290</y>
-     <width>321</width>
+     <width>281</width>
      <height>23</height>
     </rect>
    </property>
@@ -124,12 +124,12 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     <string>%p%                                                                                 </string>
    </property>
   </widget>
-  <widget class="QLabel" name="progress_bar_label">
+  <widget class="QLabel" name="label_aktueller_kurs">
    <property name="geometry">
     <rect>
      <x>430</x>
-     <y>310</y>
-     <width>311</width>
+     <y>320</y>
+     <width>91</width>
      <height>21</height>
     </rect>
    </property>
@@ -147,7 +147,100 @@ font: 10pt &quot;Segoe UI&quot;;</string>
 font: 10pt &quot;Segoe UI&quot;;</string>
    </property>
    <property name="text">
-    <string>0 Ordner und 0 Dateien gefunden...</string>
+    <string>Aktueller Kurs:</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_percentage">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>290</y>
+     <width>18</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>99</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_percent">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>290</y>
+     <width>18</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>%</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_current_course_name">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>320</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Bla Bla</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
@@ -157,8 +250,11 @@ font: 10pt &quot;Segoe UI&quot;;</string>
   <zorder>picture</zorder>
   <zorder>title</zorder>
   <zorder>label_description</zorder>
-  <zorder>progress_bar_label</zorder>
+  <zorder>label_aktueller_kurs</zorder>
+  <zorder>label_percentage</zorder>
+  <zorder>label_percent</zorder>
   <zorder>progress_bar</zorder>
+  <zorder>label_current_course_name</zorder>
  </widget>
  <resources>
   <include location="resources.qrc"/>

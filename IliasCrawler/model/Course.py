@@ -1,5 +1,4 @@
 from IliasCrawler.model.Page import Page
-from IliasCrawler.model.Element import Element
 from IliasCrawler.model.File import File
 from IliasCrawler.model.Folder import Folder
 from IliasCrawler.model.Lm import Lm
@@ -8,7 +7,7 @@ from IliasCrawler.model.OPD import OPD
 from IliasCrawler.model.Video import Video
 
 
-class Course(Element):
+class Course(Page):
 
     url_markers = ['_crs_']
     downloadable_types = [File, Video]
@@ -21,6 +20,7 @@ class Course(Element):
         super().__init__(name, url, parent)
         self.isNew = None
         self.shouldBeDownloaded = None
+        self.hasBeenCrawled = False
 
     def getHash(self):
         return self.url.split("crs_")[1].split(".html")[0]

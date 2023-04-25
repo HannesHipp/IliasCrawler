@@ -19,5 +19,5 @@ class LoginFrame(InputFrame):
     def addNextFrames(self, loginValidationFrame):
         self.loginValidationFrame = loginValidationFrame
 
-    def decideNextFrame(self):
+    def decideNextFrame(self, pressedButton):
         return self.loginValidationFrame

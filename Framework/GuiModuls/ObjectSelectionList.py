@@ -16,6 +16,7 @@ class ObjectSelectionList(GuiModul):
         self.nameAttr = nameAttr
         self.checkedAttr = checkedAttr
         self.coloredAttr = coloredAttr
+        self.qtListView.model().dataChanged.connect(self.publish)
 
     def publish(self):
         model = self.qtListView.model()

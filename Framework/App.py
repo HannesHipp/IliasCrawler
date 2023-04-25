@@ -8,6 +8,8 @@ from Framework.Window import Window
 
 class App(QObject):
 
+    """penisapp - the best app in the whole f**** world mothafocka"""
+
     def __init__(self) -> None:
         super().__init__()
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"

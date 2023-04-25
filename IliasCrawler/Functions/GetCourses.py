@@ -20,8 +20,11 @@ class GetCourses(Function):
                      'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems',
                      None)
         root.content = Session.get_content(root.url)
-        hashToDownload = {
-            course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
+        if self.courses.value:
+            hashToDownload = {
+                course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
+        else:
+            hashToDownload = {}
         allCourses = root.get_new_pages()
         for course in allCourses:
             hash = course.getHash()

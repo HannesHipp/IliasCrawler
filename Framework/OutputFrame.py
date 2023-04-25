@@ -16,3 +16,7 @@ class OutputFrame(InputFrame):
     def show(self):
         super().show()
         QThreadPool.globalInstance().start(self.function)
+
+    def finalize(self):
+        self.function.cancel = True
+        super().finalize()

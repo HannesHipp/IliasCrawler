@@ -8,16 +8,10 @@ class Courses(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def isValid(self, value: list[Course]):
-        for course in value:
-            if course.shouldBeDownloaded:
-                return True
-        return "Es muss mindestens ein Kurs ausgewählt werden."
-
     def databaseTuplelistToValue(self, tupleList: list[tuple]):
         result = []
         for tuple in tupleList:
-            course = Course(tuple[0], tuple[1], None)
+            course = Course(tuple[1], tuple[0], None)
             course.shouldBeDownloaded = strtobool(tuple[2])
             result.append(course)
         return result
@@ -26,5 +20,5 @@ class Courses(Datapoint):
         result = []
         for course in courses:
             result.append(
-                (course.name, course.url, str(course.shouldBeDownloaded)))
+                (course.url, course.name, str(course.shouldBeDownloaded)))
         return result

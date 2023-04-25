@@ -32,10 +32,10 @@ class Session:
     def get_content(url):
         if Session.__instance is None:
             raise Exception("No global session is set")
-        return BeautifulSoup(Session.__instance.get(url).text, 'lxml')
+        return BeautifulSoup(Session.__instance.session.get(url).text, 'lxml')
 
     @staticmethod
     def get_file_content(url):
         if Session.__instance is None:
             raise Exception("No global session is set")
-        return Session.__instance.get(url).content
+        return Session.__instance.session.get(url).content

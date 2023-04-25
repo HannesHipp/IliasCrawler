@@ -17,5 +17,5 @@ class PathFrame(InputFrame):
     def addNextFrames(self, getCoursesFrame):
         self.getCoursesFrame = getCoursesFrame
 
-    def decideNextFrame(self):
+    def decideNextFrame(self, pressedButton):
         return self.getCoursesFrame

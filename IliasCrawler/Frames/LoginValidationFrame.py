@@ -16,11 +16,11 @@ class LoginValidationFrame(OutputFrame):
         self.password = password
         self.setGuiModuls(LoadingAnimation(username, self.text))
 
-    def addNextFrames(self, pathFrame):
+    def addNextFrames(self, loginFrame, pathFrame):
+        self.loginFrame = loginFrame
         self.pathFrame = pathFrame
 
-    def decideNextFrame(self):
-        if self.username.value and self.password.value:
-            return self.pathFrame
-        else:
-            return self.prevFrame
+    def decideNextFrame(self, pressedButton):
+        if self.function.result != True:
+            return self.loginFrame
+        return self.pathFrame

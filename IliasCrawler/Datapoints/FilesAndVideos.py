@@ -6,23 +6,13 @@ class FilesAndVideos(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def getValue(self, savedValue, calculatedValue):
-        filesOnDisk = savedValue
-        allFiles = calculatedValue
-        for file in allFiles:
-            if file.get_hash() not in filesOnDisk:
-                file.shouldBeDownloaded = True
-            else:
-                file.shouldBeDownloaded = False
-        return allFiles, False
-
-    def valueFromDatabaseFormat(self, tupleList):
+    def databaseTuplelistToValue(self, tupleList):
         result = []
         for tuple in tupleList:
             result.append(tuple[0])
         return result
 
-    def valueToDatabaseFormat(self, allFiles):
+    def databaseValueToTuplelist(self, allFiles):
         result = []
         for file in allFiles:
             result.append((file.getHash(),))

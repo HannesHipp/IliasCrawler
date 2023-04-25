@@ -1,0 +1,21 @@
+[
+    {
+        "name": "folder",
+        "subtypes": [
+            "folder",
+            "lm",
+            "mch",
+            "odp",
+            "file",
+            "video"
+        ],
+        "directions": "bla"
+    },
+    {
+        "name": "lm",
+        "subtypes": [
+            ""
+        ],
+        "directions": "bla"
+    }
+]

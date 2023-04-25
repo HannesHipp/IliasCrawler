@@ -10,22 +10,28 @@ class Datapoint(QObject):
         super().__init__()
         value = None
         if save:
-            self.database = Database(self.__class__.__name__.lower())
-            if savedTuplelist := self.database.getTuplelist():
+            database = Database(self.__class__.__name__.lower())
+            if savedTuplelist := database.getTuplelist():
                 value = self.databaseTuplelistToValue(savedTuplelist)
+        else:
+            database = None
+        self.database = database
         self.value = value
-
-    def validate(self):
-        valid = self.isValid(self.value)
-        if valid == True:
-            self.database.saveTuplelist(
-                self.databaseValueToTuplelist(self.value))
-        return valid
+        self.error = None
 
     def updateValue(self, value):
-        self.value = value
-        if self.isValid(value) == True:
-            self.valueChanged.emit()
+        result = self.isValid(value)
+        if result == True:
+            self.value = value
+        else:
+            self.value = None
+            self.error = result
+        self.valueChanged.emit()
+
+    def save(self):
+        if self.database:
+            self.database.saveTuplelist(
+                self.databaseValueToTuplelist(self.value))
 
     # overwritten by subclasses
     def isValid(self, value):
