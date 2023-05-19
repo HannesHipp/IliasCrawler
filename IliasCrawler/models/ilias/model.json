@@ -1,0 +1,44 @@
+{
+    "start": {
+        "childTypes": [
+            "courseDate"
+        ]
+    },
+    "courseDate": {
+        "leaf": false,
+        "childTypes": [
+            "course"
+        ],
+        "locatorDict": {
+            "name": "div",
+            "attr": "class",
+            "equals": "il-item-group"
+        },
+        "name": {
+            "name": "h3",
+            "attr": "string"
+        },
+        "tree-importance": 0
+    },
+    "course": {
+        "leaf": true,
+        "childTypes": [],
+        "locatorDict": {
+            "name": "a",
+            "attr": "href",
+            "contains": "_crs_"
+        },
+        "name": {
+            "attr": "string"
+        },
+        "url": {
+            "attr": "href"
+        },
+        "tree-importance": 0
+    },
+    "opencastVideo": {
+        "leaf": true,
+        "childTypes": [],
+        ""
+    }
+}

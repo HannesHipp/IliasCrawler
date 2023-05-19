@@ -26,7 +26,7 @@ class Crawl(Function):
         return result
 
     def crawl(self, page):
-        page.content = Session.get_content(page.url)
+        html = Session.get_content(page.url)
         files_and_videos = page.get_files_and_videos()
         new_pages = page.get_new_pages()
         page.content = None
@@ -44,12 +44,15 @@ class Crawl(Function):
         userpath_plus_ilias_length = len(self.path.value + "\\Ilias\\")
         available_string_length = 256 - userpath_plus_ilias_length - file_ex_length
         for item in data:
-            removal_path = (item.get_path() + "\\" + item.name).split("\\Ilias\\")[1]
-            number_of_chars_to_remove = len(removal_path) - available_string_length
+            removal_path = (item.get_path() + "\\" +
+                            item.name).split("\\Ilias\\")[1]
+            number_of_chars_to_remove = len(
+                removal_path) - available_string_length
             too_long = number_of_chars_to_remove > 0
             if too_long:
                 removal_positions = self.get_removal_positions(removal_path)
-                self.correct_path(item, removal_positions, number_of_chars_to_remove)
+                self.correct_path(item, removal_positions,
+                                  number_of_chars_to_remove)
         return data
 
     def get_removal_positions(self, removal_path):
@@ -63,8 +66,10 @@ class Crawl(Function):
 
     def correct_path(self, item, removal_positions, total_number_of_chars_to_remove):
         if any(x == item.name for x in removal_positions):
-            number_of_chars_to_remove = int(total_number_of_chars_to_remove/len(removal_positions))
+            number_of_chars_to_remove = int(
+                total_number_of_chars_to_remove/len(removal_positions))
             length = int((len(item.name) - number_of_chars_to_remove - 1)/2)
             item.name = item.name[:length] + '_' + item.name[-length:]
         if item.parent is not None:
-            self.correct_path(item.parent, removal_positions, total_number_of_chars_to_remove)
+            self.correct_path(item.parent, removal_positions,
+                              total_number_of_chars_to_remove)

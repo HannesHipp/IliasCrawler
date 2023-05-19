@@ -1,0 +1,38 @@
+{
+    "start": {
+        "childTypes": [
+            "p"
+        ]
+    },
+    "p": {
+        "leaf": false,
+        "childTypes": [
+            "link"
+        ],
+        "locatorDict": {
+            "name": "p",
+            "attr": "class",
+            "equals": "story"
+        },
+        "name": {
+            "attr": "text"
+        },
+        "treeImportance": 0
+    },
+    "link": {
+        "leaf": true,
+        "childTypes": [],
+        "locatorDict": {
+            "name": "a",
+            "attr": "href",
+            "contains": "lacie"
+        },
+        "name": {
+            "attr": "text"
+        },
+        "url": {
+            "attr": "href"
+        },
+        "treeImportance": 0
+    }
+}

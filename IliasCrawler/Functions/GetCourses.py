@@ -3,7 +3,8 @@ from IliasCrawler.Datapoints.Courses import Courses
 from IliasCrawler.Datapoints.Username import Username
 from IliasCrawler.Datapoints.Password import Password
 from IliasCrawler.Session import Session
-from IliasCrawler.model.Ilias import Ilias
+from IliasCrawler.models.ilias.Element import Element, convertDictToElementTree
+from IliasCrawler.models.Extractor import Extractor
 
 
 class GetCourses(Function):
@@ -15,11 +16,13 @@ class GetCourses(Function):
         self.courses = courses
 
     def execute(self):
+        COURSES_URL = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
         Session(self.username.value, self.password.value)
-        root = Ilias('Ilias',
-                     'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems',
-                     None)
-        root.content = Session.get_content(root.url)
+        htmlSoup = Session.get_content(COURSES_URL)
+        extractor = Extractor('IliasCrawler\models\ilias\model.json')
+        data = extractor.start_extraction(htmlSoup)
+        root = Element('Ilias', None, 0)
+        convertDictToElementTree(data, root)
         if self.courses.value:
             hashToDownload = {
                 course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
