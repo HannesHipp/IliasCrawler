@@ -5,40 +5,38 @@
         ]
     },
     "courseDate": {
-        "leaf": false,
+        "endpoint": false,
         "childTypes": [
             "course"
         ],
-        "locatorDict": {
-            "name": "div",
-            "attr": "class",
-            "equals": "il-item-group"
+        "locator": {
+            "class": "il-item-group"
         },
         "name": {
-            "name": "h3",
-            "attr": "string"
+            "text": {
+                "name": "h3"
+            }
         },
         "tree-importance": 0
     },
     "course": {
-        "leaf": true,
+        "endpoint": true,
         "childTypes": [],
-        "locatorDict": {
-            "name": "a",
-            "attr": "href",
-            "contains": "_crs_"
+        "locator": {
+            "contains": {
+                "href": "_crs_"
+            }
         },
         "name": {
-            "attr": "string"
+            "string": {}
         },
         "url": {
-            "attr": "href"
+            "href": {}
         },
         "tree-importance": 0
     },
     "opencastVideo": {
-        "leaf": true,
-        "childTypes": [],
-        ""
+        "endpoint": true,
+        "childTypes": []
     }
 }

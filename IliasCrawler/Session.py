@@ -7,7 +7,7 @@ class Session:
     __instance = None
 
     def __init__(self, username, password):
-        LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12f&baseClass=ilStartUpGUI&rtoken="
+        LOGINURL = "https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode=12g&baseClass=ilStartUpGUI&rtoken="
         session = requests.session()
         data = {
             'username': username,

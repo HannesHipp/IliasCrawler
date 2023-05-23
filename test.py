@@ -1,8 +1,10 @@
-# import pprint
-# from bs4 import BeautifulSoup
+import json
+import pprint
+from bs4 import BeautifulSoup
+from IliasCrawler.Session import Session
 
-# from IliasCrawler.models.Extractor import Extractor
-# from IliasCrawler.models.ilias.Element import Element, convertDictToElementTree
+from IliasCrawler.models.Extractor import Extractor
+from IliasCrawler.models.ilias.Element import Element, convertDictToElementTree
 
 
 # html_str = """<html><head><title>The Dormouse's story</title></head>
@@ -19,31 +21,31 @@
 #     """
 # soup = BeautifulSoup(html_str, 'lxml')
 # extractor = Extractor('test.json')
-# root = Element('ilias', 'ilias', None, 0, None, None)
-# pprint.pprint(convertDictToElementTree(extractor.start_extraction(soup), root))
+# pprint.pprint(extractor.startExtraction(soup))
 
-def execute(self):
-    COURSES_URL = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
-    Session(self.username.value, self.password.value)
-    htmlSoup = Session.get_content(COURSES_URL)
-    extractor = Extractor('IliasCrawler\models\ilias\model.json')
-    data = extractor.start_extraction(htmlSoup)
-    root = Element('Ilias', None, 0)
-    convertDictToElementTree(data, root)
-    if self.courses.value:
-        hashToDownload = {
-            course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
-    else:
-        hashToDownload = {}
-    allCourses = root.get_new_pages()
-    for course in allCourses:
-        hash = course.getHash()
-        shouldBeDownloaded = False
-        if hash in hashToDownload:
-            course.isNew = False
-            if hashToDownload[hash]:
-                shouldBeDownloaded = True
-        else:
-            course.isNew = True
-        course.shouldBeDownloaded = shouldBeDownloaded
-    self.courses.updateValue(allCourses)
+COURSES_URL = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
+Session("st162876", "90.0kg@Sommer")
+htmlSoup = Session.get_content(COURSES_URL)
+extractor = Extractor('IliasCrawler\models\ilias\model.json')
+data = extractor.startExtraction(htmlSoup)
+with open('file.txt', 'w') as file:
+    file.write(pprint.pformat(data))  # use `json.loads` to do the reverse
+# root = Element('Ilias', None, 0)
+# convertDictToElementTree(data, root)
+# if self.courses.value:
+#     hashToDownload = {
+#         course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
+# else:
+#     hashToDownload = {}
+# allCourses = root.get_new_pages()
+# for course in allCourses:
+#     hash = course.getHash()
+#     shouldBeDownloaded = False
+#     if hash in hashToDownload:
+#         course.isNew = False
+#         if hashToDownload[hash]:
+#             shouldBeDownloaded = True
+#     else:
+#         course.isNew = True
+#     course.shouldBeDownloaded = shouldBeDownloaded
+# self.courses.updateValue(allCourses)

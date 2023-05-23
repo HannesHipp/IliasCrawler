@@ -5,34 +5,35 @@
         ]
     },
     "p": {
-        "leaf": false,
+        "endpoint": false,
         "childTypes": [
             "link"
         ],
-        "locatorDict": {
-            "name": "p",
-            "attr": "class",
-            "equals": "story"
+        "locator": {
+            "class": "story"
         },
         "name": {
-            "attr": "text"
+            "text": {}
         },
         "treeImportance": 0
     },
     "link": {
-        "leaf": true,
+        "endpoint": true,
         "childTypes": [],
-        "locatorDict": {
-            "name": "a",
-            "attr": "href",
-            "contains": "lacie"
+        "locator": {
+            "contains": {
+                "href": "lacie"
+            }
         },
         "name": {
-            "attr": "text"
+            "text": {}
         },
         "url": {
-            "attr": "href"
+            "href": {}
         },
         "treeImportance": 0
+    },
+    "pdf": {
+        "endpoint": false
     }
 }

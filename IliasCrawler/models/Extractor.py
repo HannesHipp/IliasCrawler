@@ -1,5 +1,5 @@
 import json
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 
 class Extractor:
@@ -7,76 +7,82 @@ class Extractor:
     def __init__(self, jsonPath: str) -> None:
         self.model = json.load(open(jsonPath))
 
-    @staticmethod
-    def createMatchingFunc(locatorDict):
-        tagName = locatorDict['name']
-        attrName = locatorDict['attr']
-        if 'equals' in locatorDict:
-            attrValue = locatorDict['equals']
-            return lambda tag: tag.name == tagName and attrValue == Extractor.getAttr(tag, attrName)
+    def startExtraction(self, soup):
+        return self.extractData(soup, 'start')
+
+    def extractData(self, tree: BeautifulSoup, type: str):
+        result = []
+        childTypes = self.model[type]['childTypes']
+        for childType in childTypes:
+            typeDescription = self.model[childType].copy()
+            typeDescription.pop('childTypes')
+            locatorDict = typeDescription.pop('locator')
+            elements = self.findElements(tree, locatorDict)
+            endpoint = typeDescription.pop('endpoint')
+            attrsDict = typeDescription
+            attrsDict['type'] = childType
+            result.extend(self.encodeElements(elements, attrsDict, endpoint))
+        return result
+
+    def findElements(self, tree: BeautifulSoup, locatorDict: dict) -> list[Tag]:
+        locatorDict = locatorDict.copy()
+        if not locatorDict:
+            return [tree]
+        containsDict = locatorDict.pop('contains', None)
+        name = locatorDict.pop('name', None)
+        exactDict = locatorDict
+        if exactDict:
+            matches = tree.find_all(attrs=exactDict)
+            if name:
+                matches = [tag for tag in matches if tag.name == name]
         else:
-            attrValue = locatorDict['contains']
-            return lambda tag: tag.name == tagName and attrValue in Extractor.getAttr(tag, attrName)
+            if name:
+                matches = tree.find_all(name)
+            else:
+                matches = tree.find_all(
+                    attrs={key: True for key in containsDict})
+        if containsDict:
+            matches = [tag for tag in matches if all(value in Extractor.getAttr(
+                tag, attr) for attr, value in containsDict.items())]
+        return matches
+
+    def encodeElements(self, tags, attrsDict: dict, endpoint: bool):
+        result = []
+        attrsToFind = {attrName: locatorDict for attrName,
+                       locatorDict in attrsDict.items() if isinstance(locatorDict, dict)}
+        for tag in tags:
+            validCanidate = True
+            concreteDict = attrsDict.copy()
+            for attrName, locatorDict in attrsToFind.items():
+                subElementAttr = list(locatorDict.keys())[0]
+                locatorDict = locatorDict[subElementAttr]
+                subElement = self.findElements(tag, locatorDict)
+                if not subElement:
+                    validCanidate = False
+                    break
+                subElement = subElement[0]
+                attrValue = Extractor.getAttr(subElement, subElementAttr)
+                if not attrValue:
+                    validCanidate = False
+                    break
+                concreteDict[attrName] = attrValue
+            if validCanidate:
+                if not endpoint:
+                    concreteDict['children'] = self.extractData(
+                        tag, attrsDict['type'])
+                result.append(concreteDict)
+        return result
 
     @staticmethod
-    def getAttr(tag, attrName, tagName: str = None):
-        result = None
-        if tagName:
-            tag = tag.find(lambda tag: tag.name == tagName)
-            if not tag:
-                return None
+    def parseLocatorDict(locatorDict):
+
+        return (locatorDict, containsDict, name)
+
+    @staticmethod
+    def getAttr(tag, attrName):
         result = tag.get(attrName)
         if not result and hasattr(tag, attrName):
             result = getattr(tag, attrName)
         if isinstance(result, list):
             result = result[0]
-        return result
-
-    def start_extraction(self, soup):
-        return self.extract_data(soup, 'start')
-
-    def extract_data(self, tree: BeautifulSoup, type: str):
-        result = []
-        childTypes = self.model[type]['childTypes']
-        for childType in childTypes:
-            canidates = self.findCanidates(tree, childType)
-            result.extend(self.encodeData(canidates, childType))
-        return result
-
-    def findCanidates(self, tree: BeautifulSoup, childType: str):
-        locatorDict = self.model[childType]['locatorDict']
-        matchingFunc = Extractor.createMatchingFunc(locatorDict)
-        return tree.find_all(matchingFunc)
-
-    def encodeData(self, tags, type):
-        result = []
-        baseDict = self.getBaseDict(type)
-        attrsToFind = {attrName: locatorDict for attrName,
-                       locatorDict in baseDict.items() if isinstance(locatorDict, dict)}
-        for tag in tags:
-            validCanidate = True
-            tagDict = baseDict.copy()
-            tagDict['type'] = type
-            for dataAttrName, locatorDict in attrsToFind.items():
-                tagName = None
-                if 'name' in locatorDict:
-                    tagName = locatorDict['name']
-                attrName = locatorDict['attr']
-                if attrValue := Extractor.getAttr(tag, attrName, tagName):
-                    tagDict[dataAttrName] = attrValue
-                else:
-                    validCanidate = False
-                    break
-            if validCanidate:
-                if not self.model[type]['leaf']:
-                    tagDict['children'] = self.extract_data(
-                        tag, type)
-                result.append(tagDict)
-        return result
-
-    def getBaseDict(self, childType: str):
-        result = self.model[childType].copy()
-        result.pop('locatorDict')
-        result.pop('leaf')
-        result.pop('childTypes')
         return result
