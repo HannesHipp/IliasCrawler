@@ -30,6 +30,7 @@ class Extractor:
             return [tree]
         containsDict = locatorDict.pop('contains', None)
         name = locatorDict.pop('name', None)
+        subitemDict = locatorDict.pop('subitem', None)
         exactDict = locatorDict
         if exactDict:
             matches = tree.find_all(attrs=exactDict)
@@ -44,6 +45,8 @@ class Extractor:
         if containsDict:
             matches = [tag for tag in matches if all(value in Extractor.getAttr(
                 tag, attr) for attr, value in containsDict.items())]
+        if subitemDict:
+            matches = self.findElements(matches[0], subitemDict)
         return matches
 
     def encodeElements(self, tags, attrsDict: dict, endpoint: bool):
@@ -72,11 +75,6 @@ class Extractor:
                         tag, attrsDict['type'])
                 result.append(concreteDict)
         return result
-
-    @staticmethod
-    def parseLocatorDict(locatorDict):
-
-        return (locatorDict, containsDict, name)
 
     @staticmethod
     def getAttr(tag, attrName):

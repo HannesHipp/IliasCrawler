@@ -20,7 +20,7 @@ class CrawlingFrame(OutputFrame):
         )
         self.courses = courses
         self.filesAndVideos = filesAndVideos
-        self.setGuiModuls(
+        self.addModule(
             ProgressBar(courses, self.progress_bar,
                         self.label_percentage, percentageOfCrawledCourses),
             TextLabel(currentCourseName,

@@ -40,7 +40,7 @@ class Element:
 def convertDictToElementTree(dataList: list[dict], parent):
     endPoints = []
     for dict in dataList:
-        element = Element(dict['type'], dict['name'], parent, dict['treeImportance'], dict.get(
+        element = Element(dict['type'], dict['name'], parent, dict['tree-importance'], dict.get(
             'url', None), dict.get('urlFormat', None))
         if len(dict['children']) != 0:
             for child in dict['children']:

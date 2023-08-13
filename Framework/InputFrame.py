@@ -10,7 +10,7 @@ from PyQt5.uic import loadUi
 from Framework.Window import Window
 
 
-class InputFrame(QWidget):
+class Frame(QWidget):
 
     display = pyqtSignal(object)
 
@@ -18,11 +18,11 @@ class InputFrame(QWidget):
         super().__init__()
         loadUi(path, self)
         self.index = None
-        self.buttons = self.setButtons(buttonNames)
+        self.buttons = self.set_buttons(buttonNames)
         self.guiModuls = []
         self.display.connect(Window.instance.selectFrame)
 
-    def setButtons(self, buttonNames: list[str]) -> list[QPushButton]:
+    def set_buttons(self, buttonNames: list[str]) -> list[QPushButton]:
         result = []
         for buttonName in buttonNames:
             button = getattr(self, buttonName)
@@ -30,8 +30,8 @@ class InputFrame(QWidget):
             result.append(button)
         return result
 
-    def setGuiModuls(self, *guiModuls: GuiModul):
-        self.guiModuls = guiModuls
+    def addModule(self, guiModul: GuiModul):
+        self.guiModuls.append(guiModul)
 
     def show(self):
         for guiModul in self.guiModuls:
@@ -39,13 +39,21 @@ class InputFrame(QWidget):
         self.display.emit(self)
 
     def finalize(self):
-        sender = self.sender()
-        nextFrame = self.decideNextFrame(sender)
+
         errors = self.validateFrame()
-        if len(errors) == 0:
-            nextFrame.show()
-        else:
+        if len(errors) != 0:
             self.showErrorMessage(errors)
+            return
+        next_frame = self.get_next_frame(self.sender())
+        next_frame.show()
+
+    def get_next_frame(self, sender):
+        button_name = None
+        for attribute, value in self.__dict__.items():
+            if value is sender:
+                button_name = str(attribute)
+                break
+        return self.decideNextFrame(button_name)
 
     def validateFrame(self):
         errors = []
@@ -60,3 +68,39 @@ class InputFrame(QWidget):
         raise Exception(
             f"decideNextFrame method not implemented in {self.__class__.__name__}"
         )
+
+
+class NoVerfifierStrategy:
+
+    def initialize(self):
+        pass
+
+    def show(self):
+        pass
+
+    def finalize(self):
+        pass
+
+
+class VerfifierStrategy:
+
+    def initialize(self):
+        pass
+
+    def show(self):
+        pass
+
+    def finalize(self):
+        pass
+
+
+class FunctionStrategy:
+
+    def initialize(self):
+        pass
+
+    def show(self):
+        pass
+
+    def finalize(self):
+        pass

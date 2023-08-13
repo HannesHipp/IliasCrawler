@@ -1,8 +1,8 @@
 from Framework.GuiModuls.PathSelector import PathSelector
-from Framework.InputFrame import InputFrame
+from Framework.InputFrame import Frame
 
 
-class PathFrame(InputFrame):
+class PathFrame(Frame):
 
     def __init__(self, path):
         super().__init__(
@@ -10,7 +10,7 @@ class PathFrame(InputFrame):
             buttonNames=['button_continue']
         )
         self.path = path
-        self.setGuiModuls(
+        self.addModule(
             PathSelector(path, self.lineedit_path, self.button_select_path)
         )
 

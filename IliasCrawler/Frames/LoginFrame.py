@@ -1,8 +1,8 @@
-from Framework.InputFrame import InputFrame
+from Framework.InputFrame import Frame
 from Framework.GuiModuls.TextField import TextField
 
 
-class LoginFrame(InputFrame):
+class LoginFrame(Frame):
 
     def __init__(self, username, password):
         super().__init__(
@@ -11,7 +11,7 @@ class LoginFrame(InputFrame):
         )
         self.username = username
         self.password = password
-        self.setGuiModuls(
+        self.addModule(
             TextField(username, self.textfield_username),
             TextField(password, self.textfield_password)
         )

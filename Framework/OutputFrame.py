@@ -1,10 +1,10 @@
-from Framework.InputFrame import InputFrame
+from Framework.InputFrame import Frame
 from Framework.Function import Function
 
 from PyQt5.QtCore import QThreadPool
 
 
-class OutputFrame(InputFrame):
+class OutputFrame(Frame):
 
     def __init__(self, path, function: Function, buttonNames=[]):
         super().__init__(path, buttonNames)

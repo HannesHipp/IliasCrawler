@@ -28,10 +28,11 @@ Session("st162876", "90.0kg@Sommer")
 htmlSoup = Session.get_content(COURSES_URL)
 extractor = Extractor('IliasCrawler\models\ilias\model.json')
 data = extractor.startExtraction(htmlSoup)
-with open('file.txt', 'w') as file:
-    file.write(pprint.pformat(data))  # use `json.loads` to do the reverse
-# root = Element('Ilias', None, 0)
-# convertDictToElementTree(data, root)
+# with open('fileSubitem.txt', 'w') as file:
+#     file.write(pprint.pformat(data))  # use `json.loads` to do the reverse
+root = Element('root', 'Ilias', None, 0, "", {})
+result = convertDictToElementTree(data, root)
+print("end")
 # if self.courses.value:
 #     hashToDownload = {
 #         course.getHash(): course.shouldBeDownloaded for course in self.courses.value}

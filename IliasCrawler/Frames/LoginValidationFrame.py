@@ -14,7 +14,7 @@ class LoginValidationFrame(OutputFrame):
         )
         self.username = username
         self.password = password
-        self.setGuiModuls(LoadingAnimation(username, self.text))
+        self.addModule(LoadingAnimation(username, self.text))
 
     def addNextFrames(self, loginFrame, pathFrame):
         self.loginFrame = loginFrame

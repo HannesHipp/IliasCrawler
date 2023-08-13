@@ -29,7 +29,7 @@ class AutostartFrame(OutputFrame):
             function=AutostartCountdown(autostartTimer),
             buttonNames=['button_cancel', 'button_start']
         )
-        self.setGuiModuls(
+        self.addModule(
             TextLabel(autostartTimer,  self.label_timer, lambda x: x)
         )
 

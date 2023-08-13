@@ -10,14 +10,20 @@
             "course"
         ],
         "locator": {
-            "class": "il-item-group"
+            "class": "panel il-panel-listing-std-container clearfix",
+            "subitem": {
+                "class": "il-item-group"
+            }
+        },
+        "fix": {
+            "tree-importance": 0,
+            "url-format": {}
         },
         "name": {
             "text": {
                 "name": "h3"
             }
-        },
-        "tree-importance": 0
+        }
     },
     "course": {
         "endpoint": true,
@@ -33,7 +39,8 @@
         "url": {
             "href": {}
         },
-        "tree-importance": 0
+        "tree-importance": 0,
+        "url-format": 
     },
     "opencastVideo": {
         "endpoint": true,
