@@ -13,10 +13,9 @@ class ValidateLogin(Function):
         self.password = password
 
     def execute(self):
-        session = Session(self.username.value, self.password.value)
-        if session.is_valid():
+        if Session.set_session(self.username.value, self.password.value):
             return True
         else:
-            self.signals.error.emit(
-                'Der Benutzername oder das Passwort ist falsch.')
-            return False
+            self.username.invalidate.emit()
+            self.password.invalidate.emit()
+            raise Exception('Der Benutzername oder das Passwort ist falsch.')

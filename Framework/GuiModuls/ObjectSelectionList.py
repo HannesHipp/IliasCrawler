@@ -8,39 +8,40 @@ from Framework.GuiModuls.GuiModul import GuiModul
 
 class ObjectSelectionList(GuiModul):
 
-    def __init__(self, datapoint: Datapoint, qtListView: QListView, nameAttr: str, checkedAttr: str, coloredAttr: str) -> None:
-        super().__init__([datapoint])
-        qtListView.setModel(QStandardItemModel())
-        self.datapoint = datapoint
-        self.qtListView = qtListView
-        self.nameAttr = nameAttr
-        self.checkedAttr = checkedAttr
-        self.coloredAttr = coloredAttr
-        self.qtListView.model().dataChanged.connect(self.publish)
+    def __init__(self, datapoint: Datapoint, list_view: QListView, name_attr: str, checked_attr: str, colored_attr: str) -> None:
+        list_view.setModel(QStandardItemModel())
+        super().__init__(
+            datapoint=datapoint,
+            changed_signal=list_view.model().dataChanged
+        )
+        self.list_view = list_view
+        self.name_attr = name_attr
+        self.checked_attr = checked_attr
+        self.colored_attr = colored_attr
 
-    def publish(self):
-        model = self.qtListView.model()
+    def get_value(self):
+        model = self.list_view.model()
         result = []
         for i in range(model.rowCount()):
             item = model.item(i)
             object = item.data()
             if item.checkState() == Qt.Checked:
-                setattr(object, self.checkedAttr, True)
+                setattr(object, self.checked_attr, True)
             else:
-                setattr(object, self.checkedAttr, False)
+                setattr(object, self.checked_attr, False)
             result.append(object)
-        self.datapoint.updateValue(result)
+        return result
 
-    def update(self):
-        model = self.qtListView.model()
-        for object in self.datapoint.value:
-            item = QStandardItem(getattr(object, self.nameAttr))
+    def set_value(self, value):
+        model = self.list_view.model()
+        for object in value:
+            item = QStandardItem(getattr(object, self.name_attr))
             item.setData(object)
             item.setCheckable(True)
             item.setCheckState(Qt.Unchecked)
-            if getattr(object, self.checkedAttr):
+            if getattr(object, self.checked_attr):
                 item.setCheckState(Qt.Checked)
-            if getattr(object, self.coloredAttr):
+            if getattr(object, self.colored_attr):
                 item.setBackground(QBrush(QColor(113, 217, 140)))
                 model.insertRow(0, item)
             else:

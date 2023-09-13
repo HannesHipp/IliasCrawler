@@ -1,52 +1,67 @@
-import json
-import pprint
-from bs4 import BeautifulSoup
+import os
 from IliasCrawler.Session import Session
-
-from IliasCrawler.models.Extractor import Extractor
-from IliasCrawler.models.ilias.Element import Element, convertDictToElementTree
+from IliasCrawler.models.Extractor import Extractor, Element
 
 
-# html_str = """<html><head><title>The Dormouse's story</title></head>
-#     <body>
-#     <p class="title"><b>The Dormouse's story</b></p>
 
-#     <p class="story">Once upon a time there were three little sisters; and their names were
-#     <a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
-#     <a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
-#     <a href="http://example.com/tillie" class="brother" id="link3">Tillie</a>;
-#     and they lived at the bottom of a well.</p>
+def crawl(page, extractor):
+    result = []
+    page.set_soup(Session.get_content(page.url))
+    leafs = extractor.extract_data(page)
+    for leaf in leafs:
+        if extractor.model[leaf.type]['childTypes']:
+            print(f"crawling {leaf.name}")
+            result.extend(crawl(leaf, extractor))
+        else:
+            result.append(leaf)
+    return result
 
-#     <p class="story">...</p>
-#     """
-# soup = BeautifulSoup(html_str, 'lxml')
-# extractor = Extractor('test.json')
-# pprint.pprint(extractor.startExtraction(soup))
 
-COURSES_URL = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
-Session("st162876", "90.0kg@Sommer")
-htmlSoup = Session.get_content(COURSES_URL)
+def postprocess_names(leafs):
+    for leaf in leafs:
+        current = leaf
+        while current.parent is not None:
+            current.name = postprocess_str(current.name)
+            current = current.parent
+    return leafs
+
+
+def postprocess_str(str):
+    for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
+        str = " ".join(str.split(char))
+    return " ".join(str.split())
+
+
+def download(leaf, dir):
+    path = get_path(leaf)
+    path = f"{dir}\\{path}"
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    # with open(path + "\\" + self.name, 'wb') as file:
+        # file.write(session.get_file_content(self.url))
+    with open(f"{path}\\{leaf.name}.txt", 'w') as file:
+        file.write("Hello")
+
+
+def get_path(leaf):
+    if leaf.parent is None:
+            return ""
+    else:
+        parentpath = get_path(leaf.parent)
+        return parentpath + "\\" + leaf.parent.name
+
+DOWNLOAD_DIR = "C:\\Users\\hanne\\Desktop\\test"
+Session.set_session('st162876', '90.0kg@Sommer')
+print("has session")
 extractor = Extractor('IliasCrawler\models\ilias\model.json')
-data = extractor.startExtraction(htmlSoup)
-# with open('fileSubitem.txt', 'w') as file:
-#     file.write(pprint.pformat(data))  # use `json.loads` to do the reverse
-root = Element('root', 'Ilias', None, 0, "", {})
-result = convertDictToElementTree(data, root)
-print("end")
-# if self.courses.value:
-#     hashToDownload = {
-#         course.getHash(): course.shouldBeDownloaded for course in self.courses.value}
-# else:
-#     hashToDownload = {}
-# allCourses = root.get_new_pages()
-# for course in allCourses:
-#     hash = course.getHash()
-#     shouldBeDownloaded = False
-#     if hash in hashToDownload:
-#         course.isNew = False
-#         if hashToDownload[hash]:
-#             shouldBeDownloaded = True
-#     else:
-#         course.isNew = True
-#     course.shouldBeDownloaded = shouldBeDownloaded
-# self.courses.updateValue(allCourses)
+print("extraction start")
+root = Element('root', None)
+root.name = "Ilias"
+root.url = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
+leafs = crawl(root, extractor)
+print("extraction finished")
+leafs = postprocess_names(leafs)
+print("postprocessing done")
+for leaf in leafs:
+    download(leaf, DOWNLOAD_DIR)
+

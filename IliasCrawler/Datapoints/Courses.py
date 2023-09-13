@@ -1,5 +1,4 @@
 from Framework.Datapoint import Datapoint
-from IliasCrawler.model.Course import Course
 from distutils.util import strtobool
 
 
@@ -8,15 +7,15 @@ class Courses(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def databaseTuplelistToValue(self, tupleList: list[tuple]):
+    def tuple_list_to_value(self, tupleList: list[tuple]):
         result = []
-        for tuple in tupleList:
-            course = Course(tuple[1], tuple[0], None)
-            course.shouldBeDownloaded = strtobool(tuple[2])
-            result.append(course)
+        # for tuple in tupleList:
+        #     course = Course(name=tuple[1], url=tuple[0], parent=None)
+        #     course.should_be_downloaded = strtobool(tuple[2])
+        #     result.append(course)
         return result
 
-    def databaseValueToTuplelist(self, courses):
+    def value_to_tuple_list(self, courses):
         result = []
         for course in courses:
             result.append(

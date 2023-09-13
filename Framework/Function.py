@@ -1,12 +1,11 @@
 import sys
 import traceback
-from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot, QThreadPool
 
 
 class FunctionSignals(QObject):
 
-    error = pyqtSignal(str)
-    done = pyqtSignal()
+    ended = pyqtSignal()
 
 
 class Function(QRunnable):
@@ -14,21 +13,24 @@ class Function(QRunnable):
     def __init__(self) -> None:
         super().__init__()
         self.signals = FunctionSignals()
-        self.result = None
         self.cancel = False
+        self.error = None
+
+    def start_execution(self):
+        QThreadPool.globalInstance().start(self)
 
     @pyqtSlot()
     def run(self):
         try:
-            self.result = self.execute()
-            if not self.cancel:
-                self.signals.done.emit()
+            self.execute()
         except:
             traceback.print_exc()
             value = sys.exc_info()[:2]
-            self.signals.error.emit(
-                str((value, traceback.format_exc()))
-            )
+            self.error = str((value, traceback.format_exc()))
+        self.signals.ended.emit()
+
+    def cancel_execution(self):
+        self.cancel = True
 
     def execute(self):
         raise Exception(

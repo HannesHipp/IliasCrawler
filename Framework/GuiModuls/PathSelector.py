@@ -1,23 +1,24 @@
 from easygui import diropenbox
 from Framework.Datapoint import Datapoint
 from PyQt5.QtWidgets import QLabel, QPushButton, QWidget
-from PyQt5.QtCore import QObject, Qt
+from PyQt5.QtCore import pyqtSignal
 
 from Framework.GuiModuls.GuiModul import GuiModul
 
 
 class PathSelector(GuiModul):
 
-    def __init__(self, datapoint: Datapoint, qtLineEdit: QLabel, qtButton: QPushButton) -> None:
-        super().__init__([datapoint])
-        self.datapoint = datapoint
-        self.qtLineEdit = qtLineEdit
-        qtButton.clicked.connect(self.publish)
+    def __init__(self, datapoint: Datapoint, line_edit: QLabel, button: QPushButton) -> None:
+        super().__init__(
+            datapoint=datapoint,
+            changed_signal=button.clicked
+        )
+        self.line_edit = line_edit
 
-    def publish(self):
-        path = diropenbox()
-        self.datapoint.updateValue(path)
-        self.qtLineEdit.setText(str(path))
+    def get_value(self):
+        value = diropenbox()
+        self.set_value(value)
+        return value
 
-    def update(self):
-        self.qtLineEdit.setText(str(self.datapoint.value))
+    def set_value(self, value):
+        self.line_edit.setText(str(value))

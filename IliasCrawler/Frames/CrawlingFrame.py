@@ -20,9 +20,11 @@ class CrawlingFrame(OutputFrame):
         )
         self.courses = courses
         self.filesAndVideos = filesAndVideos
-        self.addModule(
+        self.add_module(
             ProgressBar(courses, self.progress_bar,
-                        self.label_percentage, percentageOfCrawledCourses),
+                        self.label_percentage, percentageOfCrawledCourses)
+        )
+        self.add_module(
             TextLabel(currentCourseName,
                       self.label_aktueller_kurs, lambda x: x)
         )
@@ -30,7 +32,7 @@ class CrawlingFrame(OutputFrame):
     def addNextFrames(self, crawlingFrame):
         self.crawlingFrame = crawlingFrame
 
-    def decideNextFrame(self, pressedButton):
+    def decide_next_frame(self, pressedButton):
         return self.crawlingFrame
 
 

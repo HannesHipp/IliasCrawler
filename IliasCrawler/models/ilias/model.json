@@ -1,5 +1,5 @@
 {
-    "start": {
+    "root": {
         "childTypes": [
             "courseDate"
         ]
@@ -27,10 +27,15 @@
     },
     "course": {
         "endpoint": true,
-        "childTypes": [],
+        "childTypes": [
+            "ilContainerBlock",
+            "folder",
+            "file",
+            "video"
+        ],
         "locator": {
             "contains": {
-                "href": "_crs_"
+                "href": ["_crs_"]
             }
         },
         "name": {
@@ -39,11 +44,89 @@
         "url": {
             "href": {}
         },
-        "tree-importance": 0,
-        "url-format": 
+        "fix": {
+            "tree-importance": 0,
+            "url-format": {}
+        }
     },
-    "opencastVideo": {
+    "ilContainerBlock": {
+        "endpoint": false,
+        "childTypes": [
+            "folder"
+        ],
+        "locator":{
+            "class": "ilContainerBlock container-fluid form-inline"
+        },
+        "fix":{
+            "tree-importance":0,
+            "url-format":{}
+        },
+        "name":{
+            "text":{
+                "name":"h2"
+            }
+        }
+    },
+    "folder":{
         "endpoint": true,
-        "childTypes": []
+        "childTypes": [
+            "folder",
+            "file",
+            "video"
+        ],
+        "locator":{
+            "contains": {
+                "href": ["_fold_"]
+            }
+        },
+        "fix":{
+            "tree-importance":0,
+            "url-format":{}
+        },
+        "name":{
+            "text":{}
+        },
+        "url":{
+            "href":{}
+        }
+    },
+    "file":{
+        "endpoint": true,
+        "childTypes": [],
+        "locator":{
+            "contains": {
+                "href": ["_file_"]
+            }
+        },
+        "fix":{
+            "tree-importance":0,
+            "url-format":{}
+        },
+        "name":{
+            "text":{}
+        },
+        "url":{
+            "href":{}
+        }
+    },
+    "video":{
+        "endpoint": true,
+        "childTypes": [],
+        "locator":{
+            "name": "source",
+            "contains": {
+                "src": [".mp4",".webm"]
+            }
+        },
+        "fix":{
+            "tree-importance":0,
+            "url-format":{}
+        },
+        "name":{
+            "text":{}
+        },
+        "url":{
+            "src":{}
+        }
     }
 }

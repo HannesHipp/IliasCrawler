@@ -1,13 +1,13 @@
-class Element:
+from IliasCrawler.models.Extractor import Element
 
-    def __init__(self, type, name, parent, treeImportance, url, urlFormat):
-        self.type = type
-        self.name = self.postprocessName(name)
-        self.parent = parent
-        self.treeImportance = treeImportance
-        if url:
-            url = self.postprocessURL(url, urlFormat, type)
-        self.url = url
+
+
+
+
+class IliasElement(Element):
+
+    def __init__(self, type: str, parent) -> None:
+        super().__init__(type, parent)
 
     def postprocessName(self, name):
         for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|', '...']:
@@ -35,16 +35,3 @@ class Element:
         else:
             parentpath = self.parent.get_path()
             return parentpath + "\\" + self.parent.name
-
-
-def convertDictToElementTree(dataList: list[dict], parent):
-    endPoints = []
-    for dict in dataList:
-        element = Element(dict['type'], dict['name'], parent, dict['tree-importance'], dict.get(
-            'url', None), dict.get('urlFormat', None))
-        if len(dict['children']) != 0:
-            for child in dict['children']:
-                endPoints.extend(convertDictToElementTree(child, element))
-        else:
-            endPoints.extend(element)
-    return endPoints

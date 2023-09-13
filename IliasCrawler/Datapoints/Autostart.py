@@ -6,16 +6,16 @@ class Autostart(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def isValid(self, value):
+    def is_valid(self, value):
         return True
 
-    def databaseTuplelistToValue(self, tupleList):
+    def tuple_list_to_value(self, tupleList):
         if tupleList[0][0] == '1':
             return True
         else:
             return False
 
-    def databaseValueToTuplelist(self, autostart):
+    def value_to_tuple_list(self, autostart):
         if autostart:
             return [('1',)]
         else:

@@ -1,4 +1,3 @@
-from Framework.GuiModuls.LoadingAnimation import LoadingAnimation
 from Framework.OutputFrame import OutputFrame
 from IliasCrawler.Datapoints.Password import Password
 from IliasCrawler.Datapoints.Username import Username
@@ -14,13 +13,12 @@ class LoginValidationFrame(OutputFrame):
         )
         self.username = username
         self.password = password
-        self.addModule(LoadingAnimation(username, self.text))
 
     def addNextFrames(self, loginFrame, pathFrame):
         self.loginFrame = loginFrame
         self.pathFrame = pathFrame
 
-    def decideNextFrame(self, pressedButton):
-        if self.function.result != True:
+    def decide_next_frame(self, pressedButton):
+        if self.function.error:
             return self.loginFrame
         return self.pathFrame

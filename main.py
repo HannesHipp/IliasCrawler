@@ -22,7 +22,7 @@ password = Password()
 path = Path()
 courses = Courses()
 autostart = Autostart()
-autostart.updateValue(False)
+autostart.submit_value(False)
 filesAndVideos = FilesAndVideos()
 
 

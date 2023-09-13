@@ -4,45 +4,56 @@ from Framework.Database import Database
 
 class Datapoint(QObject):
 
-    valueChanged = pyqtSignal()
+    value_changed = pyqtSignal()
+    invalidate = pyqtSignal()
 
     def __init__(self, save=True) -> None:
         super().__init__()
         value = None
+        database = None
         if save:
             database = Database(self.__class__.__name__.lower())
             if savedTuplelist := database.getTuplelist():
-                value = self.databaseTuplelistToValue(savedTuplelist)
-        else:
-            database = None
+                value = self.tuple_list_to_value(savedTuplelist)
         self.database = database
         self.value = value
-        self.error = None
+        self.invalidate.connect(self._invalidate)
 
-    def updateValue(self, value):
-        result = self.isValid(value)
-        if result == True:
-            self.value = value
-        else:
-            self.value = None
-            self.error = result
-        self.valueChanged.emit()
+    def _set_value(self, value):
+        self.value = value
+        self.value_changed.emit()
 
-    def save(self):
+    def submit_value(self, value):
+        error = self.has_error(value)
+        if not error:
+            self._set_value(value)
+        return error
+    
+    def _invalidate(self):
+        self._set_value(None)
+        if self.database:
+            self.database.clearTable()
+
+    def save_to_db(self):
         if self.database:
             self.database.saveTuplelist(
-                self.databaseValueToTuplelist(self.value))
+                self.value_to_tuple_list(self.value))
 
-    # overwritten by subclasses
-    def isValid(self, value):
+    def has_error(self, value):
+        response = self.is_valid(value)
+        if response is True:
+            return None
+        return response
+    
+    def is_valid(self, value):
         return True
 
-    def databaseTuplelistToValue(self, tupleList):
+    def tuple_list_to_value(self, tupleList):
         raise Exception(
-            f"valueFromDatabaseFormat method not implemented for {self.__class__.__name__}"
+            f"tuple_list_to_value() method not implemented for {self.__class__.__name__}"
         )
 
-    def databaseValueToTuplelist(self, data):
+    def value_to_tuple_list(self, value):
         raise Exception(
-            f"valueToDatabaseFormat method not implemented for {self.__class__.__name__}"
+            f"value_to_tuple_list() method not implemented for {self.__class__.__name__}"
         )

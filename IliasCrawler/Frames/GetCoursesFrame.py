@@ -17,7 +17,7 @@ class GetCoursesFrame(OutputFrame):
         self.courseSelectionFrame = courseSelectionFrame
         self.autostartFrame = autostartFrame
 
-    def decideNextFrame(self, pressedButton):
+    def decide_next_frame(self, pressedButton):
         hasNewCourses = False
         for course in self.courses.value:
             if course.isNew:

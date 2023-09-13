@@ -4,7 +4,6 @@ from Framework.Function import Function
 from IliasCrawler.Datapoints.Courses import Courses
 from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos
 from IliasCrawler.Session import Session
-from IliasCrawler.model.File import File
 
 
 class Crawl(Function):
@@ -18,7 +17,7 @@ class Crawl(Function):
     def execute(self):
         result = []
         for course in self.courses.value:
-            self.currentCoursesName.updateValue(course.name)
+            self.currentCoursesName.submit_value(course.name)
             if course.shouldBeDownloaded:
                 result += self.crawl(course)
                 course.hasBeenCrawled = True

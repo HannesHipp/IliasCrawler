@@ -1,5 +1,5 @@
 from Framework.GuiModuls.ObjectSelectionList import ObjectSelectionList
-from Framework.InputFrame import Frame
+from Framework.Frame import Frame
 
 from IliasCrawler.Datapoints.Courses import Courses
 
@@ -9,10 +9,10 @@ class CourseSelectionFrame(Frame):
     def __init__(self, courses: Courses):
         super().__init__(
             path="IliasCrawler\\resources\\CourseSelectionView.ui",
-            buttonNames=['button_select_choice']
+            next_frame_button_names=['button_select_choice']
         )
         self.courses = courses
-        self.addModule(
+        self.add_module(
             ObjectSelectionList(courses, self.listView,
                                 'name', "shouldBeDownloaded", "isNew")
         )
@@ -20,5 +20,5 @@ class CourseSelectionFrame(Frame):
     def addNextFrames(self, crawlingFrame):
         self.crawlingFrame = crawlingFrame
 
-    def decideNextFrame(self, pressedButton):
+    def decide_next_frame(self, pressedButton):
         return self.crawlingFrame

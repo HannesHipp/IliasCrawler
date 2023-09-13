@@ -6,14 +6,14 @@ class Path(Datapoint):
     def __init__(self) -> None:
         super().__init__()
 
-    def isValid(self, value):
+    def is_valid(self, value):
         if value:
             return True
         else:
             return "Es muss ein Pfad ausgewählt werden."
 
-    def databaseTuplelistToValue(self, tupleList):
+    def tuple_list_to_value(self, tupleList):
         return tupleList[0][0]
 
-    def databaseValueToTuplelist(self, path):
+    def value_to_tuple_list(self, path):
         return [(path,)]

@@ -17,7 +17,7 @@ class GetCourses(Function):
 
     def execute(self):
         COURSES_URL = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
-        Session(self.username.value, self.password.value)
+        Session.set_session(self.username.value, self.password.value)
         htmlSoup = Session.get_content(COURSES_URL)
         extractor = Extractor('IliasCrawler\models\ilias\model.json')
         data = extractor.start_extraction(htmlSoup)
@@ -39,4 +39,4 @@ class GetCourses(Function):
             else:
                 course.isNew = True
             course.shouldBeDownloaded = shouldBeDownloaded
-        self.courses.updateValue(allCourses)
+        self.courses.submit_value(allCourses)

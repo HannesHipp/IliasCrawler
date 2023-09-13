@@ -7,13 +7,14 @@ from Framework.GuiModuls.GuiModul import GuiModul
 class TextField(GuiModul):
 
     def __init__(self, datapoint: Datapoint, qtTextEdit: QLineEdit) -> None:
-        super().__init__([datapoint])
-        self.datapoint = datapoint
+        super().__init__(
+            datapoint=datapoint, 
+            changed_signal=qtTextEdit.textChanged
+        )
         self.qtTextEdit = qtTextEdit
-        qtTextEdit.textChanged.connect(self.publish)
 
-    def publish(self):
-        self.datapoint.updateValue(self.qtTextEdit.text())
+    def get_value(self):
+        return self.qtTextEdit.text()
 
-    def update(self):
-        self.qtTextEdit.setText(self.datapoint.value)
+    def set_value(self, value):
+        self.qtTextEdit.setText(value)

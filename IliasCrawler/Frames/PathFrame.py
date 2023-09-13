@@ -1,5 +1,5 @@
 from Framework.GuiModuls.PathSelector import PathSelector
-from Framework.InputFrame import Frame
+from Framework.Frame import Frame
 
 
 class PathFrame(Frame):
@@ -7,15 +7,15 @@ class PathFrame(Frame):
     def __init__(self, path):
         super().__init__(
             path="IliasCrawler\\resources\\PathSelectionView.ui",
-            buttonNames=['button_continue']
+            next_frame_button_names=['button_continue']
         )
         self.path = path
-        self.addModule(
+        self.add_module(
             PathSelector(path, self.lineedit_path, self.button_select_path)
         )
 
     def addNextFrames(self, getCoursesFrame):
         self.getCoursesFrame = getCoursesFrame
 
-    def decideNextFrame(self, pressedButton):
+    def decide_next_frame(self, pressedButton):
         return self.getCoursesFrame
