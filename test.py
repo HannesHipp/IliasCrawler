@@ -31,6 +31,21 @@ def postprocess_str(str):
         str = " ".join(str.split(char))
     return " ".join(str.split())
 
+def postprocessURL(self, url, urlFormat):
+    if 'http' not in url:
+        url_needs_correction = True
+        for key in urlFormat:
+            if url_needs_correction:
+                if key in url:
+                    if url[:2] == "./":
+                        url = url[2:]
+                    url = urlFormat[key] + url
+                    url_needs_correction = False
+        if url_needs_correction:
+            raise Exception(
+                f"Url does not match prefixes. type = {self.type} url = {url}")
+    return url
+
 
 def download(leaf, dir):
     path = get_path(leaf)
@@ -51,14 +66,18 @@ def get_path(leaf):
         return parentpath + "\\" + leaf.parent.name
 
 DOWNLOAD_DIR = "C:\\Users\\hanne\\Desktop\\test"
+COURSE_NO = "2093098"
+
 Session.set_session('st162876', '90.0kg@Sommer')
 print("has session")
-extractor = Extractor('IliasCrawler\models\ilias\model.json')
+extractor = Extractor('IliasCrawler\models\ilias')
 print("extraction start")
 root = Element('root', None)
 root.name = "Ilias"
-root.url = 'https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'
-leafs = crawl(root, extractor)
+root.set_soup(Session.get_content('https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilDashboardGUI&cmd=jumpToSelectedItems'))
+courses = extractor.extract_data(root)
+course = [course for course in courses if COURSE_NO in course.url][0]
+leafs = crawl(course, extractor)
 print("extraction finished")
 leafs = postprocess_names(leafs)
 print("postprocessing done")

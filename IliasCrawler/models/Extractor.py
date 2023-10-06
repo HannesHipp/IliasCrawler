@@ -1,4 +1,5 @@
-import json
+import yaml
+import os
 from bs4 import BeautifulSoup, Tag
 
 
@@ -19,16 +20,33 @@ class Element:
 class Extractor:
 
     def __init__(self, jsonPath: str) -> None:
-        self.model = json.load(open(jsonPath))
+        self.model = Extractor.combine_yaml_files(jsonPath)
+
+    @staticmethod
+    def combine_yaml_files(directory_path):
+        combined_data = {}
+        if not os.path.isdir(directory_path):
+            raise ValueError("The specified directory path does not exist.")
+        for filename in os.listdir(directory_path):
+            if filename.endswith(".yaml") or filename.endswith(".yml"):
+                file_path = os.path.join(directory_path, filename)
+                with open(file_path, "r") as yaml_file:
+                    data = yaml.safe_load(yaml_file)
+                    if data is not None:
+                        combined_data.update(data)
+        return combined_data
 
     def extract_data(self, parent: Element):
         leafs = []
         childTypes = self.model[parent.type]['childTypes']
         for child_type in childTypes:
             locator = self.model[child_type]['locator']
-            elements = Extractor.find_elements(parent.soup, locator)
-            elements = self.add_attributes(elements, child_type, parent)
-            if self.model[child_type]['endpoint']:
+            if isinstance(locator, dict):
+                elements = Extractor.find_elements(parent.soup, locator)
+                elements = self.add_attributes(elements, child_type, parent)
+            else:
+                elements = exec(locator, {}, locals())
+            if 'endpoint' in self.model[child_type]:
                 leafs.extend(elements)
             else:
                 for element in elements:
@@ -51,19 +69,19 @@ class Extractor:
                     attrs={key: True for key in contains})
         if contains:
             matches = [tag for tag in matches if Extractor.tag_matches_contains(tag, contains)]
-        if subitem:
+        if subitem and matches:
             matches = Extractor.find_elements(matches[0], subitem)
         return matches
 
     @staticmethod
     def parse_locator(locator: dict):
-        name = locator.get('name', None)
-        contains = locator.get('contains', None)
-        subitem = locator.get('subitem', None)
-        exact = {k: v for k, v in locator.items() if k not in (
-            'name', 'contains', 'subitem')}
-        if not exact:
-            exact = None
+        exact = locator.copy()
+        subitem = exact.pop('subitem', None)
+        contains = {}
+        for arg in exact:
+            if not isinstance(exact[arg], str):
+                contains[arg] = exact[arg]['contains']
+        name = exact.pop('name', None)
         return exact, name, contains, subitem
     
 
@@ -71,16 +89,20 @@ class Extractor:
     def tag_matches_contains(tag, contains):
         matches = True
         for attr, value_list in contains.items():
+            matches_attr = False
             tag_value = Extractor.get_attr(tag, attr)
             for value in value_list:
-                if value not in tag_value:
-                    matches = False
+                if value in tag_value:
+                    matches_attr = True
                     break
+            matches = matches and matches_attr
         return matches
 
     def add_attributes(self, canidates: list[Tag], child_type: str, parent):
         elements = []
         fix, variable = self.get_attr_dicts(child_type)
+        if 'delete' in self.model[parent.type]:
+            parent = parent.parent
         for canidate in canidates:
             element = Element(child_type, parent)
             for attr in variable:
@@ -103,11 +125,11 @@ class Extractor:
         return elements
 
     def get_attr_dicts(self, type):
-        type_descr = self.model[type]
-        fix = type_descr['fix']
-        variable = {k: v for k, v in type_descr.items() if k not in (
-            'endpoint', 'childTypes', 'locator', 'fix')}
+        type_descr: dict = self.model[type]
+        fix = type_descr.get('fix', {})
+        variable = type_descr.get('variable', {})
         return fix, variable
+
 
     @staticmethod
     def get_sub_element(tag, locator):
@@ -118,6 +140,7 @@ class Extractor:
             return elements
         else:
             return tag
+
 
     @staticmethod
     def get_attr(tag, attrName):

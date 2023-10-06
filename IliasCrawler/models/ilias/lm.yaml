@@ -1,0 +1,45 @@
+lm:
+  endpoint: true
+  childTypes:
+    - lm_leaf
+  locator:
+    href: 
+      contains: _lm_
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name: text
+      url: href
+
+lm_leaf:
+  endpoint: true
+  childTypes:
+    - file
+    - video
+  locator: |
+    def func(parent):
+        leafs = []
+        if tree in parent.soup:
+            parent.soup = tree
+        elements = parent.soup.find_all("li")
+        for element in elements:
+            subitem = element.find_all("ul")
+            if subitem:
+                node = Element('lm_node', parent)
+                node.set_soup(subitem)
+
+                node.name = element.name
+                
+                leafs.extend(func(node))
+                element.delete_soup()
+            else:
+                leaf = Element('lm_leaf', parent)
+
+                leaf.name = element.name
+                leaf.url = element.url
+                
+                leafs.append(leaf)
+
+    elements = func(parent)

@@ -1,0 +1,28 @@
+file:
+  endpoint: true
+  childTypes: []
+  locator:
+    contains:
+      href: _file_
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name: text
+      url: href
+
+video:
+  endpoint: true
+  childTypes: []
+  locator:
+    name: source
+    src: 
+      contains: [.mp4, .webm]
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name: text
+      url: src

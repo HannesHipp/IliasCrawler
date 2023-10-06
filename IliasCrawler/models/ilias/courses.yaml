@@ -1,0 +1,37 @@
+courseDate:
+  childTypes:
+    - course
+  locator:
+    class: panel il-panel-listing-std-container clearfix
+    subitem:
+      class: il-item-group
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name:
+        text:
+          name: h3
+
+course:
+  endpoint: true
+  childTypes:
+    - ilContainerBlock
+    - folder
+    - lm
+    - file
+    - video
+  locator:
+    href:
+      contains: _crs_
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable: 
+      name: string
+      url: href  
+
+
+      

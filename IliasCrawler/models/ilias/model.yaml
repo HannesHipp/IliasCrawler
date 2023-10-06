@@ -1,0 +1,36 @@
+root: 
+  childTypes: 
+    - courseDate
+
+ilContainerBlock:
+  childTypes:
+    - folder            
+    - lm
+  locator:
+    class: ilContainerBlock container-fluid form-inline
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name:
+        text:
+          name: h2
+
+folder:
+  endpoint: true
+  childTypes:
+    - folder
+    - lm
+    - file
+    - video
+  locator:
+    href: 
+      contains: _fold_
+  attrs:
+    fix:
+      tree-importance: 0
+      url-format: {}
+    variable:
+      name: text
+      url: href
