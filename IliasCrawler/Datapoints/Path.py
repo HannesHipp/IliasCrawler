@@ -1,3 +1,4 @@
+import pathlib
 from Framework.Datapoint import Datapoint
 
 
@@ -12,8 +13,10 @@ class Path(Datapoint):
         else:
             return "Es muss ein Pfad ausgewählt werden."
 
-    def tuple_list_to_value(self, tupleList):
-        return tupleList[0][0]
+    def tuple_list_to_value(self, tuple_list):
+        if not tuple_list:
+            return None
+        return pathlib.Path(tuple_list[0][0])
 
     def value_to_tuple_list(self, path):
-        return [(path,)]
+        return [(str(path),)]

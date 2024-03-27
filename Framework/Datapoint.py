@@ -13,8 +13,7 @@ class Datapoint(QObject):
         database = None
         if save:
             database = Database(self.__class__.__name__.lower())
-            if savedTuplelist := database.getTuplelist():
-                value = self.tuple_list_to_value(savedTuplelist)
+            value = self.tuple_list_to_value(database.getTuplelist())
         self.database = database
         self.value = value
         self.invalidate.connect(self._invalidate)

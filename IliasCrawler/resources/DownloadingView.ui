@@ -57,36 +57,7 @@ background-color: rgb(255, 255, 255);</string>
     <string>Download</string>
    </property>
    <property name="textFormat">
-    <enum>Qt::MarkdownText</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_description">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>202</y>
-     <width>311</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(0, 0, 0);
-font: 10pt &quot;Segoe UI&quot;;</string>
-   </property>
-   <property name="text">
-    <string>Die gefundenen Dateien werden nun herrunter- geladen. Je nach deiner Internetgeschwindigkeit kann das einige Zeit in anspruch nehmen.</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
+    <enum>Qt::PlainText</enum>
    </property>
   </widget>
   <widget class="QWidget" name="widget" native="true">
@@ -101,13 +72,107 @@ font: 10pt &quot;Segoe UI&quot;;</string>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255)</string>
    </property>
+   <widget class="QPushButton" name="button_cancel">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>450</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(101, 101, 101);
+color: rgb(255, 255, 255);
+border-radius: 20p;</string>
+    </property>
+    <property name="text">
+     <string>Abbrechen</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_percentage">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>290</y>
+      <width>18</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+    </property>
+    <property name="text">
+     <string>99</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_percent">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>290</y>
+      <width>18</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+    </property>
+    <property name="text">
+     <string>%</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QProgressBar" name="progress_bar">
    <property name="geometry">
     <rect>
      <x>430</x>
      <y>290</y>
-     <width>321</width>
+     <width>281</width>
      <height>23</height>
     </rect>
    </property>
@@ -124,12 +189,44 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     <string>%p%                                                                                 </string>
    </property>
   </widget>
-  <widget class="QLabel" name="progress_bar_label">
+  <widget class="QLabel" name="label_current_file_name">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>322</y>
+     <width>191</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Bla Bla</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_aktuelle_datei">
    <property name="geometry">
     <rect>
      <x>430</x>
-     <y>310</y>
-     <width>311</width>
+     <y>320</y>
+     <width>91</width>
      <height>21</height>
     </rect>
    </property>
@@ -147,7 +244,36 @@ font: 10pt &quot;Segoe UI&quot;;</string>
 font: 10pt &quot;Segoe UI&quot;;</string>
    </property>
    <property name="text">
-    <string>name</string>
+    <string>Aktuelle Datei:</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_description_2">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>200</y>
+     <width>311</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Die gefundenen Dateien werden nun herruntergeladen. Je nach deiner Internetgeschwindigkeit kann das einige Zeit in anspruch nehmen.</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
@@ -156,9 +282,10 @@ font: 10pt &quot;Segoe UI&quot;;</string>
   <zorder>widget</zorder>
   <zorder>picture</zorder>
   <zorder>title</zorder>
-  <zorder>label_description</zorder>
-  <zorder>progress_bar_label</zorder>
   <zorder>progress_bar</zorder>
+  <zorder>label_current_file_name</zorder>
+  <zorder>label_aktuelle_datei</zorder>
+  <zorder>label_description_2</zorder>
  </widget>
  <resources>
   <include location="resources.qrc"/>

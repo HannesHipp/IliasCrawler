@@ -1,5 +1,11 @@
 .venv
-*tests.py
+build
+dist
+main.spec
+*.db
+*.txt
+test.py
+test_test.py
 old
 .gitignore
 *.vscode

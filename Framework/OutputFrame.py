@@ -6,26 +6,39 @@ from PyQt5.QtCore import QThreadPool
 
 class OutputFrame(Frame):
 
-    def __init__(self, path, function: Function, next_frame_button_names=[], start_button_name=None, cancel_button_name=None):
+    def __init__(
+            self, 
+            path, 
+            function: Function, 
+            next_frame_button_names=[], 
+            start_button_name=None, 
+            cancel_button_name=None):
         super().__init__(path, next_frame_button_names)
         self.function = function
         self.function.setAutoDelete(False)
-        if not next_frame_button_names:
-            self.function.signals.ended.connect(self.finalize)
-        self.start_button = None   
-        if start_button_name:
-            self.start_button = getattr(self, start_button_name)
-            self.start_button.pressed.connect(self.function.start_execution)
+
         if cancel_button_name:
-            getattr(self, cancel_button_name).pressed.connect(self.function.cancel_execution)
+           getattr(self, cancel_button_name).pressed.connect(self.function.cancel_execution)
+
+        if start_button_name:
+           self.auto_start = False
+           getattr(self, start_button_name).pressed.connect(self.function.start_execution)
+        else:
+           self.auto_start = True
+
+        if next_frame_button_names:
+           for next_frame_button_name in next_frame_button_names:
+               getattr(self, next_frame_button_name).pressed.connect(self.finalize)
+        else:
+           self.function.signals.ended.connect(self.finalize)
+            
 
     def show(self):
-        if not self.start_button:
+        if self.auto_start:
             self.function.start_execution()
         super().show()
         
     def finalize(self):
-        self.function.cancel_execution()
         super().finalize()
 
     def get_module_errors(self):

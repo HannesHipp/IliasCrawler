@@ -2,73 +2,57 @@ import time
 from Framework.Datapoint import Datapoint
 from Framework.Function import Function
 from IliasCrawler.Datapoints.Courses import Courses
-from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos
+from IliasCrawler.Datapoints.FilesAndVideos import FilesAndVideos, get_file_hash, get_video_hash
+from IliasCrawler.Functions.Download import filter_url
 from IliasCrawler.Session import Session
+from IliasCrawler.models.extractor.Extractor import Extractor
 
 
 class Crawl(Function):
 
-    def __init__(self, courses: Courses, filesAndVideos: FilesAndVideos, currentCourseName: Datapoint) -> None:
+    def __init__(
+            self, 
+            courses: Courses, 
+            files_and_videos: FilesAndVideos, 
+            current_course_name: Datapoint,
+            percentage_crawled: Datapoint
+        ) -> None:
         super().__init__()
         self.courses = courses
-        self.filesAndVideos = filesAndVideos
-        self.currentCoursesName = currentCourseName
+        self.files_and_videos = files_and_videos
+        self.current_courses_name = current_course_name
+        self.percentage_crawled = percentage_crawled
 
     def execute(self):
+        files_and_videos = []
+        extractor = Extractor('IliasCrawler\\models\\ilias')
+        to_crawl = [course for course in self.courses.value if course.to_download]
+        crawled = 0
+        for course in to_crawl:
+            self.current_courses_name.submit_value(course.name)
+            files_and_videos += self.crawl(course.element, extractor)
+            crawled += 1
+            self.percentage_crawled.submit_value(
+                int(crawled/len(to_crawl)*100)
+            )
         result = []
-        for course in self.courses.value:
-            self.currentCoursesName.submit_value(course.name)
-            if course.shouldBeDownloaded:
-                result += self.crawl(course)
-                course.hasBeenCrawled = True
-        result = self.detect_items_with_long_path(result)
-        return result
-
-    def crawl(self, page):
-        html = Session.get_content(page.url)
-        files_and_videos = page.get_files_and_videos()
-        new_pages = page.get_new_pages()
-        page.content = None
-        if len(new_pages) == 1 and len(files_and_videos) == 0:
-            new_pages[0].name = page.name
-            new_pages[0].parent = page.parent
-        if len(new_pages) == 0 and len(files_and_videos) == 1:
-            files_and_videos[0].parent = page.parent
-        for new_page in new_pages:
-            files_and_videos += self.crawl(new_page)
-        return files_and_videos
-
-    def detect_items_with_long_path(self, data):
-        file_ex_length = 5
-        userpath_plus_ilias_length = len(self.path.value + "\\Ilias\\")
-        available_string_length = 256 - userpath_plus_ilias_length - file_ex_length
-        for item in data:
-            removal_path = (item.get_path() + "\\" +
-                            item.name).split("\\Ilias\\")[1]
-            number_of_chars_to_remove = len(
-                removal_path) - available_string_length
-            too_long = number_of_chars_to_remove > 0
-            if too_long:
-                removal_positions = self.get_removal_positions(removal_path)
-                self.correct_path(item, removal_positions,
-                                  number_of_chars_to_remove)
-        return data
-
-    def get_removal_positions(self, removal_path):
+        existing_files_and_videos = self.files_and_videos.value
+        for element in files_and_videos:
+            if element.type.name == 'file':
+                if not get_file_hash(element) in existing_files_and_videos['files']:
+                    result.append(element)
+            elif element.type.name == 'video':
+                if not get_video_hash(element) in existing_files_and_videos['videos']:
+                    result.append(element)
+        self.files_and_videos.submit_value(result)
+    
+    def crawl(self, page, extractor):
         result = []
-        positions_list = removal_path.split("\\")
-        avrg_chars_per_position = int(len(removal_path)/len(positions_list))
-        for position in positions_list:
-            if len(position) > avrg_chars_per_position:
-                result.append(position)
+        page.set_soup(Session.get_content(filter_url(page)))
+        pages = extractor.extract_data(page)
+        for page in pages:
+            if page.type.child_types:
+                result.extend(self.crawl(page, extractor))
+            else:
+                result.append(page)
         return result
-
-    def correct_path(self, item, removal_positions, total_number_of_chars_to_remove):
-        if any(x == item.name for x in removal_positions):
-            number_of_chars_to_remove = int(
-                total_number_of_chars_to_remove/len(removal_positions))
-            length = int((len(item.name) - number_of_chars_to_remove - 1)/2)
-            item.name = item.name[:length] + '_' + item.name[-length:]
-        if item.parent is not None:
-            self.correct_path(item.parent, removal_positions,
-                              total_number_of_chars_to_remove)

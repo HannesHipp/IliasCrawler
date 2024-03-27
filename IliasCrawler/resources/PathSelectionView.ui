@@ -42,7 +42,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>260</y>
+      <y>220</y>
       <width>31</width>
       <height>21</height>
      </rect>
@@ -71,7 +71,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>290</y>
+      <y>250</y>
       <width>91</width>
       <height>23</height>
      </rect>
@@ -122,10 +122,39 @@ border-radius: 20p;</string>
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>260</y>
+      <y>220</y>
       <width>261</width>
       <height>21</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_description_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>330</y>
+      <width>311</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+font: 10pt &quot;Segoe UI&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Kleiner Hinweis: Falls du Windows verwendest, achte am Besten darauf, dass dein Pfad zum Ordner nicht zu lange wird. Windows hat eine begrenzte Pfadlänge und wir werden noch einige Unterordner für dein Ilias erstellen müssen.</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -133,7 +162,7 @@ border-radius: 20p;</string>
    <property name="geometry">
     <rect>
      <x>440</x>
-     <y>180</y>
+     <y>162</y>
      <width>311</width>
      <height>51</height>
     </rect>
@@ -162,7 +191,7 @@ font: 10pt &quot;Segoe UI&quot;;</string>
    <property name="geometry">
     <rect>
      <x>440</x>
-     <y>138</y>
+     <y>120</y>
      <width>240</width>
      <height>41</height>
     </rect>

@@ -12,7 +12,7 @@ class Frame(QWidget):
 
     display = pyqtSignal(object)
 
-    def __init__(self, path: str, next_frame_button_names: list[str]):
+    def __init__(self, path, next_frame_button_names=[]):
         super().__init__()
         loadUi(path, self)
         self.index = None

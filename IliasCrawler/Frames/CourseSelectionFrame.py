@@ -14,7 +14,7 @@ class CourseSelectionFrame(Frame):
         self.courses = courses
         self.add_module(
             ObjectSelectionList(courses, self.listView,
-                                'name', "shouldBeDownloaded", "isNew")
+                                'name', "to_download", "is_new")
         )
 
     def addNextFrames(self, crawlingFrame):

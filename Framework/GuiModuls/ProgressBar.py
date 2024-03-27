@@ -7,15 +7,15 @@ from Framework.GuiModuls.GuiModul import GuiModul
 
 class ProgressBar(GuiModul):
 
-    def __init__(self, datapoint: Datapoint, qtProgressBar: QProgressBar, qtPercentageLabel: QLabel, func) -> None:
+    def __init__(self, percentage: Datapoint, qtProgressBar: QProgressBar, qtPercentageLabel: QLabel) -> None:
         super().__init__(
-            datapoint=datapoint
+            datapoint=percentage
         )
         self.qtProgressbar = qtProgressBar
         self.qtPercentageLabel = qtPercentageLabel
-        self.func = func
 
     def set_value(self, value):
-        percentage = self.func(value)
-        self.qtPercentageLabel.setText(str(percentage))
-        self.qtProgressbar.setValue(percentage)
+        if not value:
+            value = 0
+        self.qtPercentageLabel.setText(str(value))
+        self.qtProgressbar.setValue(value)

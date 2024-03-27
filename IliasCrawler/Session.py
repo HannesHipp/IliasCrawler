@@ -5,18 +5,15 @@ import requests
 
 class Session:
 
-
     __instance = None
-    __semaphore = threading.Semaphore()
         
-
     @staticmethod
     def set_session(username, password):
         if Session.__instance is not None:
             return True
         session = requests.session()
-        cmdNode = Session.get_cmdNode(session)
-        LOGINURL = f"https://ilias3.uni-stuttgart.de/ilias.php?lang=de&client_id=Uni_Stuttgart&cmd=post&cmdClass=ilstartupgui&cmdNode={cmdNode}&baseClass=ilStartUpGUI&rtoken="
+        # cmdNode = Session.get_cmdNode(session)
+        LOGINURL = f"https://ilias3.uni-stuttgart.de/ilias.php?baseClass=ilstartupgui&cmd=post&fallbackCmd=doStandardAuthentication&lang=de&client_id=Uni_Stuttgart"
         data = {
             'username': username,
             'password': password,
@@ -50,14 +47,13 @@ class Session:
 
     @staticmethod
     def get_content(url):
-        with Session.__semaphore:
-            if Session.__instance is None:
-                raise Exception("No global session is set")
-            return BeautifulSoup(Session.__instance.get(url).text, 'lxml')
+        if Session.__instance is None:
+            raise Exception("No global session is set")
+        return BeautifulSoup(Session.__instance.get(url).text, 'lxml')
 
     @staticmethod
     def get_file_content(url):
-        with Session.__semaphore:
-            if Session.__instance is None:
-                raise Exception("No global session is set")
-            return Session.__instance.get(url).content
+        if Session.__instance is None:
+            raise Exception("No global session is set")
+        return Session.__instance.get(url).content
+        

@@ -9,16 +9,14 @@ ilContainerBlock:
   locator:
     class: ilContainerBlock container-fluid form-inline
   attrs:
-    fix:
-      tree-importance: 0
-      url-format: {}
-    variable:
-      name:
-        text:
-          name: h2
+    - tree_importance: 0
+    - name:
+        attrName: text
+        locator:
+          name: h2          
 
 folder:
-  endpoint: true
+  is_leaf: true
   childTypes:
     - folder
     - lm
@@ -28,9 +26,10 @@ folder:
     href: 
       contains: _fold_
   attrs:
-    fix:
-      tree-importance: 0
-      url-format: {}
-    variable:
-      name: text
-      url: href
+    - tree-importance: 0
+    - url_format: {'ilias.php?': 'https://ilias3.uni-stuttgart.de/',
+                    'Uni_Stuttgart/mobs/': 'https://ilias3.uni-stuttgart.de/'}
+    - name:
+        attrName: text
+    - url: 
+        attrName: href

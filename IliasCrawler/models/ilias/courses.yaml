@@ -6,16 +6,14 @@ courseDate:
     subitem:
       class: il-item-group
   attrs:
-    fix:
-      tree-importance: 0
-      url-format: {}
-    variable:
-      name:
-        text:
+    - tree-importance: 0
+    - name:
+        attrName: text
+        locator:
           name: h3
 
 course:
-  endpoint: true
+  is_leaf: true
   childTypes:
     - ilContainerBlock
     - folder
@@ -26,12 +24,13 @@ course:
     href:
       contains: _crs_
   attrs:
-    fix:
-      tree-importance: 0
-      url-format: {}
-    variable: 
-      name: string
-      url: href  
+    - tree-importance: 0
+    - url_format: {'ilias.php?': 'https://ilias3.uni-stuttgart.de/',
+                    'Uni_Stuttgart/mobs/': 'https://ilias3.uni-stuttgart.de/'}
+    - name: 
+        attrName: string
+    - url: 
+        attrName: href  
 
 
       

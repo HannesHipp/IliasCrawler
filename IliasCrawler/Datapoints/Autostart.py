@@ -9,11 +9,12 @@ class Autostart(Datapoint):
     def is_valid(self, value):
         return True
 
-    def tuple_list_to_value(self, tupleList):
-        if tupleList[0][0] == '1':
-            return True
-        else:
+    def tuple_list_to_value(self, tuple_list):
+        if not tuple_list:
             return False
+        if tuple_list[0][0] == '0':
+            return False
+        return True
 
     def value_to_tuple_list(self, autostart):
         if autostart:

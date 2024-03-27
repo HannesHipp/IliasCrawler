@@ -57,7 +57,7 @@ background-color: rgb(255, 255, 255);</string>
     <string>Kurse werden durchsucht</string>
    </property>
    <property name="textFormat">
-    <enum>Qt::MarkdownText</enum>
+    <enum>Qt::PlainText</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_description">
@@ -221,9 +221,9 @@ font: 10pt &quot;Segoe UI&quot;;</string>
    <property name="geometry">
     <rect>
      <x>520</x>
-     <y>320</y>
-     <width>91</width>
-     <height>21</height>
+     <y>322</y>
+     <width>191</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -241,6 +241,9 @@ font: 10pt &quot;Segoe UI&quot;;</string>
    </property>
    <property name="text">
     <string>Bla Bla</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

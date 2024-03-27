@@ -24,10 +24,8 @@ class Database():
 
     def getTuplelist(self):
         if not self.tableExists():
-            return None
+            return []
         tupleList = self.getAll()
-        if len(tupleList) == 0:
-            return None
         return tupleList
 
     def tableExists(self):

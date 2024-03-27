@@ -13,7 +13,7 @@ class Function(QRunnable):
     def __init__(self) -> None:
         super().__init__()
         self.signals = FunctionSignals()
-        self.cancel = False
+        self.canceled = False
         self.error = None
 
     def start_execution(self):
@@ -30,7 +30,7 @@ class Function(QRunnable):
         self.signals.ended.emit()
 
     def cancel_execution(self):
-        self.cancel = True
+        self.canceled = True
 
     def execute(self):
         raise Exception(

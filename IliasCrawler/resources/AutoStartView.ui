@@ -49,6 +49,9 @@
     <property name="text">
      <string>10</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="label_seconds">
     <property name="geometry">
@@ -101,36 +104,6 @@ border-radius: 20p;</string>
     </property>
     <property name="text">
      <string>Abbrechen</string>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="button_start">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>450</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Segoe UI</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(101, 101, 101);
-color: rgb(255, 255, 255);
-border-radius: 20p;</string>
-    </property>
-    <property name="text">
-     <string>Jetzt Starten</string>
     </property>
     <property name="checkable">
      <bool>false</bool>

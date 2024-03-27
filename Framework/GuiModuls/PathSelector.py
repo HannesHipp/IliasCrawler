@@ -1,8 +1,6 @@
-from easygui import diropenbox
+from pathlib import Path
 from Framework.Datapoint import Datapoint
-from PyQt5.QtWidgets import QLabel, QPushButton, QWidget
-from PyQt5.QtCore import pyqtSignal
-
+from PyQt5.QtWidgets import QLabel, QPushButton, QFileDialog
 from Framework.GuiModuls.GuiModul import GuiModul
 
 
@@ -16,7 +14,8 @@ class PathSelector(GuiModul):
         self.line_edit = line_edit
 
     def get_value(self):
-        value = diropenbox()
+        value = QFileDialog.getExistingDirectory(None, "Ordner auswählen")
+        value = Path(value)
         self.set_value(value)
         return value
 

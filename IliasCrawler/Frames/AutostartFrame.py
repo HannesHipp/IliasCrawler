@@ -13,8 +13,7 @@ class AutostartCountdown(Function):
 
     def execute(self):
         time = 10
-        while time != 0 and not self.cancel:
-            print(time)
+        while time != 0 and not self.canceled:
             self.timer.submit_value(time)
             sleep(1.0)
             time = time - 1
@@ -27,7 +26,7 @@ class AutostartFrame(OutputFrame):
         super().__init__(
             path="IliasCrawler\\resources\\AutoStartView.ui",
             function=AutostartCountdown(autostartTimer),
-            next_frame_button_names=['button_cancel', 'button_start']
+            cancel_button_name='button_cancel'
         )
         self.add_module(
             TextLabel(autostartTimer,  self.label_timer, lambda x: x)
@@ -38,6 +37,6 @@ class AutostartFrame(OutputFrame):
         self.crawlingFrame = crawlingFrame
 
     def decide_next_frame(self, pressedButton):
-        if pressedButton == self.button_cancel:
+        if self.function.canceled:
             return self.courseSelectionFrame
         return self.crawlingFrame

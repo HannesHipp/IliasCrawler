@@ -13,4 +13,4 @@ class TextLabel(GuiModul):
         self.func = func
 
     def set_value(self, value):
-        self.qtLabel.setText(self.func(value))
+        self.qtLabel.setText(str(self.func(value)))
